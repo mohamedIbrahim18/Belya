@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Belya</string>
+    <string name="create_account">Create Account</string>
+    <string name="first_name">First Name</string>
+    <string name="lastname">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="password">Password</string>
+    <string name="repassword">Confirm Password</string>
+    <string name="haveAccount">Already have an account?</string>
+    <string name="login">Login</string>
+</resources>

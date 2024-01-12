@@ -7,12 +7,12 @@
     android:background="@color/blue_main"
     tools:context=".ui.splashscreen.SplashScreenActivity">
 
-    <ImageView
-        android:layout_width="194dp"
-        android:layout_height="228dp"
-        android:src="@drawable/ic_logo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+   <ImageView
+       android:layout_width="194dp"
+       android:layout_height="228dp"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintBottom_toBottomOf="parent"
+       android:src="@drawable/ic_logo"/>
+   </androidx.constraintlayout.widget.ConstraintLayout>

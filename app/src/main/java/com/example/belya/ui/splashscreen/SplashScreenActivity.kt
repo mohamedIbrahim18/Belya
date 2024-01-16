@@ -7,7 +7,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.belya.R
 import com.example.belya.databinding.ActivitySplashScreenBinding
-import com.example.belya.ui.signup.SignUpActivity
+import com.example.belya.ui.auth.signup.SignUpActivity
 
 class SplashScreenActivity: AppCompatActivity() {
     lateinit var viewBinding : ActivitySplashScreenBinding
@@ -22,7 +22,7 @@ class SplashScreenActivity: AppCompatActivity() {
     }
 
     private fun gotoSignUp() {
-        val intent = Intent(this,SignUpActivity::class.java)
+        val intent = Intent(this, SignUpActivity::class.java)
         startActivity(intent)
     }
 }

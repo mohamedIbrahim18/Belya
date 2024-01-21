@@ -29,51 +29,36 @@
         android:id="@+id/type_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:padding="10dp"
         android:backgroundTint="@color/white"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/Why_do_you_use_this_program">
 
-        <androidx.cardview.widget.CardView
+        <RadioButton
+            android:id="@+id/customer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="11dp"
-            android:backgroundTint="@color/white"
-            app:cardCornerRadius="6dp"
-            app:cardElevation="5dp">
-
-            <RadioButton
-                android:id="@+id/customer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:text="@string/customer"
-                android:textColor="@color/blue_main"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-        </androidx.cardview.widget.CardView>
+            android:layout_marginEnd="40dp"
+            android:text="@string/customer"
+            android:textColor="@color/blue_main"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
 
-        <androidx.cardview.widget.CardView
+        <RadioButton
+            android:id="@+id/factor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="11dp"
-            android:backgroundTint="@color/white"
-            app:cardCornerRadius="6dp"
-            app:cardElevation="5dp">
-
-            <RadioButton
-                android:id="@+id/factor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
-                android:text="@string/factor"
-                android:textColor="@color/blue_main"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-        </androidx.cardview.widget.CardView>
+            android:layout_marginEnd="40dp"
+            android:text="@string/factor"
+            android:textColor="@color/blue_main"
+            android:textSize="24sp"
+            android:textStyle="bold" />
     </RadioGroup>
 
     <com.google.android.material.button.MaterialButton

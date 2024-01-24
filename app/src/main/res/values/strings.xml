@@ -16,4 +16,7 @@
     <string name="customer">Customer</string>
     <string name="factor">Factor</string>
     <string name="continuee">continue</string>
+    <string name="occupation">Occupation</string>
+    <string name="work_experience">Work Experience</string>
+    <string name="save_changes">Save Changes</string>
 </resources>

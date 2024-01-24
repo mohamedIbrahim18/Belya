@@ -5,12 +5,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
-import com.example.belya.R
 import com.example.belya.databinding.ActivitySplashScreenBinding
-import com.example.belya.ui.auth.signup.SignUpActivity
+import com.example.belya.ui.registration.auth.signup.SignUpActivity
 
 class SplashScreenActivity: AppCompatActivity() {
-    lateinit var viewBinding : ActivitySplashScreenBinding
+    private lateinit var viewBinding : ActivitySplashScreenBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding= ActivitySplashScreenBinding.inflate(layoutInflater)

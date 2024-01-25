@@ -18,6 +18,37 @@
         android:layout_marginTop="54dp"
         />
     <TextView
+        android:id="@+id/phonenumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:padding="10dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/phone_number"
+        android:textColor="@color/blue_main"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_img" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputlayout_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/phonenumber">
+
+        <EditText
+            android:id="@+id/phone_ed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:background="@drawable/custome_border_to_edit_text" />
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
         android:id="@+id/occupation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +59,7 @@
         android:textColor="@color/blue_main"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_img" />
+        app:layout_constraintTop_toBottomOf="@id/inputlayout_phone" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputlayout_occupation"
@@ -73,7 +104,7 @@
         <EditText
             android:id="@+id/work_experience_ed"
             android:layout_width="match_parent"
-            android:lines="8"
+            android:lines="4"
             android:layout_height="match_parent"
             android:layout_marginStart="18dp"
             android:layout_marginEnd="18dp"
@@ -88,7 +119,7 @@
         app:layout_constraintTop_toBottomOf="@id/inputlayout_work_experience"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="41dp"
+        android:layout_marginTop="30dp"
         android:text="@string/save_changes"
         android:padding="15dp"
         android:layout_marginStart="17dp"

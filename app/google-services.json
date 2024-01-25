@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "4684361405",
+    "project_id": "belya-84979",
+    "storage_bucket": "belya-84979.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4684361405:android:a6a1890fcacb05363611d4",
+        "android_client_info": {
+          "package_name": "com.example.belya"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD48qX0oxiNT_kuUWIxRQMUdB3y_hKEWX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

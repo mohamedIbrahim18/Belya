@@ -8,8 +8,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.belya.databinding.ActivityWhoUseThisBinding
 import com.example.belya.ui.Customer_Main.CustomerMainActivity
-import com.example.belya.ui.registration.auth.login.LoginActivity
-import com.example.belya.ui.registration.auth.signup.SignUpActivity
 import com.example.belya.ui.registration.factorinfo.FactorInfoActivity
 
 

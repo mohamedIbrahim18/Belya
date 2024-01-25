@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.belya.databinding.ActivityFactorInfoBinding
 import com.example.belya.ui.Factor_Main.FactorMainActivity
-import com.example.belya.ui.registration.auth.signup.SignUpActivity
 
 class FactorInfoActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityFactorInfoBinding

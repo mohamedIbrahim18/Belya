@@ -6,23 +6,36 @@ import android.os.Bundle
 import com.example.belya.R
 import com.example.belya.databinding.ActivityLoginBinding
 import com.example.belya.ui.registration.whouse.WhoUseThisActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var viewBinding : ActivityLoginBinding
+    private lateinit var auth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-        initViews()
+        //initViews()
     }
-
+/*
     private fun initViews() {
+        auth = FirebaseAuth.getInstance()
         viewBinding.btnLogin.setOnClickListener {
-            goToWhoUseThis()
+            val email = viewBinding.emailEd.text.toString()
+            val password = viewBinding.passwordEd.text.toString()
+
+            auth.signInWithEmailAndPassword(email,password).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    // Check user type and navigate accordingly
+                    checkUserTypeAndNavigate(email)
+                } else {
+                    binding.passwordContainer.error = "Wrong email or password"
+                }
+            }
         }
     }
-
+*/
     private fun goToWhoUseThis() {
         val intent = Intent(this, WhoUseThisActivity::class.java)
         startActivity(intent)

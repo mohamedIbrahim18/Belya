@@ -22,9 +22,6 @@
             android:name=".ui.registration.factorinfo.FactorInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.registration.whouse.WhoUseThisActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.registration.auth.login.LoginActivity"
             android:exported="false" />
         <activity

@@ -26,31 +26,37 @@ class FactorInfoActivity : AppCompatActivity() {
         }
     }
 
-    private fun getTheNewData() {
+    private fun getTheNewData(): Map<String, Any> {
+        val phoneNumber = viewBinding.phoneEd.text.toString().trim()
+        val occupation = viewBinding.occupationEd.text.toString().trim()
+        val workExperience = viewBinding.workExperienceEd.text.toString().trim()
 
+        val newData = mutableMapOf<String, Any>()
+        if (phoneNumber.isNotEmpty()) {
+            newData["phoneNumber"] = phoneNumber
+        }
+        newData["occupation"] = occupation
+        newData["work_experience"] = workExperience
+
+        return newData
     }
 
     private fun updateFactorData() {
-        getTheNewData()
-        val userFactorData = /* your updated data, replace this with your actual data */
+        val userFactorData = getTheNewData()
         val db = FirebaseFirestore.getInstance()
-
-        val documentId = auth.uid!! // replace this with the actual document ID
+        val documentId = auth.uid!!
         val userFactorsCollection = db.collection(Constent.USER_FACTOR_COLLECTION)
-
         // Update the document with the new data
         userFactorsCollection.document(documentId)
             .update(userFactorData)
             .addOnSuccessListener {
                 // Update successful
-                // You can add any additional logic or UI updates here
+                navigateToFactorPage()
             }
             .addOnFailureListener { e ->
                 // Handle the error
-                // You can add error logging or show an error message to the user
             }
     }
-
 
     private fun navigateToFactorPage() {
         val intent = Intent(this,FactorMainActivity::class.java)

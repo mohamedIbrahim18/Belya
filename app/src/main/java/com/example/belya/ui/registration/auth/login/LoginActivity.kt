@@ -3,9 +3,7 @@ package com.example.belya.ui.registration.auth.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.belya.R
 import com.example.belya.databinding.ActivityLoginBinding
-import com.example.belya.ui.registration.whouse.WhoUseThisActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
@@ -36,8 +34,5 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 */
-    private fun goToWhoUseThis() {
-        val intent = Intent(this, WhoUseThisActivity::class.java)
-        startActivity(intent)
-    }
+
 }

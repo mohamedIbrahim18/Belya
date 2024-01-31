@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:fillViewport="true"
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -183,7 +187,7 @@
             app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/helepr_v1"
-            app:layout_constraintTop_toBottomOf="@id/inputlayout_repassword"/>
+            app:layout_constraintTop_toBottomOf="@id/whouseThisApp"/>
 
         <ProgressBar
             android:id="@+id/loadingProgressBar"
@@ -214,5 +218,60 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.04" />
+        <LinearLayout
+            android:id="@+id/whouseThisApp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/inputlayout_repassword"
+            app:layout_constraintStart_toStartOf="@id/helepr_v1"
+            app:layout_constraintEnd_toEndOf="@id/inputlayout_repassword"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/Why_do_you_use_this_program"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/why_do_you_use_this_program"
+                android:textColor="@color/blue_main"
+                android:textSize="20sp" />
+
+            <RadioGroup
+                android:id="@+id/type_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:backgroundTint="@color/white"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/customer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="40dp"
+                    android:text="@string/customer"
+                    android:textColor="@color/blue_main"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+
+                <RadioButton
+                    android:id="@+id/factor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="40dp"
+                    android:text="@string/factor"
+                    android:textColor="@color/blue_main"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+            </RadioGroup>
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
+
 </layout>

@@ -2,6 +2,7 @@ package com.example.belya.ui.registration.factorinfo
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.belya.databinding.ActivityFactorInfoBinding
 import com.example.belya.ui.Constent
@@ -11,7 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class FactorInfoActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityFactorInfoBinding
-    val auth = FirebaseAuth.getInstance()
+    private val auth = FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityFactorInfoBinding.inflate(layoutInflater)
@@ -55,6 +56,7 @@ class FactorInfoActivity : AppCompatActivity() {
             }
             .addOnFailureListener { e ->
                 // Handle the error
+                Log.e("ERROR_HANDLE", e.localizedMessage!!)
             }
     }
 

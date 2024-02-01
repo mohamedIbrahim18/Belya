@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import com.example.belya.databinding.ActivitySignUpBinding
 import com.example.belya.ui.Constent
 import com.example.belya.ui.Customer_Main.CustomerMainActivity
+import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.ui.registration.factorinfo.FactorInfoActivity
 import com.example.belya.ui.userCustomer
 import com.example.belya.ui.userFactor
@@ -39,39 +40,18 @@ class SignUpActivity : AppCompatActivity() {
         viewBinding.btnCreateAccount.setOnClickListener {
             chooseWhoUseThisApp()
         }
-    }
-
-    fun doRegisterFactor(){
-        viewBinding.apply {
-            btnCreateAccount.setOnClickListener {
-                val userFactor = userFactor(
-                          firstnameEd.text.toString(),
-                            lastnameEd.text.toString(),
-                            emailEd.text.toString(),
-                    "",
-                    "",
-                    "",
-                    ""
-                )
-                var passwordEd = viewBinding.passwordEd.text.toString()
-               var rePasswordEd = viewBinding.repasswordEd.text.toString()
-                if (passwordEd.isBlank()) {
-                    // show error
-                    viewBinding.inputlayoutPassword.error = "Please enter a strong password"
-                } else {
-                    viewBinding.inputlayoutPassword.error = null
-                }
-
-                if (passwordEd != rePasswordEd) {
-                    // show error
-                    viewBinding.inputlayoutRepassword.error = "Password doesn't match"
-                } else {
-                    viewBinding.inputlayoutRepassword.error = null
-                }
-                registerFactor(userFactor,passwordEd)
-            }
+        viewBinding.haveAcoountLogin.setOnClickListener {
+            navigateToLogin()
         }
     }
+
+    private fun navigateToLogin() {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+
+    }
+
 
     private fun chooseWhoUseThisApp() {
             //get selected radio button from radiogroup
@@ -90,16 +70,7 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }
     }
-    private fun navigateToFactorDetails() {
-        val intent = Intent(this, FactorInfoActivity::class.java)
-        startActivity(intent)
-    }
 
-    private fun navigateToCustomerPage() {
-        val intent = Intent(this, CustomerMainActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
 
     private fun validForm(): Boolean {
         var isValid = true
@@ -146,7 +117,37 @@ class SignUpActivity : AppCompatActivity() {
 
         return isValid
     }
+    fun doRegisterFactor(){
+        viewBinding.apply {
+            btnCreateAccount.setOnClickListener {
+                val userFactor = userFactor(
+                    firstnameEd.text.toString(),
+                    lastnameEd.text.toString(),
+                    emailEd.text.toString(),
+                    "",
+                    "",
+                    "",
+                    ""
+                )
+                var passwordEd = viewBinding.passwordEd.text.toString()
+                var rePasswordEd = viewBinding.repasswordEd.text.toString()
+                if (passwordEd.isBlank()) {
+                    // show error
+                    viewBinding.inputlayoutPassword.error = "Please enter a strong password"
+                } else {
+                    viewBinding.inputlayoutPassword.error = null
+                }
 
+                if (passwordEd != rePasswordEd) {
+                    // show error
+                    viewBinding.inputlayoutRepassword.error = "Password doesn't match"
+                } else {
+                    viewBinding.inputlayoutRepassword.error = null
+                }
+                registerFactor(userFactor,passwordEd)
+            }
+        }
+    }
     private fun registerFactor(userFactor: userFactor, password:String) {
         viewBinding.loadingProgressBar.isVisible = true
 
@@ -160,6 +161,7 @@ class SignUpActivity : AppCompatActivity() {
                             // User creation successful
                             task.result.user.let {
                                 saveUserFactorDataBase(it?.uid!!,userFactor)
+                                Constent.TYPE =0;
                                 navigateToFactorDetails()
                             }
                         } else {
@@ -173,7 +175,6 @@ class SignUpActivity : AppCompatActivity() {
 
         }
     }
-
     private fun saveUserFactorDataBase(uId:String,userFactor: userFactor) {
         db.collection(Constent.USER_FACTOR_COLLECTION).document(uId)
             .set(userFactor)
@@ -208,6 +209,7 @@ class SignUpActivity : AppCompatActivity() {
                         // User creation successful
                         task.result.user.let {
                             saveUserCustomerDataBase(it?.uid!!,userCustomer)
+                            Constent.TYPE =1;
                             navigateToCustomerPage()
                         }
                     } else {
@@ -229,8 +231,8 @@ class SignUpActivity : AppCompatActivity() {
                     lastnameEd.text.toString(),
                     emailEd.text.toString(),
                 )
-                var passwordEd = viewBinding.passwordEd.text.toString()
-                var rePasswordEd = viewBinding.repasswordEd.text.toString()
+                val passwordEd = viewBinding.passwordEd.text.toString()
+                val rePasswordEd = viewBinding.repasswordEd.text.toString()
                 if (passwordEd.isBlank()) {
                     // show error
                     viewBinding.inputlayoutPassword.error = "Please enter a strong password"
@@ -249,7 +251,6 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setUiEnabled(enabled: Boolean) {
         viewBinding.firstName.isEnabled = enabled
         viewBinding.lastnameEd.isEnabled = enabled
@@ -258,5 +259,17 @@ class SignUpActivity : AppCompatActivity() {
         viewBinding.repasswordEd.isEnabled = enabled
         viewBinding.btnCreateAccount.isEnabled = enabled
         viewBinding.loadingProgressBar.isVisible = !enabled
+    }
+
+
+    private fun navigateToFactorDetails() {
+        val intent = Intent(this, FactorInfoActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun navigateToCustomerPage() {
+        val intent = Intent(this, CustomerMainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

@@ -20,4 +20,9 @@
     <string name="work_experience">Work Experience</string>
     <string name="save_changes">Save Changes</string>
     <string name="phone_number">Phone Number</string>
+    <string name="email_hint">Email</string>
+    <string name="provide_your_account_s_email_for_which_you_want_to_reset_your_password">Provide your account\'s email for which you want to reset your password!</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="back">Back</string>
+    <string name="reset_password">Reset Password</string>
 </resources>

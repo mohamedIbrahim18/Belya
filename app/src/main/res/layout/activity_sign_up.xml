@@ -263,7 +263,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="40dp"
-                    android:text="@string/factor"
+                    android:text="@string/technician"
                     android:textColor="@color/blue_main"
                     android:textSize="24sp"
                     android:textStyle="bold" />

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.Toast
-import com.example.belya.R
 import com.example.belya.databinding.ActivityForgetPasswordBinding
 import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.google.firebase.Firebase
@@ -35,7 +34,7 @@ class ForgetPasswordActivity : AppCompatActivity() {
 
     private fun checkEmail() {
         binding.btnReset.setOnClickListener {
-            var srtEmail = binding.edtForgotPasswordEmail.text.toString().trim()
+            val srtEmail = binding.edtForgotPasswordEmail.text.toString().trim()
             if (!TextUtils.isEmpty(srtEmail)) {
                 resetPassword(srtEmail)
             } else {
@@ -71,6 +70,4 @@ class ForgetPasswordActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
-
 }

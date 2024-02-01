@@ -16,13 +16,13 @@
             android:name=".ui.registration.auth.forget_password.ForgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.Customer_Main.CustomerMainActivity"
+            android:name=".ui.customer_main.CustomerMainActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.Factor_Main.FactorMainActivity"
+            android:name=".ui.technician_main.TechnicianMainActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.registration.factorinfo.FactorInfoActivity"
+            android:name=".ui.registration.technicianinfo.TechnicianInfoActivity"
             android:exported="false" />
         <activity
             android:name=".ui.registration.auth.login.LoginActivity"

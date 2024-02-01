@@ -14,7 +14,7 @@
     <string name="email">Email</string>
     <string name="why_do_you_use_this_program">Why do you use this program?</string>
     <string name="customer">Customer</string>
-    <string name="factor">Factor</string>
+    <string name="technician">Technician</string>
     <string name="continuee">continue</string>
     <string name="occupation">Occupation</string>
     <string name="work_experience">Work Experience</string>
@@ -25,4 +25,6 @@
     <string name="forgot_password">Forgot Password</string>
     <string name="back">Back</string>
     <string name="reset_password">Reset Password</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

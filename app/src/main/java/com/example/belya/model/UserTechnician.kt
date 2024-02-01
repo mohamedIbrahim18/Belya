@@ -1,6 +1,6 @@
-package com.example.belya.ui
+package com.example.belya.model
 
-data class userFactor (
+data class userTechnician (
     val firstName : String?,
     val lastName : String?,
     val email : String?,

@@ -1,4 +1,4 @@
-package com.example.belya.ui.Customer_Main
+package com.example.belya.ui.customer_main
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

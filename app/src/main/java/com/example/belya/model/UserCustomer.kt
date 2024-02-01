@@ -1,4 +1,4 @@
-package com.example.belya.ui
+package com.example.belya.model
 
 data class userCustomer(
     val firstName : String?,

@@ -4,9 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.belya.databinding.ActivityLoginBinding
-import com.example.belya.ui.Constent
-import com.example.belya.ui.Customer_Main.CustomerMainActivity
-import com.example.belya.ui.Factor_Main.FactorMainActivity
+import com.example.belya.Constent
+import com.example.belya.ui.customer_main.CustomerMainActivity
+import com.example.belya.ui.technician_main.TechnicianMainActivity
 import com.example.belya.ui.registration.auth.forget_password.ForgetPasswordActivity
 import com.example.belya.ui.registration.auth.signup.SignUpActivity
 import com.google.android.material.snackbar.Snackbar
@@ -80,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkUserTypeAndNavigate() {
         if(Constent.TYPE==0){
-            navigateToFactor()
+            navigateToTechnician()
         } else if (Constent.TYPE==1){
             navigateToCustomer()
         }
@@ -91,8 +91,8 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
         finish()    }
 
-    private fun navigateToFactor() {
-        val intent = Intent(this,FactorMainActivity::class.java)
+    private fun navigateToTechnician() {
+        val intent = Intent(this,TechnicianMainActivity::class.java)
         startActivity(intent)
         finish()
     }

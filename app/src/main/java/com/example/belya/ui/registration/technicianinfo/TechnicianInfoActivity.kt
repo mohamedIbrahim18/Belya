@@ -1,21 +1,21 @@
-package com.example.belya.ui.registration.factorinfo
+package com.example.belya.ui.registration.technicianinfo
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.belya.databinding.ActivityFactorInfoBinding
-import com.example.belya.ui.Constent
-import com.example.belya.ui.Factor_Main.FactorMainActivity
+import com.example.belya.databinding.ActivityTechnicianInfoBinding
+import com.example.belya.Constent
+import com.example.belya.ui.technician_main.TechnicianMainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class FactorInfoActivity : AppCompatActivity() {
-    private lateinit var viewBinding: ActivityFactorInfoBinding
+class TechnicianInfoActivity : AppCompatActivity() {
+    private lateinit var viewBinding: ActivityTechnicianInfoBinding
     private val auth = FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBinding = ActivityFactorInfoBinding.inflate(layoutInflater)
+        viewBinding = ActivityTechnicianInfoBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         initViews()
     }
@@ -61,7 +61,7 @@ class FactorInfoActivity : AppCompatActivity() {
     }
 
     private fun navigateToFactorPage() {
-        val intent = Intent(this,FactorMainActivity::class.java)
+        val intent = Intent(this,TechnicianMainActivity::class.java)
         startActivity(intent)
         finish()
     }

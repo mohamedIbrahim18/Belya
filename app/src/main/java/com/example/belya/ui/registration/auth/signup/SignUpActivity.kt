@@ -9,12 +9,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.belya.databinding.ActivitySignUpBinding
-import com.example.belya.ui.Constent
-import com.example.belya.ui.Customer_Main.CustomerMainActivity
+import com.example.belya.Constent
+import com.example.belya.ui.customer_main.CustomerMainActivity
 import com.example.belya.ui.registration.auth.login.LoginActivity
-import com.example.belya.ui.registration.factorinfo.FactorInfoActivity
-import com.example.belya.ui.userCustomer
-import com.example.belya.ui.userFactor
+import com.example.belya.ui.registration.technicianinfo.TechnicianInfoActivity
+import com.example.belya.model.userCustomer
+import com.example.belya.model.userTechnician
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -64,9 +64,9 @@ class SignUpActivity : AppCompatActivity() {
                 if (selectedRadioButton.text.equals("Customer")){
                    // navigateToCustomerPage()
                     doRegisterCustomer()
-                } else if(selectedRadioButton.text.equals("Factor")){
+                } else if(selectedRadioButton.text.equals("Technician")){
                    // navigateToFactorDetails()
-                    doRegisterFactor()
+                    doRegisterTechnician()
                 }
             }
     }
@@ -117,10 +117,10 @@ class SignUpActivity : AppCompatActivity() {
 
         return isValid
     }
-    fun doRegisterFactor(){
+    fun doRegisterTechnician(){
         viewBinding.apply {
             btnCreateAccount.setOnClickListener {
-                val userFactor = userFactor(
+                val userTechnician = userTechnician(
                     firstnameEd.text.toString(),
                     lastnameEd.text.toString(),
                     emailEd.text.toString(),
@@ -144,25 +144,25 @@ class SignUpActivity : AppCompatActivity() {
                 } else {
                     viewBinding.inputlayoutRepassword.error = null
                 }
-                registerFactor(userFactor,passwordEd)
+                registerTechnician(userTechnician,passwordEd)
             }
         }
     }
-    private fun registerFactor(userFactor: userFactor, password:String) {
+    private fun registerTechnician(userTechnician: userTechnician, password:String) {
         viewBinding.loadingProgressBar.isVisible = true
 
         if (!validForm()) {
             setUiEnabled(true)
         } else {
             setUiEnabled(false)
-                auth.createUserWithEmailAndPassword(userFactor.email!!, password)
+                auth.createUserWithEmailAndPassword(userTechnician.email!!, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             // User creation successful
                             task.result.user.let {
-                                saveUserFactorDataBase(it?.uid!!,userFactor)
+                                saveUserTechnicianDataBase(it?.uid!!,userTechnician)
                                 Constent.TYPE =0;
-                                navigateToFactorDetails()
+                                navigateToTechnicianDetails()
                             }
                         } else {
                             // User creation failed
@@ -175,9 +175,9 @@ class SignUpActivity : AppCompatActivity() {
 
         }
     }
-    private fun saveUserFactorDataBase(uId:String,userFactor: userFactor) {
+    private fun saveUserTechnicianDataBase(uId:String, userTechnician: userTechnician) {
         db.collection(Constent.USER_FACTOR_COLLECTION).document(uId)
-            .set(userFactor)
+            .set(userTechnician)
             .addOnSuccessListener {documentReference->
                 // Done
             }
@@ -196,7 +196,7 @@ class SignUpActivity : AppCompatActivity() {
                 Log.w("TAG", "Error adding document", e)
             }
     }
-    private fun registerCustomer(userCustomer: userCustomer ,password:String) {
+    private fun registerCustomer(userCustomer: userCustomer, password:String) {
         viewBinding.loadingProgressBar.isVisible = true
 
         if (!validForm()) {
@@ -262,8 +262,8 @@ class SignUpActivity : AppCompatActivity() {
     }
 
 
-    private fun navigateToFactorDetails() {
-        val intent = Intent(this, FactorInfoActivity::class.java)
+    private fun navigateToTechnicianDetails() {
+        val intent = Intent(this, TechnicianInfoActivity::class.java)
         startActivity(intent)
     }
 

@@ -14,7 +14,7 @@ import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.ui.registration.technicianinfo.TechnicianInfoActivity
 import com.example.belya.model.userCustomer
 import com.example.belya.model.userTechnician
-import com.example.belya.ui.customer_main.CustomerMainActivity
+import com.example.belya.ui.registration.customerinfo.CustomerInfoActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -207,7 +207,7 @@ class SignUpActivity : AppCompatActivity() {
                         // User creation successful
                         task.result.user.let {
                             saveUserCustomerDataBase(it?.uid!!,userCustomer)
-                            navigateToCustomerPage()
+                            navigateToCustomerDetails()
                         }
                     } else {
                         // User creation failed
@@ -226,6 +226,8 @@ class SignUpActivity : AppCompatActivity() {
                     firstnameEd.text.toString(),
                     lastnameEd.text.toString(),
                     emailEd.text.toString(),
+                    "",
+                    ""
                 )
                 val passwordEd = viewBinding.passwordEd.text.toString()
                 val rePasswordEd = viewBinding.repasswordEd.text.toString()
@@ -264,9 +266,9 @@ class SignUpActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun navigateToCustomerPage() {
+    private fun navigateToCustomerDetails() {
         saveUserType(1)
-        val intent = Intent(this, CustomerMainActivity::class.java)
+        val intent = Intent(this, CustomerInfoActivity::class.java)
         startActivity(intent)
         finish()
     }

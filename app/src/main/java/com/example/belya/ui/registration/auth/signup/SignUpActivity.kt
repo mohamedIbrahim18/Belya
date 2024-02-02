@@ -10,11 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.belya.databinding.ActivitySignUpBinding
 import com.example.belya.Constent
-import com.example.belya.ui.customer_main.CustomerMainActivity
 import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.ui.registration.technicianinfo.TechnicianInfoActivity
 import com.example.belya.model.userCustomer
 import com.example.belya.model.userTechnician
+import com.example.belya.ui.customer_main.CustomerMainActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -119,7 +119,6 @@ class SignUpActivity : AppCompatActivity() {
     }
     fun doRegisterTechnician(){
         viewBinding.apply {
-            btnCreateAccount.setOnClickListener {
                 val userTechnician = userTechnician(
                     firstnameEd.text.toString(),
                     lastnameEd.text.toString(),
@@ -145,7 +144,7 @@ class SignUpActivity : AppCompatActivity() {
                     viewBinding.inputlayoutRepassword.error = null
                 }
                 registerTechnician(userTechnician,passwordEd)
-            }
+
         }
     }
     private fun registerTechnician(userTechnician: userTechnician, password:String) {
@@ -161,7 +160,6 @@ class SignUpActivity : AppCompatActivity() {
                             // User creation successful
                             task.result.user.let {
                                 saveUserTechnicianDataBase(it?.uid!!,userTechnician)
-                                Constent.TYPE =0;
                                 navigateToTechnicianDetails()
                             }
                         } else {
@@ -176,7 +174,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
     private fun saveUserTechnicianDataBase(uId:String, userTechnician: userTechnician) {
-        db.collection(Constent.USER_FACTOR_COLLECTION).document(uId)
+        db.collection(Constent.USER_TECHNICIAN_COLLECTION).document(uId)
             .set(userTechnician)
             .addOnSuccessListener {documentReference->
                 // Done
@@ -209,7 +207,6 @@ class SignUpActivity : AppCompatActivity() {
                         // User creation successful
                         task.result.user.let {
                             saveUserCustomerDataBase(it?.uid!!,userCustomer)
-                            Constent.TYPE =1;
                             navigateToCustomerPage()
                         }
                     } else {
@@ -225,7 +222,6 @@ class SignUpActivity : AppCompatActivity() {
     }
     fun doRegisterCustomer(){
         viewBinding.apply {
-            btnCreateAccount.setOnClickListener {
                 val userCustomer = userCustomer(
                     firstnameEd.text.toString(),
                     lastnameEd.text.toString(),
@@ -247,7 +243,7 @@ class SignUpActivity : AppCompatActivity() {
                     viewBinding.inputlayoutRepassword.error = null
                 }
                 registerCustomer(userCustomer,passwordEd)
-            }
+
         }
     }
 
@@ -263,13 +259,21 @@ class SignUpActivity : AppCompatActivity() {
 
 
     private fun navigateToTechnicianDetails() {
+        saveUserType(0)
         val intent = Intent(this, TechnicianInfoActivity::class.java)
         startActivity(intent)
     }
 
     private fun navigateToCustomerPage() {
+        saveUserType(1)
         val intent = Intent(this, CustomerMainActivity::class.java)
         startActivity(intent)
         finish()
+    }
+    private fun saveUserType(userType: Int) {
+        val sharedPreferences = getSharedPreferences(Constent.USER_PREFERENCES, MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putInt(Constent.USER_TYPE, userType)
+        editor.apply()
     }
 }

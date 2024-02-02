@@ -46,7 +46,7 @@ class TechnicianInfoActivity : AppCompatActivity() {
         val userFactorData = getTheNewData()
         val db = FirebaseFirestore.getInstance()
         val documentId = auth.uid!!
-        val userFactorsCollection = db.collection(Constent.USER_FACTOR_COLLECTION)
+        val userFactorsCollection = db.collection(Constent.USER_TECHNICIAN_COLLECTION)
         // Update the document with the new data
         userFactorsCollection.document(documentId)
             .update(userFactorData)

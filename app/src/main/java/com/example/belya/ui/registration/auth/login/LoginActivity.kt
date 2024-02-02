@@ -78,11 +78,20 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
         finish()     }
 
-    private fun checkUserTypeAndNavigate() {
-        if(Constent.TYPE==0){
-            navigateToTechnician()
-        } else if (Constent.TYPE==1){
+    /*private fun checkUserTypeAndNavigate() {
+        if(Constent.TYPE==1){
             navigateToCustomer()
+        } else if (Constent.TYPE==0){
+            navigateToTechnician()
+        }
+    }*/
+    private fun checkUserTypeAndNavigate() {
+        val sharedPreferences = getSharedPreferences(Constent.USER_PREFERENCES, MODE_PRIVATE)
+        val userType = sharedPreferences.getInt(Constent.USER_TYPE, -1)
+
+        when (userType) {
+            0 -> navigateToTechnician()
+            1 -> navigateToCustomer()
         }
     }
 

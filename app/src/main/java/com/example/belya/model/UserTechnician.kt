@@ -6,7 +6,7 @@ data class userTechnician (
     val email : String?,
     val imagePath : String?,
     val phoneNumber : String?,
-    val occupation : String?,
+    val job : String?,
     val work_experience : String?
 ) {
     constructor() : this("","","","","","","")

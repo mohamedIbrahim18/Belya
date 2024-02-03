@@ -26,18 +26,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:text="Suggestions near you"
+        android:text="Categories"
         android:layout_marginTop="20dp"
         android:layout_marginStart="14dp"
         android:textStyle="bold"
         android:textColor="@color/blue_main" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_suggest"
+        android:id="@+id/recycler_categories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        tools:listitem="@layout/recycler_suggest_item_layout"
+        android:layout_marginTop="10dp"
+        tools:listitem="@layout/recycler_categories_item_layout"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     <TextView
         android:layout_width="wrap_content"
@@ -53,6 +54,8 @@
         android:id="@+id/recycler_most_important"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
         android:orientation="horizontal"
         tools:listitem="@layout/recycler_most_important_item_layout"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />

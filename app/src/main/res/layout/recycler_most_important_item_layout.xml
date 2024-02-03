@@ -3,15 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/image_most_important"
         android:layout_width="190dp"
         android:layout_height="190dp"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_test_most"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +25,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/image_most_important"
         app:layout_constraintTop_toBottomOf="@id/image_most_important"
-        tools:text="@string/occupation" />
+        tools:text="job" />
 
     <TextView
         android:id="@+id/name_most_important"

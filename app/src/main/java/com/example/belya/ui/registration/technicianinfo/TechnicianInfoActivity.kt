@@ -35,7 +35,7 @@ class TechnicianInfoActivity : AppCompatActivity() {
 
     private fun initSpinner() {
         // Dummy job data
-        val jobOptions = arrayOf("T1", "T2", "T3", "T4")
+        val jobOptions = arrayOf("mechanical", "plumber", "Carpenter", "electrical","Smith")
         val madapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, jobOptions)
         viewBinding.jobSpinner.apply {
             adapter = madapter

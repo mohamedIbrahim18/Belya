@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_graph"
+    app:startDestination="@id/homeCustomerFragment">
+
+    <fragment
+        android:id="@+id/homeCustomerFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.home.HomeCustomerFragment"
+        android:label="fragment_home_customer"
+        tools:layout="@layout/fragment_home_customer" >
+        <action
+            android:id="@+id/action_homeCustomerFragment_to_personInCategoryFragment"
+            app:destination="@id/personInCategoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/personInCategoryFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.PersonInCategoryFragment"
+        android:label="fragment_person_in_category"
+        tools:layout="@layout/fragment_person_in_category" />
+    <fragment
+        android:id="@+id/notificationCustomerFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.notification.NotificationCustomerFragment"
+        android:label="fragment_notification_customer"
+        tools:layout="@layout/fragment_notification_customer" />
+    <fragment
+        android:id="@+id/chatCustomerFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.chat.ChatCustomerFragment"
+        android:label="fragment_chat_customer"
+        tools:layout="@layout/fragment_chat_customer" />
+    <fragment
+        android:id="@+id/accountCustomerFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.account.AccountCustomerFragment"
+        android:label="fragment_account_customer"
+        tools:layout="@layout/fragment_account_customer" />
+</navigation>

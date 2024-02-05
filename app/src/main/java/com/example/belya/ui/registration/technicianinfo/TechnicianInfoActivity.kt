@@ -35,7 +35,7 @@ class TechnicianInfoActivity : AppCompatActivity() {
 
     private fun initSpinner() {
         // Dummy job data
-        val jobOptions = arrayOf("mechanical", "plumber", "Carpenter", "electrical","Smith")
+        val jobOptions = arrayOf("Plumber", "Pharmacist", "Carpenter", "Electrician","Mechanic")
         val madapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, jobOptions)
         viewBinding.jobSpinner.apply {
             adapter = madapter
@@ -61,10 +61,14 @@ class TechnicianInfoActivity : AppCompatActivity() {
 
         val phoneNumber = viewBinding.phoneEd.text.toString().trim()
         val workExperience = viewBinding.workExperienceEd.text.toString().trim()
+        val city = viewBinding.cityEd.text.toString().trim()
 
         val newData = mutableMapOf<String, Any>()
         if (phoneNumber.isNotEmpty()) {
             newData["phoneNumber"] = phoneNumber
+        }
+        if (city.isNotEmpty()) {
+            newData["city"] = city
         }
         newData["job"] = job?:""
         newData["work_experience"] = workExperience

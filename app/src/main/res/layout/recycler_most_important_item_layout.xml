@@ -11,7 +11,7 @@
         android:layout_height="190dp"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_test_most"
+        android:src="@drawable/ic_ngar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

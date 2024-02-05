@@ -12,13 +12,28 @@
         tools:layout="@layout/fragment_home_customer" >
         <action
             android:id="@+id/action_homeCustomerFragment_to_personInCategoryFragment"
-            app:destination="@id/personInCategoryFragment" />
+            app:destination="@id/personInCategoryFragment" >
+            <argument
+                android:name="jobName"
+                app:argType="string"
+                android:defaultValue="jobName"
+                />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/personInCategoryFragment"
         android:name="com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.PersonInCategoryFragment"
         android:label="fragment_person_in_category"
-        tools:layout="@layout/fragment_person_in_category" />
+        tools:layout="@layout/fragment_person_in_category" >
+        <action
+            android:id="@+id/action_personInCategoryFragment_to_technicianDetailsFragment"
+            app:destination="@id/technicianDetailsFragment">
+            <argument
+                android:name="personDetails"
+                app:argType="string"
+                android:defaultValue="personDetails"/>
+        </action>
+    </fragment>
     <fragment
         android:id="@+id/notificationCustomerFragment"
         android:name="com.example.belya.ui.customer_main.tabs.notification.NotificationCustomerFragment"
@@ -34,4 +49,9 @@
         android:name="com.example.belya.ui.customer_main.tabs.account.AccountCustomerFragment"
         android:label="fragment_account_customer"
         tools:layout="@layout/fragment_account_customer" />
+    <fragment
+        android:id="@+id/technicianDetailsFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.technician_details.TechnicianDetailsFragment"
+        android:label="fragment_technician_deatils"
+        tools:layout="@layout/fragment_technician_deatils" />
 </navigation>

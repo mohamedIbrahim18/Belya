@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    app:cardCornerRadius="5dp"
-    app:cardElevation="20dp"
+    android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:layout_height="wrap_content">
+    app:cardCornerRadius="5dp"
+    app:cardElevation="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_margin="5dp"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/cardPerson"
+        android:layout_margin="5dp">
 
         <TextView
             android:id="@+id/person_name"
@@ -18,12 +20,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="27dp"
             android:layout_marginTop="15dp"
-            android:text="Name"
             android:textColor="@color/blue_main"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Name" />
 
         <TextView
             android:id="@+id/person_job"
@@ -31,20 +33,33 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="27dp"
             android:layout_marginTop="15dp"
-            android:text="Job"
             android:textColor="@color/blue_main"
             android:textSize="13sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/person_name" />
+            app:layout_constraintTop_toBottomOf="@id/person_name"
+            tools:text="Job" />
+
+        <RatingBar
+            android:id="@+id/person_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:rating="0"
+            android:numStars="5"
+            android:isIndicator="true"
+            android:scaleX="0.75"
+            android:scaleY="0.75"
+            app:layout_constraintStart_toStartOf="@id/person_job"
+            app:layout_constraintTop_toBottomOf="@id/person_job" />
+
         <ImageView
             android:id="@+id/person_image"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:layout_marginEnd="16dp"
             android:src="@drawable/ic_profileimg"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/person_name"
-            android:layout_marginEnd="16dp"
-            />
+            app:layout_constraintTop_toTopOf="@id/person_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

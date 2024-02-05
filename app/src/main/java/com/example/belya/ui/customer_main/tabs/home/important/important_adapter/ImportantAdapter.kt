@@ -1,4 +1,4 @@
-package com.example.belya.ui.customer_main.tabs.home.importantAdapter
+package com.example.belya.ui.customer_main.tabs.home.important.important_adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

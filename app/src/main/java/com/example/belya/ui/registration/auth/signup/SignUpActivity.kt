@@ -126,6 +126,8 @@ class SignUpActivity : AppCompatActivity() {
                     "",
                     "",
                     "",
+                    "",
+                    0.0,
                     ""
                 )
                 var passwordEd = viewBinding.passwordEd.text.toString()

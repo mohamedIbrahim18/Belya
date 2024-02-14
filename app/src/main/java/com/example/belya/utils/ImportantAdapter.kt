@@ -1,9 +1,10 @@
-package com.example.belya.ui.customer_main.tabs.home.important.important_adapter
+package com.example.belya.utils
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.belya.databinding.RecyclerMostImportantItemLayoutBinding
+import com.example.belya.model.ImportantItem
 
 class ImportantAdapter(private val listOfImportant : List<ImportantItem>) : RecyclerView.Adapter<ImportantAdapter.ViewHolderImportant>() {
     class ViewHolderImportant(var itemBinding: RecyclerMostImportantItemLayoutBinding)

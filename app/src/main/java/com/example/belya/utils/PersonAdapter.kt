@@ -1,4 +1,4 @@
-package com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.who_in_this_category_adapter
+package com.example.belya.utils
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -19,7 +19,7 @@ class PersonAdapter(private var listOfPerson: MutableList<userTechnician>) :
                 placeholder(R.drawable.ic_profileimg)
             }
             itemBinding.personName.text = task.firstName
-            itemBinding.personJob.text = task.job
+            itemBinding.city.text = task.city
             itemBinding.personRate.rating = task.person_rate.toFloat()
         }
     }

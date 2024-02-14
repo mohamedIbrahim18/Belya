@@ -1,9 +1,10 @@
-package com.example.belya.ui.customer_main.tabs.home.categories.categories_adapter
+package com.example.belya.utils
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.belya.databinding.RecyclerCategoriesItemLayoutBinding
+import com.example.belya.model.CategoriesItem
 
 class CategoriesAdapter(private val lisfOfCategories : List<CategoriesItem>) : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
     class ViewHolder(var itemBinding: RecyclerCategoriesItemLayoutBinding) :

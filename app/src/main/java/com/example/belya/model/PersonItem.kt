@@ -1,4 +1,4 @@
-package com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.who_in_this_category_adapter
+package com.example.belya.model
 // Delete this file
 // replace this file with (UserTechnician)
 data class PersonItem (

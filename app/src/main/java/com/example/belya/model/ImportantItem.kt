@@ -1,4 +1,4 @@
-package com.example.belya.ui.customer_main.tabs.home.important.important_adapter
+package com.example.belya.model
 
 data class ImportantItem(
     val  image: Int,

@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.belya.R
 import com.example.belya.databinding.FragmentTechnicianDeatilsBinding
 import com.example.belya.model.userTechnician
 
@@ -35,10 +34,33 @@ class TechnicianDetailsFragment : Fragment() {
                 val name = person.firstName + " "+ person.lastName
                 viewBinding.firstnamePersonDetails.text = name
                 viewBinding.cityPersonDetails.text = person.city
+                viewBinding.ratingbarPersonDetails.rating = person.person_rate.toFloat()
                 // average price
+
+                //
+
+                }
             }
+        viewBinding.progressBarPersonDeatails.visibility = View.GONE
+        viewBinding.bookNowPersonDetails.setOnClickListener {
+            checkPriceAndMakeAction()
         }
     }
 
+    private fun checkPriceAndMakeAction() {
+        viewBinding.bookNowPersonDetails.visibility = View.GONE
+        viewBinding.progressBarPersonDeatails.visibility = View.VISIBLE
+        if (viewBinding.edittextPersonDetails.text?.isNotEmpty() == true) {
+            // hide error
+            viewBinding.textinputLayoutPersonDetails.error = null
+            // make a request to manage price
+            // Assuming you have some method to handle the request here
+        } else {
+            // show error
+            viewBinding.textinputLayoutPersonDetails.error = "Please Enter a price"
+            viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+            viewBinding.progressBarPersonDeatails.visibility = View.GONE
+        }
+    }
 
 }

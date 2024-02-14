@@ -12,7 +12,7 @@ import com.example.belya.HorizontalItemDecoration
 import com.example.belya.R
 import com.example.belya.databinding.FragmentPersonInCategoryBinding
 import com.example.belya.model.userTechnician
-import com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.who_in_this_category_adapter.PersonAdapter
+import com.example.belya.utils.PersonAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -101,8 +101,11 @@ class PersonInCategoryFragment : Fragment() {
         }
     }
 
+    /*
     private fun showPersonDetails(task: userTechnician) {
         val action = PersonInCategoryFragmentDirections.actionPersonInCategoryFragmentToTechnicianDetailsFragment(task.email?:"")
         view?.findNavController()?.navigate(action)
     }
+
+     */
 }

@@ -11,10 +11,10 @@ import com.example.belya.Constent
 import com.example.belya.HorizontalItemDecoration
 import com.example.belya.R
 import com.example.belya.databinding.FragmentHomeCustomerBinding
-import com.example.belya.ui.customer_main.tabs.home.categories.categories_adapter.CategoriesAdapter
-import com.example.belya.ui.customer_main.tabs.home.categories.categories_adapter.CategoriesItem
-import com.example.belya.ui.customer_main.tabs.home.important.important_adapter.ImportantAdapter
-import com.example.belya.ui.customer_main.tabs.home.important.important_adapter.ImportantItem
+import com.example.belya.utils.CategoriesAdapter
+import com.example.belya.model.CategoriesItem
+import com.example.belya.utils.ImportantAdapter
+import com.example.belya.model.ImportantItem
 import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeCustomerFragment : Fragment() {

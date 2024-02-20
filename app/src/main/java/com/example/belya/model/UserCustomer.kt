@@ -1,11 +1,12 @@
 package com.example.belya.model
 
-data class userCustomer(
+data class UserCustomer (
     val firstName : String?,
     val lastName : String?,
     val email : String?,
+    val imagePath : String?,
     val phoneNumber : String?,
-    val location : String?,
+    val city : String?,
 ){
-    constructor() : this("","","","","")
+    constructor():this("","","","","","")
 }

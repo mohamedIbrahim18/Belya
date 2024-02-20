@@ -9,11 +9,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.belya.databinding.ActivitySignUpBinding
-import com.example.belya.Constent
+import com.example.belya.Constant
+import com.example.belya.model.User
 import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.ui.registration.technicianinfo.TechnicianInfoActivity
-import com.example.belya.model.userCustomer
-import com.example.belya.model.userTechnician
 import com.example.belya.ui.registration.customerinfo.CustomerInfoActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -119,7 +118,7 @@ class SignUpActivity : AppCompatActivity() {
     }
     fun doRegisterTechnician(){
         viewBinding.apply {
-                val userTechnician = userTechnician(
+                val userTechnician = User(
                     firstnameEd.text.toString(),
                     lastnameEd.text.toString(),
                     emailEd.text.toString(),
@@ -127,8 +126,9 @@ class SignUpActivity : AppCompatActivity() {
                     "",
                     "",
                     "",
+                    "",
                     0.0,
-                    ""
+                    "Technician"
                 )
                 var passwordEd = viewBinding.passwordEd.text.toString()
                 var rePasswordEd = viewBinding.repasswordEd.text.toString()
@@ -149,7 +149,7 @@ class SignUpActivity : AppCompatActivity() {
 
         }
     }
-    private fun registerTechnician(userTechnician: userTechnician, password:String) {
+    private fun registerTechnician(userTechnician: User, password:String) {
         viewBinding.loadingProgressBar.isVisible = true
 
         if (!validForm()) {
@@ -175,8 +175,8 @@ class SignUpActivity : AppCompatActivity() {
 
         }
     }
-    private fun saveUserTechnicianDataBase(uId:String, userTechnician: userTechnician) {
-        db.collection(Constent.USER_TECHNICIAN_COLLECTION).document(uId)
+    private fun saveUserTechnicianDataBase(uId:String, userTechnician: User) {
+        db.collection(Constant.USER).document(uId)
             .set(userTechnician)
             .addOnSuccessListener {documentReference->
                 // Done
@@ -186,8 +186,8 @@ class SignUpActivity : AppCompatActivity() {
             }
     }
 
-    private fun saveUserCustomerDataBase(uId:String,userCustomer: userCustomer) {
-        db.collection(Constent.USER_CUSTOMER_COLLECTION).document(uId)
+    private fun saveUserCustomerDataBase(uId:String,userCustomer: User) {
+        db.collection(Constant.USER).document(uId)
             .set(userCustomer)
             .addOnSuccessListener {documentReference->
                 // Done
@@ -196,7 +196,7 @@ class SignUpActivity : AppCompatActivity() {
                 Log.w("TAG", "Error adding document", e)
             }
     }
-    private fun registerCustomer(userCustomer: userCustomer, password:String) {
+    private fun registerCustomer(userCustomer: User, password:String) {
         viewBinding.loadingProgressBar.isVisible = true
 
         if (!validForm()) {
@@ -224,12 +224,17 @@ class SignUpActivity : AppCompatActivity() {
     }
     fun doRegisterCustomer(){
         viewBinding.apply {
-                val userCustomer = userCustomer(
+                val userCustomer = User(
                     firstnameEd.text.toString(),
                     lastnameEd.text.toString(),
                     emailEd.text.toString(),
                     "",
-                    ""
+                    "",
+                    "",
+                    "",
+                    "",
+                    0.0,
+                    "Customer"
                 )
                 val passwordEd = viewBinding.passwordEd.text.toString()
                 val rePasswordEd = viewBinding.repasswordEd.text.toString()
@@ -263,21 +268,14 @@ class SignUpActivity : AppCompatActivity() {
 
 
     private fun navigateToTechnicianDetails() {
-        saveUserType(0)
         val intent = Intent(this, TechnicianInfoActivity::class.java)
         startActivity(intent)
     }
 
     private fun navigateToCustomerDetails() {
-        saveUserType(1)
         val intent = Intent(this, CustomerInfoActivity::class.java)
         startActivity(intent)
         finish()
     }
-    private fun saveUserType(userType: Int) {
-        val sharedPreferences = getSharedPreferences(Constent.USER_PREFERENCES, MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putInt(Constent.USER_TYPE, userType)
-        editor.apply()
-    }
+
 }

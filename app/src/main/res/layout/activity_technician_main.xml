@@ -7,9 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.technician_main.TechnicianMainActivity">
 
-    <FrameLayout
+    <fragment
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/my_graph_technician"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/navigation_menu"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,5 +26,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="4dp"
-        app:menu="@menu/nav_menu"/>
+        app:menu="@menu/nav_menu_technician"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

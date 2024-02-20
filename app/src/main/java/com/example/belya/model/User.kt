@@ -1,7 +1,10 @@
 package com.example.belya.model
 
-data class UserTechnician (
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
+data class User(
     val firstName : String?,
     val lastName : String?,
     val email : String?,
@@ -11,9 +14,9 @@ data class UserTechnician (
     val job : String?,
     val work_experience : String?,
     val person_rate : Double,
-){
-    companion object{
-        const val UserType="Technician"
-    }
-    constructor(): this("","","","","","","","",0.0)
+    val userType :String
+) : Parcelable
+{
+constructor() : this("","","","","","","","",
+    0.0,"",)
 }

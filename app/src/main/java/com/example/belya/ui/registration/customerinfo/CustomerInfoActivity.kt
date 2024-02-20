@@ -4,10 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.example.belya.Constent
+import com.example.belya.Constant
 import com.example.belya.databinding.ActivityCustomerInfoBinding
 import com.example.belya.ui.customer_main.CustomerMainActivity
-import com.example.belya.ui.technician_main.TechnicianMainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -45,9 +44,9 @@ class CustomerInfoActivity : AppCompatActivity() {
         val userCustomerData = getTheNewData()
         val db = FirebaseFirestore.getInstance()
         val documentId = auth.uid!!
-        val userFactorsCollection = db.collection(Constent.USER_CUSTOMER_COLLECTION)
+        val User = db.collection(Constant.USER)
         // Update the document with the new data
-        userFactorsCollection.document(documentId)
+        User.document(documentId)
             .update(userCustomerData)
             .addOnSuccessListener {
                 // Update successful

@@ -4,17 +4,19 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.belya.databinding.ActivityLoginBinding
-import com.example.belya.Constent
+import com.example.belya.Constant
 import com.example.belya.ui.customer_main.CustomerMainActivity
 import com.example.belya.ui.technician_main.TechnicianMainActivity
 import com.example.belya.ui.registration.auth.forget_password.ForgetPasswordActivity
 import com.example.belya.ui.registration.auth.signup.SignUpActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var viewBinding : ActivityLoginBinding
     private lateinit var auth : FirebaseAuth
+    lateinit var db : FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         viewBinding.btnLogin.setOnClickListener {
             val email = viewBinding.emailEd.text.toString()
@@ -78,20 +81,39 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
         finish()     }
 
-    /*private fun checkUserTypeAndNavigate() {
-        if(Constent.TYPE==1){
-            navigateToCustomer()
-        } else if (Constent.TYPE==0){
-            navigateToTechnician()
-        }
-    }*/
     private fun checkUserTypeAndNavigate() {
-        val sharedPreferences = getSharedPreferences(Constent.USER_PREFERENCES, MODE_PRIVATE)
-        val userType = sharedPreferences.getInt(Constent.USER_TYPE, -1)
-
-        when (userType) {
-            0 -> navigateToTechnician()
-            1 -> navigateToCustomer()
+        val currentUser = auth.currentUser
+        currentUser?.let { user ->
+            db.collection(Constant.USER)
+                .document(user.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document != null && document.exists()) {
+                        val userType = document.getString("userType")
+                        userType?.let {
+                            if (it == "Technician") {
+                                navigateToTechnician()
+                            } else if (it == "Customer") {
+                                navigateToCustomer()
+                            } else {
+                                // Handle other user types if needed
+                                Snackbar.make(
+                                    viewBinding.root,
+                                    "Error",
+                                    Snackbar.LENGTH_LONG).show()
+                            }
+                        }
+                    } else {
+                        // Document doesn't exist or user type is not set
+                    }
+                }
+                .addOnFailureListener { e ->
+                    // Handle failure
+                    Snackbar.make(
+                        viewBinding.root,
+                        e.localizedMessage,
+                        Snackbar.LENGTH_LONG).show()
+                }
         }
     }
 

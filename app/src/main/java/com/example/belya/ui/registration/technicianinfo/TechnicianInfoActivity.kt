@@ -8,7 +8,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.belya.databinding.ActivityTechnicianInfoBinding
-import com.example.belya.Constent
+import com.example.belya.Constant
 import com.example.belya.ui.technician_main.TechnicianMainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -35,7 +35,7 @@ class TechnicianInfoActivity : AppCompatActivity() {
 
     private fun initSpinner() {
         // Dummy job data
-        val jobOptions = arrayOf("Plumber", "Pharmacist", "Carpenter", "Electrician","Mechanic")
+        val jobOptions = arrayOf("Plumping", "Pharmacy", "Carpentry", "Electricity","Mechanics")
         val madapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, jobOptions)
         viewBinding.jobSpinner.apply {
             adapter = madapter
@@ -80,7 +80,7 @@ class TechnicianInfoActivity : AppCompatActivity() {
         val userFactorData = getTheNewData()
         val db = FirebaseFirestore.getInstance()
         val documentId = auth.uid!!
-        val userFactorsCollection = db.collection(Constent.USER_TECHNICIAN_COLLECTION)
+        val userFactorsCollection = db.collection(Constant.USER)
         // Update the document with the new data
         userFactorsCollection.document(documentId)
             .update(userFactorData)

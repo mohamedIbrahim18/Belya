@@ -7,11 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import com.example.belya.Constent
+import com.example.belya.Constant
 import com.example.belya.HorizontalItemDecoration
 import com.example.belya.R
 import com.example.belya.databinding.FragmentPersonInCategoryBinding
-import com.example.belya.model.userTechnician
+import com.example.belya.model.User
 import com.example.belya.utils.PersonAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -21,8 +21,8 @@ class PersonInCategoryFragment : Fragment() {
 
     lateinit var viewBinding: FragmentPersonInCategoryBinding
     lateinit var personAdapter: PersonAdapter
-    private lateinit var personList: MutableList<userTechnician>
-    lateinit var newList: MutableList<userTechnician>
+    private lateinit var personList: MutableList<User>
+    lateinit var newList: MutableList<User>
     var categoryName: String = ""
 
     lateinit var auth: FirebaseAuth
@@ -58,7 +58,7 @@ class PersonInCategoryFragment : Fragment() {
     }
 
     private fun fetchPersonFromDatabase(categoryName: String) {
-        FirebaseFirestore.getInstance().collection(Constent.USER_TECHNICIAN_COLLECTION)
+        FirebaseFirestore.getInstance().collection(Constant.USER)
             .whereEqualTo("job", categoryName).addSnapshotListener { value, error ->
                 if (error != null) {
                     // handle the error
@@ -69,7 +69,7 @@ class PersonInCategoryFragment : Fragment() {
                     // Clear the existing list before adding new data
                     newList.clear()
                     for (document in value.documents) {
-                        val result = document.toObject(userTechnician::class.java)
+                        val result = document.toObject(User::class.java)
                         result?.let {
                             Log.d("DATA", result.toString())
                             newList.add(it)
@@ -90,7 +90,7 @@ class PersonInCategoryFragment : Fragment() {
             adapter = personAdapter
 
             personAdapter.onItemSelectedClickListnner = object : PersonAdapter.OnItemSelectedClick{
-                override fun onItemSelectedClick(position: Int, task: userTechnician) {
+                override fun onItemSelectedClick(position: Int, task: User) {
                     //showPersonDetails(task)
                     val bundle = Bundle()
                     bundle.putParcelable("pokemon",task)

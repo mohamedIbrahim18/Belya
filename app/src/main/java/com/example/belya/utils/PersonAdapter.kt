@@ -6,13 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.belya.R
 import com.example.belya.databinding.RecyclerPersonInCategoryItemBinding
-import com.example.belya.model.userTechnician
+import com.example.belya.model.User
 
-class PersonAdapter(private var listOfPerson: MutableList<userTechnician>) :
+class PersonAdapter(private var listOfPerson: MutableList<User>) :
     RecyclerView.Adapter<PersonAdapter.ViewHolder>() {
     class ViewHolder(var itemBinding: RecyclerPersonInCategoryItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(task: userTechnician) {
+        fun bind(task: User) {
            // itemBinding.personImage.text(task.imagePath)
             itemBinding.personImage.load(task.imagePath){
                 crossfade(500)
@@ -37,7 +37,7 @@ class PersonAdapter(private var listOfPerson: MutableList<userTechnician>) :
         return listOfPerson.size
     }
 
-    fun newList(mList: MutableList<userTechnician>){
+    fun newList(mList: MutableList<User>){
         listOfPerson = mList
         notifyDataSetChanged()
     }
@@ -52,7 +52,7 @@ class PersonAdapter(private var listOfPerson: MutableList<userTechnician>) :
     }
 
     interface OnItemSelectedClick {
-        fun onItemSelectedClick(position: Int, task: userTechnician)
+        fun onItemSelectedClick(position: Int, task: User)
     }
 
     var onItemSelectedClickListnner: OnItemSelectedClick? = null

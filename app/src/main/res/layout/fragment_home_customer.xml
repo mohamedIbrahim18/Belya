@@ -54,8 +54,6 @@
         android:id="@+id/recycler_most_important"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="5dp"
         android:orientation="horizontal"
         tools:listitem="@layout/recycler_most_important_item_layout"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />

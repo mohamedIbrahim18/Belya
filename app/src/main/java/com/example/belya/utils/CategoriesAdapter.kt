@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.belya.databinding.RecyclerCategoriesItemLayoutBinding
 import com.example.belya.model.CategoriesItem
 
-class CategoriesAdapter(private val lisfOfCategories : List<CategoriesItem>) : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
+class CategoriesAdapter( var lisfOfCategories : List<CategoriesItem>) : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
     class ViewHolder(var itemBinding: RecyclerCategoriesItemLayoutBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(task: CategoriesItem) {
@@ -32,6 +32,12 @@ class CategoriesAdapter(private val lisfOfCategories : List<CategoriesItem>) : R
             onItemSelectedClickListnner?.onItemSelectedClick(position,lisfOfCategories[position])
         }
     }
+
+    fun updateData(categoryItemList: List<CategoriesItem>) {
+        lisfOfCategories = categoryItemList
+        notifyDataSetChanged()
+    }
+
     interface OnItemSelectedClick{
         fun onItemSelectedClick(position: Int, task: CategoriesItem)
     }

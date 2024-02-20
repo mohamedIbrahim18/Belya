@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_graph_technician"
+    app:startDestination="@id/homeTechnicianFragment2">
+
+    <fragment
+        android:id="@+id/homeTechnicianFragment2"
+        android:name="com.example.belya.ui.technician_main.tabs.home.HomeTechnicianFragment"
+        android:label="fragment_home_technician"
+        tools:layout="@layout/fragment_home_technician" />
+    <fragment
+        android:id="@+id/chatTechnicianFragment2"
+        android:name="com.example.belya.ui.technician_main.tabs.chat.ChatTechnicianFragment"
+        android:label="fragment_chat_technician"
+        tools:layout="@layout/fragment_chat_technician" />
+    <fragment
+        android:id="@+id/notificationTechnicianFragment2"
+        android:name="com.example.belya.ui.technician_main.tabs.notification.NotificationTechnicianFragment"
+        android:label="fragment_notification_technician"
+        tools:layout="@layout/fragment_notification_technician" />
+    <fragment
+        android:id="@+id/accountTechnicianFragment2"
+        android:name="com.example.belya.ui.technician_main.tabs.account.AccountTechnicianFragment"
+        android:label="fragment_account_technician"
+        tools:layout="@layout/fragment_account_technician" />
+</navigation>

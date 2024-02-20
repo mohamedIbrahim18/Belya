@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import com.example.belya.Constent
+import com.example.belya.Constant
 import com.example.belya.HorizontalItemDecoration
 import com.example.belya.R
 import com.example.belya.databinding.FragmentHomeCustomerBinding
@@ -42,7 +42,6 @@ class HomeCustomerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-
 
     }
 
@@ -83,9 +82,6 @@ class HomeCustomerFragment : Fragment() {
             ImportantItem(R.drawable.ic_plumber, "TSADASDAS", "30"),
             ImportantItem(R.drawable.ic_plumber, "TSADASDAS", "30"),
             ImportantItem(R.drawable.ic_plumber, "TSADASDAS", "30"),
-            ImportantItem(R.drawable.ic_plumber, "TSADASDAS", "30"),
-            ImportantItem(R.drawable.ic_plumber, "TSADASDAS", "30"),
-            ImportantItem(R.drawable.ic_plumber, "TSADASDAS", "30"),
         )
         importantAdapter = ImportantAdapter(importantItemList)
         viewBinding.recyclerMostImportant.apply {
@@ -102,7 +98,7 @@ class HomeCustomerFragment : Fragment() {
     }
 
     private fun fetchNumberOfCategory(countOfJob: String) {
-        val docRef = FirebaseFirestore.getInstance().collection(Constent.USER_TECHNICIAN_COLLECTION)
+        val docRef = FirebaseFirestore.getInstance().collection(Constant.USER)
             .whereEqualTo("job", countOfJob)
         docRef.addSnapshotListener { value, error ->
             if (error != null) {

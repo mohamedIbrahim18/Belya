@@ -45,29 +45,29 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun navigateToLogin() {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
 
     }
 
 
     private fun chooseWhoUseThisApp() {
-            //get selected radio button from radiogroup
-            val buttonId: Int = viewBinding.typeContainer.checkedRadioButtonId
-            if (buttonId == View.NO_ID) {
-                Toast.makeText(this, "Please Select Choose...", Toast.LENGTH_SHORT).show()
-            } else {
-                //TODO make validate
-                val selectedRadioButton = findViewById<RadioButton>(buttonId)
-                if (selectedRadioButton.text.equals("Customer")){
-                   // navigateToCustomerPage()
-                    doRegisterCustomer()
-                } else if(selectedRadioButton.text.equals("Technician")){
-                   // navigateToFactorDetails()
-                    doRegisterTechnician()
-                }
+        //get selected radio button from radiogroup
+        val buttonId: Int = viewBinding.typeContainer.checkedRadioButtonId
+        if (buttonId == View.NO_ID) {
+            Toast.makeText(this, "Please Select Choose...", Toast.LENGTH_SHORT).show()
+        } else {
+            //TODO make validate
+            val selectedRadioButton = findViewById<RadioButton>(buttonId)
+            if (selectedRadioButton.text.equals("Customer")) {
+                // navigateToCustomerPage()
+                doRegisterCustomer()
+            } else if (selectedRadioButton.text.equals("Technician")) {
+                // navigateToFactorDetails()
+                doRegisterTechnician()
             }
+        }
     }
 
 
@@ -116,69 +116,81 @@ class SignUpActivity : AppCompatActivity() {
 
         return isValid
     }
-    fun doRegisterTechnician(){
-        viewBinding.apply {
-                val userTechnician = User(
-                    firstnameEd.text.toString(),
-                    lastnameEd.text.toString(),
-                    emailEd.text.toString(),
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    0.0,
-                    "Technician"
-                )
-                var passwordEd = viewBinding.passwordEd.text.toString()
-                var rePasswordEd = viewBinding.repasswordEd.text.toString()
-                if (passwordEd.isBlank()) {
-                    // show error
-                    viewBinding.inputlayoutPassword.error = "Please enter a strong password"
-                } else {
-                    viewBinding.inputlayoutPassword.error = null
-                }
 
-                if (passwordEd != rePasswordEd) {
-                    // show error
-                    viewBinding.inputlayoutRepassword.error = "Password doesn't match"
-                } else {
-                    viewBinding.inputlayoutRepassword.error = null
-                }
-                registerTechnician(userTechnician,passwordEd)
+    fun doRegisterTechnician() {
+        auth = FirebaseAuth.getInstance()
+        viewBinding.apply {
+            val userTechnician = User(
+                firstnameEd.text.toString(),
+                lastnameEd.text.toString(),
+                emailEd.text.toString(),
+                "",
+                "",
+                "",
+                "",
+                "",
+                0.0,
+                "Technician",
+                "",
+                ""
+            )
+            var passwordEd = viewBinding.passwordEd.text.toString()
+            var rePasswordEd = viewBinding.repasswordEd.text.toString()
+            if (passwordEd.isBlank()) {
+                // show error
+                viewBinding.inputlayoutPassword.error = "Please enter a strong password"
+            } else {
+                viewBinding.inputlayoutPassword.error = null
+            }
+
+            if (passwordEd != rePasswordEd) {
+                // show error
+                viewBinding.inputlayoutRepassword.error = "Password doesn't match"
+            } else {
+                viewBinding.inputlayoutRepassword.error = null
+            }
+            registerTechnician(userTechnician, passwordEd)
 
         }
     }
-    private fun registerTechnician(userTechnician: User, password:String) {
+
+    private fun registerTechnician(userTechnician: User, password: String) {
         viewBinding.loadingProgressBar.isVisible = true
 
         if (!validForm()) {
             setUiEnabled(true)
         } else {
             setUiEnabled(false)
-                auth.createUserWithEmailAndPassword(userTechnician.email!!, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            // User creation successful
-                            task.result.user.let {
-                                saveUserTechnicianDataBase(it?.uid!!,userTechnician)
-                                navigateToTechnicianDetails()
-                            }
-                        } else {
-                            // User creation failed
-                            Snackbar.make(viewBinding.root,task.exception?.localizedMessage!!,Snackbar.LENGTH_LONG).show()
-
+            auth.createUserWithEmailAndPassword(userTechnician.email!!, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // User creation successful
+                        val userId = task.result?.user?.uid ?: ""
+                        userTechnician.userID = userId
+                        task.result.user.let {
+                            saveUserTechnicianDataBase(it?.uid!!, userTechnician)
+                            navigateToTechnicianDetails()
                         }
-                        setUiEnabled(true)
+                    } else {
+                        // User creation failed
+                        Snackbar.make(
+                            viewBinding.root,
+                            task.exception?.localizedMessage!!,
+                            Snackbar.LENGTH_LONG
+                        ).show()
+
                     }
+                    setUiEnabled(true)
+                }
 
 
         }
     }
-    private fun saveUserTechnicianDataBase(uId:String, userTechnician: User) {
+
+    private fun saveUserTechnicianDataBase(uId: String, userTechnician: User) {
         db.collection(Constant.USER).document(uId)
             .set(userTechnician)
-            .addOnSuccessListener {documentReference->
+            .addOnSuccessListener { documentReference ->
                 // Done
             }
             .addOnFailureListener { e ->
@@ -186,17 +198,19 @@ class SignUpActivity : AppCompatActivity() {
             }
     }
 
-    private fun saveUserCustomerDataBase(uId:String,userCustomer: User) {
+    private fun saveUserCustomerDataBase(uId: String, userCustomer: User) {
         db.collection(Constant.USER).document(uId)
             .set(userCustomer)
-            .addOnSuccessListener {documentReference->
+            .addOnSuccessListener { documentReference ->
                 // Done
+                Log.e("TAG", "Good $uId")
             }
             .addOnFailureListener { e ->
                 Log.w("TAG", "Error adding document", e)
             }
     }
-    private fun registerCustomer(userCustomer: User, password:String) {
+
+    private fun registerCustomer(userCustomer: User, password: String) {
         viewBinding.loadingProgressBar.isVisible = true
 
         if (!validForm()) {
@@ -207,13 +221,19 @@ class SignUpActivity : AppCompatActivity() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         // User creation successful
+                        val userId = task.result?.user?.uid ?: ""
+                        userCustomer.userID = userId
                         task.result.user.let {
-                            saveUserCustomerDataBase(it?.uid!!,userCustomer)
+                            saveUserCustomerDataBase(it?.uid!!, userCustomer)
                             navigateToCustomerDetails()
                         }
                     } else {
                         // User creation failed
-                        Snackbar.make(viewBinding.root,task.exception?.localizedMessage!!,Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(
+                            viewBinding.root,
+                            task.exception?.localizedMessage!!,
+                            Snackbar.LENGTH_LONG
+                        ).show()
 
                     }
                     setUiEnabled(true)
@@ -222,36 +242,40 @@ class SignUpActivity : AppCompatActivity() {
 
         }
     }
-    fun doRegisterCustomer(){
-        viewBinding.apply {
-                val userCustomer = User(
-                    firstnameEd.text.toString(),
-                    lastnameEd.text.toString(),
-                    emailEd.text.toString(),
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    0.0,
-                    "Customer"
-                )
-                val passwordEd = viewBinding.passwordEd.text.toString()
-                val rePasswordEd = viewBinding.repasswordEd.text.toString()
-                if (passwordEd.isBlank()) {
-                    // show error
-                    viewBinding.inputlayoutPassword.error = "Please enter a strong password"
-                } else {
-                    viewBinding.inputlayoutPassword.error = null
-                }
 
-                if (passwordEd != rePasswordEd) {
-                    // show error
-                    viewBinding.inputlayoutRepassword.error = "Password doesn't match"
-                } else {
-                    viewBinding.inputlayoutRepassword.error = null
-                }
-                registerCustomer(userCustomer,passwordEd)
+    fun doRegisterCustomer() {
+        auth = FirebaseAuth.getInstance()
+        viewBinding.apply {
+            val userCustomer = User(
+                firstnameEd.text.toString(),
+                lastnameEd.text.toString(),
+                emailEd.text.toString(),
+                "",
+                "",
+                "",
+                "",
+                "",
+                0.0,
+                "Customer",
+                "",
+                ""
+            )
+            val passwordEd = viewBinding.passwordEd.text.toString()
+            val rePasswordEd = viewBinding.repasswordEd.text.toString()
+            if (passwordEd.isBlank()) {
+                // show error
+                viewBinding.inputlayoutPassword.error = "Please enter a strong password"
+            } else {
+                viewBinding.inputlayoutPassword.error = null
+            }
+
+            if (passwordEd != rePasswordEd) {
+                // show error
+                viewBinding.inputlayoutRepassword.error = "Password doesn't match"
+            } else {
+                viewBinding.inputlayoutRepassword.error = null
+            }
+            registerCustomer(userCustomer, passwordEd)
 
         }
     }

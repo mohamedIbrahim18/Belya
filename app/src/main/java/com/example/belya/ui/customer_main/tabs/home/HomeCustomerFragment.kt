@@ -92,7 +92,6 @@ class HomeCustomerFragment : Fragment() {
 
 
     private fun showWhoInThisCategory(nameOfJob: String) {
-//            findNavController().navigate(R.id.action_homeCustomerFragment_to_personInCategoryFragment)
         val action = HomeCustomerFragmentDirections.actionHomeCustomerFragmentToPersonInCategoryFragment(nameOfJob)
         view?.findNavController()?.navigate(action)
     }

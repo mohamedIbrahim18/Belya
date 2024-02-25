@@ -11,13 +11,16 @@ import com.example.belya.Constant
 import com.example.belya.databinding.FragmentTechnicianDeatilsBinding
 import com.example.belya.model.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+
 class TechnicianDetailsFragment : Fragment() {
     lateinit var viewBinding: FragmentTechnicianDeatilsBinding
     private lateinit var person: User
     private lateinit var db: FirebaseFirestore
     private val auth = FirebaseAuth.getInstance()
+
+   private lateinit var otherUID : String
+   private lateinit var currentUserId :String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,66 +33,105 @@ class TechnicianDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // initViews()
         db = FirebaseFirestore.getInstance()
+
+        // initViews()
         arguments?.let {
             it.getParcelable<User>("pokemon")?.let { task ->
                 person = task
+               otherUID = person.userID
+                currentUserId = auth.currentUser!!.uid
                 // viewBinding.imagePersonDetails.setImageResource(task.imagePath!!)
                 val name = person.firstName + " " + person.lastName
                 viewBinding.firstnamePersonDetails.text = name
-              val city = person.city
-                 viewBinding.cityPersonDetails.text = city
+                val city = person.city
+                viewBinding.cityPersonDetails.text = city
                 val rating = person.person_rate
-                    viewBinding.ratingbarPersonDetails.rating= rating.toFloat()
+                viewBinding.ratingbarPersonDetails.rating = rating.toFloat()
 
                 // average price
 
-                //
-                // doc in tech coll have tickets
-                // name + price + city + image
-                // customer have doc tickets
-
             }
         }
-        viewBinding.progressBarPersonDeatails.visibility = View.GONE
         viewBinding.bookNowPersonDetails.setOnClickListener {
-            val currentUserDocumentRef = db.collection(Constant.USER).document(auth.uid!!)
+            viewBinding.progressBarPersonDeatails.visibility = View.VISIBLE
+            viewBinding.bookNowPersonDetails.visibility = View.GONE
+            // Check if the price is not empty
+            if (viewBinding.edittextPersonDetails.text?.isNotEmpty() == true) {
+                val price = viewBinding.edittextPersonDetails.text.toString().trim()
+                // Hide the error message if the price is not empty
+                viewBinding.textinputLayoutPersonDetails.error = null
 
-            // Create a new collection within the user's document
-            currentUserDocumentRef.collection(Constant.REQUEST)
-                .document(auth.uid!!)
-                .update("Requests", FieldValue.arrayUnion(auth.uid))
-                .addOnSuccessListener {
-                    // Document successfully updated
-                    // Handle success, if needed
-                }
-                .addOnFailureListener { e ->
-                    // Handle errors
-                     Log.e(TAG, "Error updating document", e)
-                }
+                // Proceed to make a ticket
+
+                    makeTicket(this.currentUserId,otherUID,price)
+
+
+            } else {
+                // Show an error message if the price is empty
+                viewBinding.textinputLayoutPersonDetails.error = "Please Enter a price"
+                // Hide the progress bar since the ticket creation process is not initiated
+                viewBinding.progressBarPersonDeatails.visibility = View.GONE
+                viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+            }
         }
+
 
     }
 
 
 
-
-    private fun checkPriceAndMakeAction() {
-        viewBinding.bookNowPersonDetails.visibility = View.GONE
+    private fun makeTicket(currentUserId: String, technicianId: String, price: String) {
+        // Show progress bar when making the ticket
         viewBinding.progressBarPersonDeatails.visibility = View.VISIBLE
-        if (viewBinding.edittextPersonDetails.text?.isNotEmpty() == true) {
-            // hide error
-            viewBinding.textinputLayoutPersonDetails.error = null
-            // make a request to manage price
-            // Assuming you have some method to handle the request here
-        } else {
-            // show error
-            viewBinding.textinputLayoutPersonDetails.error = "Please Enter a price"
-            viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
-            viewBinding.progressBarPersonDeatails.visibility = View.GONE
-        }
+        viewBinding.bookNowPersonDetails.visibility = View.GONE
+
+        // Fetch the current user details
+        FirebaseFirestore.getInstance().collection(Constant.USER)
+            .document(currentUserId).get().addOnSuccessListener { documentSnapshot ->
+                val currentUser = documentSnapshot.toObject(User::class.java)
+                if (currentUser != null) {
+                    // Set the price to the current user model
+                    currentUser.price = price
+
+                    // Now add the currentUser to the technician
+                    val otherUserRef = db.collection(Constant.USER).document(technicianId)
+                        .collection("Tickets")
+                    val batch = db.batch()
+
+                    // Add customer request to ticket sub collection
+                    val customerRequestDoc = otherUserRef.document(currentUser.userID)
+                    batch.set(customerRequestDoc, currentUser)
+
+                    // Commit the batch operation
+                    batch.commit().addOnSuccessListener {
+                        // Handle success if needed
+                        Log.d(TAG, "Ticket created successfully")
+                        // Hide progress bar on success
+                        viewBinding.progressBarPersonDeatails.visibility = View.GONE
+                        viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+                    }.addOnFailureListener { e ->
+                        // Handle failure if needed
+                        Log.e(TAG, "Error creating ticket", e)
+                        // Hide progress bar on failure
+                        viewBinding.progressBarPersonDeatails.visibility = View.GONE
+                        viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+                    }
+                } else {
+                    Log.e(TAG, "Current user is null")
+                    // Hide progress bar on failure
+                    viewBinding.progressBarPersonDeatails.visibility = View.GONE
+                    viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+                }
+            }.addOnFailureListener { e ->
+                // Handle failure if needed
+                Log.e(TAG, "Error getting current user", e)
+                // Hide progress bar on failure
+                viewBinding.progressBarPersonDeatails.visibility = View.GONE
+                viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+            }
     }
+
 
     /*
     private fun sendNotification(notification: Sender) = CoroutineScope(Dispatchers.IO).launch {

@@ -14,9 +14,11 @@ data class User(
     val job : String?,
     val work_experience : String?,
     val person_rate : Double,
-    val userType :String
+    val userType :String,
+    var userID : String,
+    var price : String
 ) : Parcelable
 {
 constructor() : this("","","","","","","","",
-    0.0,"",)
+    0.0,"","","")
 }

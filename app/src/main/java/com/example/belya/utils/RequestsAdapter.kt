@@ -4,24 +4,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.belya.databinding.RecyclerRequestsListItemBinding
-import com.example.belya.model.RequestsItem
+import com.example.belya.model.User
 
-class RequestsAdapter(private val listOfRequests : List<RequestsItem>) : RecyclerView.Adapter<RequestsAdapter.ViewHolder>() {
-    class ViewHolder(var itemBinding: RecyclerRequestsListItemBinding) :
+class RequestsAdapter(private var listOfRequests : List<User>) : RecyclerView.Adapter<RequestsAdapter.ViewHolder>() {
+    class ViewHolder(val itemBinding: RecyclerRequestsListItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(task: RequestsItem) {
-            val fullName =task.userCustomer.firstName+task.userCustomer.lastName
-           // itemBinding.requestImage.setImageResource(task.userCustomer.imagePath!!)
+        fun bind(task: User) {
+            val fullName = "${task.firstName} ${task.lastName}"
             itemBinding.requestName.text = fullName
-           itemBinding.requestCity.text = task.userCustomer.city
+            itemBinding.requestCity.text = task.city
             itemBinding.requestPrice.text = task.price
-            // pending
-
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val viewBinding = RecyclerRequestsListItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val viewBinding = RecyclerRequestsListItemBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
         return ViewHolder(viewBinding)
     }
 
@@ -31,6 +30,21 @@ class RequestsAdapter(private val listOfRequests : List<RequestsItem>) : Recycle
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(listOfRequests[position])
+        holder.itemBinding.requestRejectBtn.setOnClickListener {
+            onItemRejectedClickListnner?.onItemRejectedClick(position, listOfRequests[position])
+        }
+        holder.itemBinding.requestAceeptBtn.setOnClickListener {
+            onItemSelectedClickListnner?.onItemSelectedClick(position,listOfRequests[position])
+        }
+    }
+    interface OnItemSelectedClick {
+        fun onItemSelectedClick(position: Int, task: User)
+    }
+    interface OnItemRejectedClick{
+        fun onItemRejectedClick(position: Int, task: User)
+
     }
 
+    var onItemSelectedClickListnner: OnItemSelectedClick? = null
+    var onItemRejectedClickListnner : OnItemRejectedClick?=null
 }

@@ -101,11 +101,4 @@ class PersonInCategoryFragment : Fragment() {
         }
     }
 
-    /*
-    private fun showPersonDetails(task: userTechnician) {
-        val action = PersonInCategoryFragmentDirections.actionPersonInCategoryFragmentToTechnicianDetailsFragment(task.email?:"")
-        view?.findNavController()?.navigate(action)
-    }
-
-     */
 }

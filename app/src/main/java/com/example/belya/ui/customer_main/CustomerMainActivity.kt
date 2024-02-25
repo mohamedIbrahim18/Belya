@@ -1,7 +1,7 @@
 package com.example.belya.ui.customer_main
 
 
-
+import androidx.navigation.fragment.NavHostFragment
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -22,7 +22,8 @@ class CustomerMainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        navController = findNavController(R.id.fragment_container)
+        val navHost =supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
+        navController = navHost.navController
         viewBinding.navigationMenu.setupWithNavController(navController)
 
         viewBinding.navigationMenu.setOnItemSelectedListener { item ->

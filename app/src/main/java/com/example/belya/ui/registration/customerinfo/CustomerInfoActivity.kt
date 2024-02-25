@@ -29,13 +29,13 @@ class CustomerInfoActivity : AppCompatActivity() {
 
     private fun getTheNewData(): Map<String, Any> {
         val phoneNumber = viewBinding.phoneEd.text.toString().trim()
-        val location = viewBinding.locationEd.text.toString().trim()
+        val city: String = viewBinding.locationEd.text.toString().trim()
 
         val newData = mutableMapOf<String, Any>()
         if (phoneNumber.isNotEmpty()) {
             newData["phoneNumber"] = phoneNumber
         }
-        newData["location"] = location
+        newData["city"] = city
 
         return newData
     }

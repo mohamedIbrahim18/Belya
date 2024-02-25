@@ -64,19 +64,19 @@
             android:layout_height="wrap_content"
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/accept_reject_btn"
+            app:layout_constraintStart_toEndOf="@id/request_aceept_btn"
             app:layout_constraintTop_toBottomOf="@id/request_image"
-            tools:text="Reject" />
+            android:text="Reject" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/accept_reject_btn"
+            android:id="@+id/request_aceept_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
             app:layout_constraintEnd_toStartOf="@id/request_reject_btn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/request_image"
-            tools:text="Accept" />
+            android:text="Accept" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

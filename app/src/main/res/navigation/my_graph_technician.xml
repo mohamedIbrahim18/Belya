@@ -16,8 +16,8 @@
         android:label="fragment_chat_technician"
         tools:layout="@layout/fragment_chat_technician" >
         <action
-            android:id="@+id/action_chatTechnicianFragment2_to_specificChatFragment"
-            app:destination="@id/specificChatFragment" />
+            android:id="@+id/action_chatTechnicianFragment2_to_specificChatActivity"
+            app:destination="@id/specificChatActivity" />
     </fragment>
     <fragment
         android:id="@+id/notificationTechnicianFragment2"
@@ -32,10 +32,27 @@
         android:id="@+id/accountTechnicianFragment2"
         android:name="com.example.belya.ui.technician_main.tabs.account.AccountTechnicianFragment"
         android:label="fragment_account_technician"
-        tools:layout="@layout/fragment_account_technician" />
+        tools:layout="@layout/fragment_account_technician" >
+        <action
+            android:id="@+id/action_accountTechnicianFragment2_to_changeEmailFragment"
+            app:destination="@id/changeEmailFragment" />
+        <action
+            android:id="@+id/action_accountTechnicianFragment2_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/specificChatFragment"
-        android:name="com.example.belya.ui.technician_main.tabs.chat.SpecificChatFragment"
-        android:label="fragment_specific_chat"
-        tools:layout="@layout/fragment_specific_chat" />
+        android:id="@+id/changeEmailFragment"
+        android:name="com.example.belya.ui.technician_main.tabs.account.ChangeEmailFragment"
+        android:label="fragment_change_email"
+        tools:layout="@layout/fragment_change_email" />
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.belya.ui.technician_main.tabs.account.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" />
+    <activity
+        android:id="@+id/specificChatActivity"
+        android:name="com.example.belya.ui.technician_main.tabs.chat.SpecificChatActivity"
+        android:label="activity_specific_chat"
+        tools:layout="@layout/activity_specific_chat" />
 </navigation>

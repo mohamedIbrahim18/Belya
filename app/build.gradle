@@ -5,6 +5,8 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'com.google.firebase.crashlytics'
+
 }
 
 android {
@@ -53,7 +55,9 @@ dependencies {
     // splash screen
     implementation("androidx.core:core-splashscreen:1.0.1")
     // Import the Firebase BoM
-    implementation platform('com.google.firebase:firebase-bom:32.7.1')
+    implementation platform('com.google.firebase:firebase-bom:32.7.2')
+    // Import the Firebase crashlytics
+    implementation("com.google.firebase:firebase-crashlytics")
     // Import the Firebase Analytics
     implementation 'com.google.firebase:firebase-analytics'
     // Import the Firebase Auth

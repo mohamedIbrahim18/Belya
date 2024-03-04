@@ -38,6 +38,9 @@
             android:name=".ui.registration.auth.login.LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.technician_main.tabs.chat.SpecificChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.registration.auth.signup.SignUpActivity"
             android:exported="true" >
 

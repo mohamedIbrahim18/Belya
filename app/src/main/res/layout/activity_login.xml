@@ -6,6 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="10dp"
         tools:context=".ui.registration.auth.login.LoginActivity">
 
         <TextView
@@ -25,8 +26,9 @@
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:padding="10dp"
+            android:layout_marginTop="24dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:text="@string/email"
             android:textColor="@color/blue_main"
             android:textSize="14sp"
@@ -35,28 +37,30 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputlayout_email"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/email">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_ed"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="18dp"
-                android:layout_marginEnd="18dp"
-                android:background="@drawable/custome_border_to_edit_text" />
-            />
+                android:layout_height="wrap_content"
+                android:background="@drawable/custome_border_to_edit_text"
+                android:inputType="textEmailAddress"
+                android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:padding="10dp"
+            android:layout_marginTop="15dp"
+            android:paddingStart="10dp"
             android:text="@string/password"
             android:textColor="@color/blue_main"
             android:textSize="14sp"
@@ -65,31 +69,31 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputlayout_password"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_marginTop="5dp"
             android:layout_height="wrap_content"
-            app:boxCornerRadiusBottomEnd="6dp"
-            app:boxCornerRadiusBottomStart="6dp"
-            app:boxCornerRadiusTopEnd="6dp"
-            app:boxCornerRadiusTopStart="6dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/password"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_ed"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="18dp"
-                android:layout_marginEnd="18dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/custome_border_to_edit_text"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:padding="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
             android:id="@+id/Remember_me"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="58dp"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
             android:checked="false"
             android:text="@string/remember_me"
             android:textColor="@color/blue_main"
@@ -101,6 +105,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="17dp"
             android:backgroundTint="@color/blue_main"
             android:text="@string/login"
@@ -113,9 +118,7 @@
             android:id="@+id/forget_your_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="131dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="106dp"
             android:text="@string/forgot_your_password"
             android:textColor="@color/blue_main"
             android:textStyle="bold"
@@ -127,12 +130,11 @@
             android:id="@+id/dont_have_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="79dp"
-            android:layout_marginEnd="51dp"
-            android:layout_marginBottom="52dp"
+            android:layout_marginBottom="16dp"
             android:text="@string/don_t_have_an_account_create_an_account"
             android:textColor="@color/blue_main"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

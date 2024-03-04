@@ -50,7 +50,7 @@ class ChatTechnicianFragment : Fragment() {
                     val bundle = Bundle()
                     bundle.putParcelable("CHAT_DATA", task)
                     findNavController().navigate(
-                        R.id.action_chatTechnicianFragment2_to_specificChatFragment,
+                        R.id.action_chatTechnicianFragment2_to_specificChatActivity,
                         bundle
                     )
                 }

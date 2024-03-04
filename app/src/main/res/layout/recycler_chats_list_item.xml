@@ -12,6 +12,8 @@
     <ImageView
         android:id="@+id/person_image_chat"
         android:layout_width="100dp"
+        android:layout_margin="10dp"
+        tools:src="@drawable/ic_profileimg"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_height="100dp"/>
@@ -20,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="This is My name "
-        android:textColor="@color/blue_main"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginStart="20dp"
@@ -32,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="my job is "
-        android:textColor="@color/blue_main"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"

@@ -5,84 +5,88 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:padding="10dp"
-    app:cardCornerRadius="15dp"
-    app:cardElevation="55dp">
-
+    android:padding="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/request_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_margin="10dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:contentDescription="Profile Image"
+            android:src="@drawable/ic_profileimg"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_profileimg"
-            android:contentDescription="a7aaaaaaaaaaaaa" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/request_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="16dp"
             android:textColor="@color/black"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/request_image"
+            app:layout_constraintTop_toTopOf="@+id/request_image"
             tools:text="Mohamed Ibrahim" />
 
         <TextView
             android:id="@+id/request_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="@id/request_name"
-            app:layout_constraintStart_toStartOf="@id/request_name"
-
-            app:layout_constraintTop_toBottomOf="@id/request_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/request_name"
+            app:layout_constraintTop_toBottomOf="@+id/request_name"
             tools:text="Cairo" />
 
         <TextView
             android:id="@+id/request_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="50dp"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@id/request_name"
+            app:layout_constraintEnd_toEndOf="@id/request_city"
             app:layout_constraintStart_toStartOf="@id/request_city"
             app:layout_constraintTop_toBottomOf="@id/request_city"
-            tools:text="60EGP" />
+            tools:text="60 EGP" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/request_aceept_btn"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:backgroundTint="@color/blue_main"
+            android:text="@string/accept"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@id/request_reject_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/request_image" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/request_reject_btn"
-            android:layout_width="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_margin="10dp"
             android:backgroundTint="@color/red"
             android:text="@string/reject"
             android:textAllCaps="false"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/request_aceept_btn"
             app:layout_constraintTop_toBottomOf="@id/request_image" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/request_aceept_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/accept"
-            android:textAllCaps="false"
-            app:layout_constraintEnd_toStartOf="@id/request_reject_btn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/request_image" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

@@ -1,6 +1,7 @@
 package com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.technician_details
 
 import android.content.ContentValues.TAG
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -110,6 +111,12 @@ class TechnicianDetailsFragment : Fragment() {
                         // Hide progress bar on success
                         viewBinding.progressBarPersonDeatails.visibility = View.GONE
                         viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+
+                        //
+                        viewBinding.bookNowPersonDetails.setBackgroundColor(Color.RED)
+                        viewBinding.bookNowPersonDetails.isClickable= false
+                        // change pending b el status elli htegi mn fire store
+                        viewBinding.bookNowPersonDetails.text = "Pending"
                     }.addOnFailureListener { e ->
                         // Handle failure if needed
                         Log.e(TAG, "Error creating ticket", e)

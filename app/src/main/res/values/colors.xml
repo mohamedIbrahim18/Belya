@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue_main">#043AA4</color>
     <color name="red">#F10202</color>
+    <color name="reject_button_color">#FF0000</color>
+    <color name="accept_button_color">#00FF00</color>
+
 </resources>

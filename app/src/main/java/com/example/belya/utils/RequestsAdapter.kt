@@ -29,7 +29,8 @@ class RequestsAdapter(private var listOfRequests : List<User>) : RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(listOfRequests[position])
+        val currentUser = listOfRequests[position]
+        holder.bind(currentUser)
         holder.itemBinding.requestRejectBtn.setOnClickListener {
             onItemRejectedClickListnner?.onItemRejectedClick(position, listOfRequests[position])
         }

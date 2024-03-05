@@ -87,6 +87,8 @@ class NotificationTechnicianFragment : Fragment() {
                                     // Remove it from the local list
                                     listRequests.remove(task)
                                     requestsAdapter.notifyDataSetChanged()
+
+                                    // make status you can booking
                                 }
                                 .addOnFailureListener { e ->
                                     Snackbar.make(

@@ -1,44 +1,44 @@
 package com.example.belya.ui.technician_main.tabs.notification
 
-import android.content.ContentValues.TAG
+import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.belya.Constant
 import com.example.belya.HorizontalItemDecoration
 import com.example.belya.R
 import com.example.belya.databinding.FragmentNotificationTechnicianBinding
 import com.example.belya.model.User
 import com.example.belya.utils.RequestsAdapter
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.type.DateTime
+import java.time.Clock
+import java.time.LocalTime
+import java.util.*
+
 
 class NotificationTechnicianFragment : Fragment() {
     lateinit var viewBinding: FragmentNotificationTechnicianBinding
     lateinit var requestsAdapter: RequestsAdapter
     lateinit var listRequests: MutableList<User>
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         viewBinding = FragmentNotificationTechnicianBinding.inflate(layoutInflater)
         return viewBinding.root
-        // initViews()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listRequests = mutableListOf() // Initialize listRequests here
+        listRequests = mutableListOf()
         initRequestsRecycler()
         fetchTickets()
         viewBinding.swiprefresh.setOnRefreshListener {
@@ -50,18 +50,32 @@ class NotificationTechnicianFragment : Fragment() {
     private fun fetchTickets() {
         val currentUID = FirebaseAuth.getInstance().uid
         FirebaseFirestore.getInstance().collection(Constant.USER).document(currentUID!!)
-            .collection("Tickets").addSnapshotListener { value, error ->
+            .addSnapshotListener { documentSnapshot, error ->
                 if (error != null) {
-                    Log.d("Error", "${error.localizedMessage}")
+                    Log.e("TEST", "Error fetching user data: ${error.message}", error)
                     return@addSnapshotListener
                 }
-                value?.let { snapshot ->
-                    val userDetails = snapshot.documents.mapNotNull { doc ->
-                        doc.toObject(User::class.java)
+
+                documentSnapshot?.let { snapshot ->
+                    val pendingList = snapshot.get("pendingList") as? List<String>
+                    pendingList?.let { list ->
+                        listRequests.clear()
+                        list.forEach { userID ->
+                            FirebaseFirestore.getInstance().collection(Constant.USER)
+                                .document(userID)
+                                .get()
+                                .addOnSuccessListener { userDocument ->
+                                    val user = userDocument.toObject(User::class.java)
+                                    user?.let {
+                                        listRequests.add(it)
+                                        requestsAdapter.notifyDataSetChanged()
+                                    }
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.e("TEST", "Error fetching user details: ${e.message}", e)
+                                }
+                        }
                     }
-                    listRequests.clear()
-                    listRequests.addAll(userDetails)
-                    requestsAdapter.notifyDataSetChanged()
                 }
             }
     }
@@ -71,62 +85,42 @@ class NotificationTechnicianFragment : Fragment() {
         viewBinding.recyclerViewRequests.apply {
             addItemDecoration(HorizontalItemDecoration())
             adapter = requestsAdapter
-            // when user reject the offer
-            requestsAdapter.onItemRejectedClickListnner =
-                object : RequestsAdapter.OnItemRejectedClick {
-                    override fun onItemRejectedClick(position: Int, task: User) {
-                        // Remove it from Firestore
-                        val currentUID = FirebaseAuth.getInstance().uid
-                        val doc = task.userID
-                        if (currentUID != null && doc.isNotEmpty()) {
-                            FirebaseFirestore.getInstance().collection(Constant.USER)
-                                .document(currentUID)
-                                .collection("Tickets")
-                                .document(doc).delete()
-                                .addOnSuccessListener {
-                                    // Remove it from the local list
-                                    listRequests.remove(task)
-                                    requestsAdapter.notifyDataSetChanged()
 
-                                    // make status you can booking
-                                }
-                                .addOnFailureListener { e ->
-                                    Snackbar.make(
-                                        viewBinding.root,
-                                        "Error: ${e.message}",
-                                        Snackbar.LENGTH_LONG
-                                    ).show()
-                                }
-                        }
-                    }
-                }
-            // when user accepted the offer
             requestsAdapter.onItemSelectedClickListnner =
                 object : RequestsAdapter.OnItemSelectedClick {
                     override fun onItemSelectedClick(position: Int, task: User) {
-                        Snackbar.make(viewBinding.root, "Accepted", Snackbar.LENGTH_LONG).show()
-                        // Save accepted offer to Firestore
-                        val currentUID = FirebaseAuth.getInstance().uid
-                        val doc = task.userID
-                        if (currentUID != null && doc.isNotEmpty()) {
-                            // Save the accepted offer to Firestore
-                            FirebaseFirestore.getInstance().collection("chats").document(currentUID)
-                                .collection("acceptedOffers").document(doc).set(task)
+                        Log.e("Fetch taskID", task.userID)
+                        val currentUserId = FirebaseAuth.getInstance().uid
+
+                        if (currentUserId != null) {
+                            val batch = FirebaseFirestore.getInstance().batch()
+                            val techRef = FirebaseFirestore.getInstance().collection(Constant.USER)
+                                .document(currentUserId)
+
+                            // Add the current server timestamp to the acceptedOffers collection
+                            val currentTimeStamp = FieldValue.serverTimestamp()
+
+
+                            val acceptedOfferData = mapOf(
+                                "user" to task,
+                                "acceptedTime" to currentTimeStamp
+                            )
+
+                            // Update the acceptedOffers collection with the new document
+                            batch.set(techRef.collection("Tickets").document(task.userID), acceptedOfferData)
+
+                            // Update the acceptedList and pendingList fields in the user document
+                            batch.update(techRef, "acceptedList", FieldValue.arrayUnion(task.userID))
+                            batch.update(techRef, "pendingList", FieldValue.arrayRemove(task.userID))
+
+                            batch.commit()
                                 .addOnSuccessListener {
-                                    // After successfully saving to Firestore, navigate to the chat fragment
-                                    val bundle = Bundle()
-                                    bundle.putParcelable("passData", task)
-                                    findNavController().navigate(
-                                        R.id.action_notificationTechnicianFragment2_to_chatTechnicianFragment2,
-                                        bundle
-                                    )
+                                    Log.d(ContentValues.TAG, "Accepted successfully")
+                                    // navigate to chat and start chat
+                                    findNavController().navigate(R.id.action_notificationTechnicianFragment2_to_chatTechnicianFragment2)
                                 }
                                 .addOnFailureListener { e ->
-                                    Snackbar.make(
-                                        viewBinding.root,
-                                        "Error: ${e.message}",
-                                        Snackbar.LENGTH_LONG
-                                    ).show()
+                                    Log.e(ContentValues.TAG, "Error accepting request", e)
                                 }
                         }
                     }

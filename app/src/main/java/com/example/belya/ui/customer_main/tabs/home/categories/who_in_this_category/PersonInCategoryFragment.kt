@@ -13,7 +13,6 @@ import com.example.belya.R
 import com.example.belya.databinding.FragmentPersonInCategoryBinding
 import com.example.belya.model.User
 import com.example.belya.utils.PersonAdapter
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -53,7 +52,6 @@ class PersonInCategoryFragment : Fragment() {
         // Initialize RecyclerView and fetch data
         initRecyclerPerson()
         categoryName = arguments?.getString("jobName") ?: ""
-        Snackbar.make(viewBinding.root, "Test : $categoryName", Snackbar.LENGTH_LONG).show()
         fetchPersonFromDatabase(categoryName)
     }
 
@@ -62,7 +60,7 @@ class PersonInCategoryFragment : Fragment() {
             .whereEqualTo("job", categoryName).addSnapshotListener { value, error ->
                 if (error != null) {
                     // handle the error
-                    Log.e("TESTFUN", "Error fetching data", error)
+                    Log.e("Error Fetch category", "Error fetching data", error)
                     return@addSnapshotListener
                 }
                 if (value != null) {
@@ -71,11 +69,9 @@ class PersonInCategoryFragment : Fragment() {
                     for (document in value.documents) {
                         val result = document.toObject(User::class.java)
                         result?.let {
-                            Log.d("DATA", result.toString())
                             newList.add(it)
                         }
                     }
-                    Log.d("DATA", "Number of documents: ${value.documents.size}")
                     // Update the adapter with the new list
                     personAdapter.newList(newList)
                 }
@@ -96,7 +92,6 @@ class PersonInCategoryFragment : Fragment() {
                     bundle.putParcelable("pokemon",task)
                     findNavController().navigate(
                         R.id.action_personInCategoryFragment_to_technicianDetailsFragment,bundle) }
-
             }
         }
     }

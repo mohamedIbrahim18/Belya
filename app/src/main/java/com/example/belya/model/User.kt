@@ -16,9 +16,11 @@ data class User(
     val person_rate : Double,
     val userType :String,
     var userID : String,
-    var price : String
+    var price : String,
+    var acceptedList : List<String>,
+    var pendingList : List<String>,
 ) : Parcelable
 {
 constructor() : this("","","","","","","","",
-    0.0,"","","")
+    0.0,"","","", emptyList(),emptyList())
 }

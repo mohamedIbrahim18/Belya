@@ -132,7 +132,8 @@ class SignUpActivity : AppCompatActivity() {
                 0.0,
                 "Technician",
                 "",
-                ""
+                "",emptyList(),
+                emptyList(),
             )
             var passwordEd = viewBinding.passwordEd.text.toString()
             var rePasswordEd = viewBinding.repasswordEd.text.toString()
@@ -258,7 +259,9 @@ class SignUpActivity : AppCompatActivity() {
                 0.0,
                 "Customer",
                 "",
-                ""
+                "",
+                emptyList(),
+                emptyList(),
             )
             val passwordEd = viewBinding.passwordEd.text.toString()
             val rePasswordEd = viewBinding.repasswordEd.text.toString()

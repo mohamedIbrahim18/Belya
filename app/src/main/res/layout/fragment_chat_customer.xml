@@ -6,12 +6,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.technician_main.tabs.chat.SpecificChatActivity">
 
-    <ImageView
-        android:id="@+id/clickkk"
-        android:layout_width="40dp"
-        android:src="@drawable/ic_send_message"
-        android:layout_height="40dp"
-        android:layout_margin="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_chats"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/recycler_chats_list_item"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

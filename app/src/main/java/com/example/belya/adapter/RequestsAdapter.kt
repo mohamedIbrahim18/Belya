@@ -1,4 +1,4 @@
-package com.example.belya.utils
+package com.example.belya.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

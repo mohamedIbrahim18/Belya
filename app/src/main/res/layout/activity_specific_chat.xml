@@ -5,69 +5,74 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.technician_main.tabs.chat.SpecificChatActivity">
-<androidx.cardview.widget.CardView
-    android:id="@+id/card_for_details_to_chat"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    android:backgroundTint="#E3ECF3"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_for_details_to_chat"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:backgroundTint="#E3ECF3"
         android:layout_width="match_parent"
-        android:layout_marginTop="5dp"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/card_image_to_chat"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            tools:src="@drawable/ic_profileimg"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
-        <TextView
-            android:id="@+id/card_name_to_chat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Mohamed Ibrahim"
-            app:layout_constraintEnd_toStartOf="@id/card_image_to_chat"
-            app:layout_constraintTop_toTopOf="@id/card_image_to_chat"
-            android:textSize="18sp"
-            android:layout_marginTop="13dp"
-            android:textColor="@color/blue_main"
-            android:layout_marginEnd="12dp"
-            />
-        <ImageView
-            android:id="@+id/card_phone_to_chat"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_phone"
-            android:layout_marginStart="10dp"
-            />
-        <ImageView
-            android:id="@+id/card_location_to_chat"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:layout_constraintStart_toEndOf="@id/card_phone_to_chat"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_map"
-            android:layout_marginStart="30dp"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/card_image_to_chat"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                tools:src="@drawable/ic_profileimg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/card_name_to_chat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Mohamed Ibrahim"
+                app:layout_constraintEnd_toStartOf="@id/card_image_to_chat"
+                app:layout_constraintTop_toTopOf="@id/card_image_to_chat"
+                android:textSize="18sp"
+                android:layout_marginTop="13dp"
+                android:textColor="@color/blue_main"
+                android:layout_marginEnd="12dp" />
+
+            <ImageView
+                android:id="@+id/card_phone_to_chat"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_phone"
+                android:layout_marginStart="10dp" />
+
+            <ImageView
+                android:id="@+id/card_location_to_chat"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:layout_constraintStart_toEndOf="@id/card_phone_to_chat"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/ic_map"
+                android:layout_marginStart="30dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_chat_two_persons"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        tools:listitem="@layout/chat_message_recycler_row"
         app:layout_constraintTop_toBottomOf="@id/card_for_details_to_chat"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/send_btn"
 
         />
+
     <EditText
         android:id="@+id/message"
         android:layout_width="0dp"
@@ -78,8 +83,8 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="10dp"
         android:background="@drawable/message_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintBottom_toBottomOf="parent" />
+
     <ImageView
         android:id="@+id/send_btn"
         android:layout_width="40dp"
@@ -87,5 +92,5 @@
         android:layout_height="40dp"
         android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,14 +13,10 @@ import com.example.belya.HorizontalItemDecoration
 import com.example.belya.R
 import com.example.belya.databinding.FragmentNotificationTechnicianBinding
 import com.example.belya.model.User
-import com.example.belya.utils.RequestsAdapter
+import com.example.belya.adapter.RequestsAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.type.DateTime
-import java.time.Clock
-import java.time.LocalTime
-import java.util.*
 
 
 class NotificationTechnicianFragment : Fragment() {
@@ -96,11 +92,7 @@ class NotificationTechnicianFragment : Fragment() {
                             val batch = FirebaseFirestore.getInstance().batch()
                             val techRef = FirebaseFirestore.getInstance().collection(Constant.USER)
                                 .document(currentUserId)
-
-                            // Add the current server timestamp to the acceptedOffers collection
                             val currentTimeStamp = FieldValue.serverTimestamp()
-
-
                             val acceptedOfferData = mapOf(
                                 "user" to task,
                                 "acceptedTime" to currentTimeStamp

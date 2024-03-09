@@ -5,11 +5,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class User(
-    val firstName : String?,
-    val lastName : String?,
+    var firstName : String?,
+    var lastName : String?,
     val email : String?,
     val imagePath : String?,
-    val phoneNumber : String?,
+    var phoneNumber : String?,
     val city : String?,
     val job : String?,
     val work_experience : String?,

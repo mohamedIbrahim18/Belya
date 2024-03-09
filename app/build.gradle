@@ -90,6 +90,9 @@ dependencies {
     // SwipeRefreshLayout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
 
+    // FirestoreRecyclerOptions
+    implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'
+
 
 
 }

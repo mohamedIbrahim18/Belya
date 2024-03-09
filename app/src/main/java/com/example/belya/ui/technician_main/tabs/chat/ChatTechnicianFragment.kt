@@ -1,18 +1,18 @@
 package com.example.belya.ui.technician_main.tabs.chat
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import com.example.belya.Constant
 import com.example.belya.HorizontalItemDecoration
-import com.example.belya.R
 import com.example.belya.databinding.FragmentChatTechnicianBinding
 import com.example.belya.model.User
-import com.example.belya.utils.ChatsAdapter
+import com.example.belya.adapter.ChatsAdapter
+import com.example.belya.utils.AndroidUtils
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -48,12 +48,10 @@ class ChatTechnicianFragment : Fragment() {
             // when user click on card
             chatsAdapter.onItemSelectedClickedListnner = object : ChatsAdapter.OnItemSelectedClick {
                 override fun onItemClicked(position: Int, task: User) {
-                    val bundle = Bundle()
-                    bundle.putParcelable("CHAT_DATA", task)
-                    findNavController().navigate(
-                        R.id.action_chatTechnicianFragment2_to_specificChatActivity,
-                        bundle
-                    )
+                    val intent = Intent(context,SpecificChatActivity::class.java)
+                    AndroidUtils.passUserModelAsIntent(intent,task)
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(intent)
                 }
             }
         }

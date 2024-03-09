@@ -11,9 +11,9 @@ import com.example.belya.Constant
 import com.example.belya.HorizontalItemDecoration
 import com.example.belya.R
 import com.example.belya.databinding.FragmentHomeCustomerBinding
-import com.example.belya.utils.CategoriesAdapter
+import com.example.belya.adapter.CategoriesAdapter
 import com.example.belya.model.CategoriesItem
-import com.example.belya.utils.ImportantAdapter
+import com.example.belya.adapter.ImportantAdapter
 import com.example.belya.model.ImportantItem
 import com.google.firebase.firestore.FirebaseFirestore
 

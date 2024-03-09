@@ -1,4 +1,4 @@
-package com.example.belya.utils
+package com.example.belya.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,8 +8,8 @@ import com.example.belya.R
 import com.example.belya.databinding.RecyclerPersonInCategoryItemBinding
 import com.example.belya.model.User
 
-class PersonAdapter(private var listOfPerson: MutableList<User>) :
-    RecyclerView.Adapter<PersonAdapter.ViewHolder>() {
+class PersonInCategoryAdapter(private var listOfPerson: MutableList<User>) :
+    RecyclerView.Adapter<PersonInCategoryAdapter.ViewHolder>() {
     class ViewHolder(var itemBinding: RecyclerPersonInCategoryItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(task: User) {

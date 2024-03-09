@@ -14,11 +14,7 @@
         android:id="@+id/chatTechnicianFragment2"
         android:name="com.example.belya.ui.technician_main.tabs.chat.ChatTechnicianFragment"
         android:label="fragment_chat_technician"
-        tools:layout="@layout/fragment_chat_technician" >
-        <action
-            android:id="@+id/action_chatTechnicianFragment2_to_specificChatActivity"
-            app:destination="@id/specificChatActivity" />
-    </fragment>
+        tools:layout="@layout/fragment_chat_technician" />
     <fragment
         android:id="@+id/notificationTechnicianFragment2"
         android:name="com.example.belya.ui.technician_main.tabs.notification.NotificationTechnicianFragment"
@@ -50,9 +46,4 @@
         android:name="com.example.belya.ui.technician_main.tabs.account.ChangePasswordFragment"
         android:label="fragment_change_password"
         tools:layout="@layout/fragment_change_password" />
-    <activity
-        android:id="@+id/specificChatActivity"
-        android:name="com.example.belya.ui.technician_main.tabs.chat.SpecificChatActivity"
-        android:label="activity_specific_chat"
-        tools:layout="@layout/activity_specific_chat" />
 </navigation>

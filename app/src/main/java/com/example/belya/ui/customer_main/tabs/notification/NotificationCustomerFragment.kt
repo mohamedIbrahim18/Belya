@@ -1,29 +1,24 @@
 package com.example.belya.ui.customer_main.tabs.notification
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.belya.Constant
 import com.example.belya.databinding.FragmentNotificationCustomerBinding
 import com.example.belya.model.StatusOfCustomer
 import com.example.belya.model.User
-import com.example.belya.utils.StatusOfCustomerAdapter
+import com.example.belya.adapter.StatusCustomerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
+
 class NotificationCustomerFragment : Fragment() {
     private lateinit var viewBinding: FragmentNotificationCustomerBinding
-    private lateinit var statusOfCustomerAdapter: StatusOfCustomerAdapter
+    private lateinit var statusOfCustomerAdapter: StatusCustomerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +28,6 @@ class NotificationCustomerFragment : Fragment() {
         return viewBinding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
@@ -42,12 +36,11 @@ class NotificationCustomerFragment : Fragment() {
 
     private fun initViews() {
         viewBinding.recyclerNotification.apply {
-            statusOfCustomerAdapter = StatusOfCustomerAdapter()
+            statusOfCustomerAdapter = StatusCustomerAdapter()
             adapter = statusOfCustomerAdapter
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchAcceptedUsers() {
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
         if (currentUserId != null) {
@@ -63,10 +56,12 @@ class NotificationCustomerFragment : Fragment() {
                         if (acceptedList != null && currentUserId in acceptedList) {
                             val userId = document.id
                             // Fetch the worker ID from the accepted user's document
-                            val workerId = document.getString("userID") // Assuming "workerId" is the field containing the worker ID
-                            fetchUserDetails(userId)
+                            val workerId =
+                                document.getString("userID") // Assuming "workerId" is the field containing the worker ID
                             if (workerId != null) {
-                                fetchTime(workerId, currentUserId)
+                                fetchUserDetails(workerId, currentUserId)
+                            } else {
+                                Log.e("ERROR IN Log", "Worker ID")
                             }
                         }
                     }
@@ -74,57 +69,46 @@ class NotificationCustomerFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun fetchTime(workerId: String, currentUserId: String) {
-        FirebaseFirestore.getInstance().collection(Constant.USER)
-            .document(workerId)
-            .collection("Tickets")
-            .document(currentUserId)
-            .get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    val timestamp = documentSnapshot.getTimestamp("acceptedTime")
-                    if (timestamp != null) {
-                        // Convert timestamp to LocalTime
-                        val acceptedTime = timestamp.toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalTime()
-                        val formattedTime = acceptedTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
-
-                        Log.d("Worker ID" , workerId)
-                        Log.d("Customer ID" , currentUserId)
-                        statusOfCustomerAdapter.updateTime(currentUserId, formattedTime)
-                    } else {
-                        Log.d("NotificationCustomer", "Accepted time is null for userID: $workerId")
-                    }
-                } else {
-                    Log.d("NotificationCustomer", "Ticket document not found for userID: $workerId")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.e("NotificationCustomer", "Error fetching accepted time", exception)
-            }
-    }
-
-    private fun fetchUserDetails(userID: String) {
+    private fun fetchUserDetails(workerId: String, currentUserId: String) {
         val usersRef = FirebaseFirestore.getInstance().collection(Constant.USER)
-
-        usersRef.document(userID)
+        usersRef.document(workerId)
             .get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
                     val user = documentSnapshot.toObject(User::class.java)
                     user?.let {
                         val fullName = "${it.firstName} ${it.lastName}"
-                        val currentTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-                        val statusOfCustomer = StatusOfCustomer("$fullName, Accepted Your Offer", "", currentTime)
-                        statusOfCustomerAdapter.addStatus(statusOfCustomer)
+                        val statusOfCustomer = StatusOfCustomer("$fullName, Accepted Your Offer",null)
+                        // get time and update it in adapter
+                        usersRef.document(workerId).collection("Tickets").document(currentUserId)
+                            .addSnapshotListener { value, error ->
+                                if (error != null) {
+                                    Log.e("Fetching Tickets Error", "Error fetching tickets", error)
+                                    return@addSnapshotListener
+                                }
+                                val timestamp = value?.getTimestamp("acceptedTime")
+                                if (timestamp != null) {
+                                    // convert
+                                    val date = timestamp.toDate()
+                                    val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
+                                    val formattedDate = dateFormat.format(date)
+
+                                    // Add timestamp to statusOfCustomer
+                                    statusOfCustomer.timeNow = formattedDate
+                                    // Update adapter with statusOfCustomer
+                                    statusOfCustomerAdapter.addStatus(statusOfCustomer)
+                                }
+                            }
                     }
                 } else {
-                    Log.d("NotificationCustomer", "User document not found for userID: $userID")
+                    Log.d(
+                        "NotificationCustomer",
+                        "User document not found for userID: $currentUserId"
+                    )
                 }
             }
             .addOnFailureListener { exception ->
                 Log.e("NotificationCustomer", "Error fetching user details", exception)
             }
     }
-
 }

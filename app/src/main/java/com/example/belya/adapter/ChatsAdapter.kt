@@ -1,13 +1,11 @@
-package com.example.belya.utils
+package com.example.belya.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.Coil
 import coil.load
 import com.example.belya.R
 import com.example.belya.databinding.RecyclerChatsListItemBinding
-import com.example.belya.databinding.RecyclerRequestsListItemBinding
 import com.example.belya.model.User
 
 class ChatsAdapter(private var listofChats : MutableList<User>) : RecyclerView.Adapter<ChatsAdapter.ViewHolder>() {

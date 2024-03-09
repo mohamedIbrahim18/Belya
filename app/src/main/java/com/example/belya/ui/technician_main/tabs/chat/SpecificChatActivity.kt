@@ -1,113 +1,137 @@
 package com.example.belya.ui.technician_main.tabs.chat
 
-import MessagesAdapter
+import android.content.Intent
+import android.net.Uri
+import com.example.belya.adapter.MessagesAdapter
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.belya.databinding.ActivitySpecificChatBinding
-import com.example.belya.model.Message
+import com.example.belya.model.ChatMessageModel
+import com.example.belya.model.ChatroomModel
 import com.example.belya.model.User
+import com.example.belya.utils.AndroidUtils
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.*
+import com.google.firebase.firestore.Query
 
 class SpecificChatActivity : AppCompatActivity() {
-    private lateinit var messageRecyclerView: RecyclerView
-    private lateinit var messageAdapter: MessagesAdapter
+    private lateinit var messagesAdapter: MessagesAdapter
     private lateinit var viewBinding: ActivitySpecificChatBinding
-    private lateinit var messageEditText: EditText
-
-    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    private val currentUser = FirebaseAuth.getInstance().currentUser
+    private lateinit var chatroomModel: ChatroomModel
+    private lateinit var otherUser: User
+    private val currentUserId: String = FirebaseAuth.getInstance().uid!!
+    private lateinit var chatroomId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivitySpecificChatBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        // Initialize views
-        messageRecyclerView = viewBinding.recyclerChatTwoPersons
-        messageEditText = viewBinding.message
-
-        // Set up RecyclerView
-        messageRecyclerView.layoutManager = LinearLayoutManager(this)
-
-        // Get User object from arguments
-        val user = intent.getParcelableExtra<User>("CHAT_DATA")
-        val chatId = user?.userID
-
-        if (!chatId.isNullOrBlank()) {
-            loadMessagesFromFirestore(chatId)
-        } else {
-            // Handle missing chatId
-            Log.e("SpecificChatActivity", "Chat ID is missing")
-        }
-
-        // Set up click listener for send button
+        otherUser = AndroidUtils.getUserModelFromIntent(intent)
+        chatroomId = getChatroomID(currentUserId, otherUser.userID)
+        viewBinding.cardNameToChat.text = otherUser.firstName + " " + otherUser.lastName
         viewBinding.sendBtn.setOnClickListener {
-            sendMessage(chatId)
+            val message = viewBinding.message.text.toString().trim()
+            if (message.isNotEmpty()) {
+                sendMessageToUser(message)
+            }
+        }
+
+        getOrCreateChatRoomModel()
+        setupChatRecyclerView()
+        setupPhone(otherUser)
+    }
+
+
+    private fun setupPhone(otherUser: User) {
+        viewBinding.cardPhoneToChat.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:${otherUser.phoneNumber}")
+            startActivity(intent)
         }
     }
 
-    private fun loadMessagesFromFirestore(chatId: String?) {
-        if (!chatId.isNullOrBlank()) {
-            firestore.collection("chats")
-                .document(chatId)
-                .collection("messages")
-                .orderBy("timestamp")
-                .addSnapshotListener { snapshot, exception ->
-                    if (exception != null) {
-                        // Handle error (e.g., show error message)
-                        Log.e("SpecificChatActivity", "Error fetching messages", exception)
-                        return@addSnapshotListener
-                    }
 
-                    if (snapshot != null && !snapshot.isEmpty) {
-                        val messages = snapshot.toObjects(Message::class.java)
-                        displayMessages(messages)
-                    } else {
-                        // Handle empty data (e.g., show no messages message)
-                        Log.d("SpecificChatActivity", "No messages found")
-                    }
+    private fun setupChatRecyclerView() {
+        val query = getChatRoomMessageRef(chatroomId)
+            .orderBy("timeStamp", Query.Direction.DESCENDING)
+
+        val options = FirestoreRecyclerOptions.Builder<ChatMessageModel>()
+            .setQuery(query, ChatMessageModel::class.java)
+            .build()
+
+        messagesAdapter = MessagesAdapter(options, applicationContext)
+        val manager = LinearLayoutManager(this)
+        manager.reverseLayout = true
+        viewBinding.recyclerChatTwoPersons.layoutManager = manager
+        viewBinding.recyclerChatTwoPersons.adapter = messagesAdapter
+        messagesAdapter.startListening()
+
+        messagesAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                manager.smoothScrollToPosition(viewBinding.recyclerChatTwoPersons, null, 0)
+            }
+        })
+
+    }
+
+    private fun sendMessageToUser(message: String) {
+        chatroomModel.lastMessageTimeStamp = Timestamp.now()
+        chatroomModel.lastMessageSenderId = currentUserId
+        getChatRoomRef(chatroomId).set(chatroomModel)
+
+        val chatMessageModel = ChatMessageModel(message, currentUserId, Timestamp.now())
+        getChatRoomMessageRef(chatroomId).add(chatMessageModel).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                viewBinding.message.text.clear()
+            }
+        }
+    }
+
+    private fun getOrCreateChatRoomModel() {
+        getChatRoomRef(chatroomId).get().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val document = task.result
+                if (document.exists()) {
+                    chatroomModel = document.toObject(ChatroomModel::class.java)!!
+                } else {
+                    // Create a new chatroom model if it doesn't exist
+                    chatroomModel = ChatroomModel(
+                        chatroomId,
+                        listOf(currentUserId, otherUser.userID),
+                        Timestamp.now(),
+                        ""
+                    )
+                    getChatRoomRef(chatroomId).set(chatroomModel)
                 }
+            } else {
+                Log.e("ERror", "Error getting chatroom document", task.exception)
+            }
+        }
+    }
+
+    private fun getChatRoomRef(chatRoomId: String): DocumentReference {
+        return FirebaseFirestore.getInstance().collection("chatrooms").document(chatRoomId)
+    }
+
+    private fun getChatRoomMessageRef(chatRoomId: String): CollectionReference {
+        return getChatRoomRef(chatRoomId).collection("chats")
+    }
+
+    private fun getChatroomID(userId1: String, userId2: String): String {
+        return if (userId1.hashCode() < userId2.hashCode()) {
+            userId1 + "_" + userId2
         } else {
-            Log.e("SpecificChatActivity", "Invalid chat ID")
+            userId2 + "_" + userId1
         }
     }
 
-    private fun displayMessages(messages: List<Message>) {
-        messageAdapter = MessagesAdapter(messages, currentUser?.uid ?: "")
-        messageRecyclerView.adapter = messageAdapter
-    }
-
-    private fun sendMessage(chatId: String?) {
-        val messageText = messageEditText.text.toString().trim()
-        if (messageText.isNotEmpty() && !chatId.isNullOrBlank()) {
-            val timestamp = Timestamp.now()
-
-            val message = Message(
-                id = UUID.randomUUID().toString(), // Generate a unique ID
-                content = messageText,
-                senderId = currentUser?.uid ?: "",
-                timestamp = timestamp // Use Timestamp.now() for current timestamp
-            )
-
-            firestore.collection("chats")
-                .document(chatId)
-                .collection("messages")
-                .add(message)
-                .addOnSuccessListener {
-                    // Message sent successfully
-                    messageEditText.text.clear()
-                }
-                .addOnFailureListener { e ->
-                    // Handle failure (e.g., show error message)
-                    Log.e("SpecificChatActivity", "Failed to send message", e)
-                }
-        }
-    }
 }

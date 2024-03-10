@@ -56,7 +56,7 @@ class SignUpActivity : AppCompatActivity() {
         //get selected radio button from radiogroup
         val buttonId: Int = viewBinding.typeContainer.checkedRadioButtonId
         if (buttonId == View.NO_ID) {
-            Toast.makeText(this, "Please Select Choose...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please select an option", Toast.LENGTH_SHORT).show()
         } else {
             //TODO make validate
             val selectedRadioButton = findViewById<RadioButton>(buttonId)

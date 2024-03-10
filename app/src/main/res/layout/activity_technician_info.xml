@@ -6,7 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.registration.technicianinfo.TechnicianInfoActivity">
-
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_marginTop="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/work_experience" />
     <ImageView
         android:id="@+id/profile_img"
         android:layout_width="120dp"
@@ -93,17 +102,29 @@
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inputlayout_city" />
-
+<LinearLayout
+    android:id="@+id/parent_spinner"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintTop_toBottomOf="@id/job"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:orientation="horizontal">
     <Spinner
         android:id="@+id/jobSpinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         android:theme="@style/ThemeOverlay.AppCompat.Light"
         android:spinnerMode="dropdown"
         app:layout_constraintTop_toBottomOf="@id/job"/>
+    <ImageView
+        android:id="@+id/spinner_item_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="10dp" />
+</LinearLayout>
+
     <TextView
         android:id="@+id/work_experience"
         android:layout_width="wrap_content"
@@ -115,7 +136,7 @@
         android:textColor="@color/blue_main"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/jobSpinner" />
+        app:layout_constraintTop_toBottomOf="@id/parent_spinner" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputlayout_work_experience"

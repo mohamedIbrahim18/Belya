@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import com.example.belya.Constant
 import com.example.belya.databinding.ActivityCustomerInfoBinding
 import com.example.belya.ui.customer_main.CustomerMainActivity
@@ -21,9 +22,13 @@ class CustomerInfoActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        viewBinding.progressBar.visibility = View.GONE
         viewBinding.saveChanges.setOnClickListener {
             // update the new attributes
             updateCustomerData()
+            viewBinding.progressBar.visibility = View.VISIBLE
+            viewBinding.saveChanges.visibility = View.GONE
+
         }
     }
 
@@ -51,10 +56,14 @@ class CustomerInfoActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 // Update successful
                 navigateToCustomerPage()
+                viewBinding.progressBar.visibility = View.GONE
+                viewBinding.saveChanges.visibility = View.VISIBLE
             }
             .addOnFailureListener { e ->
                 // Handle the error
                 Log.e("ERROR_HANDLE", e.localizedMessage!!)
+                viewBinding.progressBar.visibility = View.GONE
+                viewBinding.saveChanges.visibility = View.VISIBLE
             }
     }
 

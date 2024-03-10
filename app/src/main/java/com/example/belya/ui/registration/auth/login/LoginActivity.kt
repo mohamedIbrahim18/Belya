@@ -3,6 +3,7 @@ package com.example.belya.ui.registration.auth.login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.example.belya.databinding.ActivityLoginBinding
 import com.example.belya.Constant
 import com.example.belya.ui.customer_main.CustomerMainActivity
@@ -28,7 +29,10 @@ class LoginActivity : AppCompatActivity() {
     private fun initViews() {
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
+        viewBinding.progressBar.visibility = View.GONE
         viewBinding.btnLogin.setOnClickListener {
+            viewBinding.progressBar.visibility = View.VISIBLE
+            viewBinding.btnLogin.visibility = View.GONE
             val email = viewBinding.emailEd.text.toString()
             val password = viewBinding.passwordEd.text.toString()
             if(checkValidate()){
@@ -36,8 +40,14 @@ class LoginActivity : AppCompatActivity() {
                 if (it.isSuccessful) {
                     // Check user type and navigate accordingly
                     checkUserTypeAndNavigate()
+                    viewBinding.progressBar.visibility = View.GONE
+                    viewBinding.btnLogin.visibility = View.VISIBLE
+
+
                 } else {
                     Snackbar.make(viewBinding.root,it.exception?.localizedMessage!!,Snackbar.LENGTH_LONG).show()
+                    viewBinding.progressBar.visibility = View.GONE
+                    viewBinding.btnLogin.visibility = View.VISIBLE
                 }
             }
             }

@@ -26,10 +26,14 @@ class TechnicianInfoActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
+        viewBinding.progressBar.visibility = View.GONE
         viewBinding.saveChanges.setOnClickListener {
             // update the new attributes
 
             updateFactorData()
+            viewBinding.progressBar.visibility = View.VISIBLE
+            viewBinding.saveChanges.visibility = View.GONE
+
         }
     }
 
@@ -86,11 +90,15 @@ class TechnicianInfoActivity : AppCompatActivity() {
             .update(userFactorData)
             .addOnSuccessListener {
                 // Update successful
+                viewBinding.progressBar.visibility = View.GONE
+                viewBinding.saveChanges.visibility = View.VISIBLE
                 navigateToFactorPage()
             }
             .addOnFailureListener { e ->
                 // Handle the error
                 Log.e("ERROR_HANDLE", e.localizedMessage!!)
+                viewBinding.progressBar.visibility = View.GONE
+                viewBinding.saveChanges.visibility = View.VISIBLE
             }
     }
 

@@ -8,8 +8,8 @@ import com.example.belya.R
 import com.example.belya.databinding.RecyclerPersonInCategoryItemBinding
 import com.example.belya.model.User
 
-class PersonInCategoryAdapter(private var listOfPerson: MutableList<User>) :
-    RecyclerView.Adapter<PersonInCategoryAdapter.ViewHolder>() {
+class PersonAdapter(private var listOfPerson: MutableList<User>) :
+    RecyclerView.Adapter<PersonAdapter.ViewHolder>() {
     class ViewHolder(var itemBinding: RecyclerPersonInCategoryItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(task: User) {
@@ -18,8 +18,9 @@ class PersonInCategoryAdapter(private var listOfPerson: MutableList<User>) :
                 crossfade(500)
                 placeholder(R.drawable.ic_profileimg)
             }
-            itemBinding.personName.text = task.firstName
+            itemBinding.personName.text = task.firstName +" "+ task.lastName
             itemBinding.city.text = task.city
+            itemBinding.job.text = task.job
             itemBinding.personRate.rating = task.person_rate.toFloat()
         }
     }

@@ -69,7 +69,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ratingbar_person_details"
-            tools:text="Average Price Between 50 to 1 per hour" />
+            android:text="Average Price Between 20 to 50 per hour" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textinput_layout_person_details"

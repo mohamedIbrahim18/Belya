@@ -12,14 +12,14 @@ import com.example.belya.HorizontalItemDecoration
 import com.example.belya.R
 import com.example.belya.databinding.FragmentPersonInCategoryBinding
 import com.example.belya.model.User
-import com.example.belya.adapter.PersonInCategoryAdapter
+import com.example.belya.adapter.PersonAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class PersonInCategoryFragment : Fragment() {
 
     lateinit var viewBinding: FragmentPersonInCategoryBinding
-    lateinit var personInCategoryAdapter: PersonInCategoryAdapter
+    lateinit var personInCategoryAdapter: PersonAdapter
     private lateinit var personList: MutableList<User>
     lateinit var newList: MutableList<User>
     var categoryName: String = ""
@@ -80,12 +80,12 @@ class PersonInCategoryFragment : Fragment() {
 
     private fun initRecyclerPerson() {
         // Initialize personAdapter with personList
-        personInCategoryAdapter = PersonInCategoryAdapter(personList)
+        personInCategoryAdapter = PersonAdapter(personList)
         viewBinding.recyclerCategories.apply {
             viewBinding.recyclerCategories.addItemDecoration(HorizontalItemDecoration())
             adapter = personInCategoryAdapter
 
-            personInCategoryAdapter.onItemSelectedClickListnner = object : PersonInCategoryAdapter.OnItemSelectedClick{
+            personInCategoryAdapter.onItemSelectedClickListnner = object : PersonAdapter.OnItemSelectedClick{
                 override fun onItemSelectedClick(position: Int, task: User) {
                     //showPersonDetails(task)
                     val bundle = Bundle()

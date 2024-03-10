@@ -48,10 +48,27 @@
         android:id="@+id/accountCustomerFragment"
         android:name="com.example.belya.ui.customer_main.tabs.account.AccountCustomerFragment"
         android:label="fragment_account_customer"
-        tools:layout="@layout/fragment_account_customer" />
+        tools:layout="@layout/fragment_account_customer" >
+        <action
+            android:id="@+id/action_accountCustomerFragment_to_changeEmailFragment2"
+            app:destination="@id/changeEmailFragment2" />
+        <action
+            android:id="@+id/action_accountCustomerFragment_to_changePasswordFragment2"
+            app:destination="@id/changePasswordFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/technicianDetailsFragment"
         android:name="com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.technician_details.TechnicianDetailsFragment"
         android:label="fragment_technician_deatils"
         tools:layout="@layout/fragment_technician_deatils" />
+    <fragment
+        android:id="@+id/changeEmailFragment2"
+        android:name="com.example.belya.ui.technician_main.tabs.account.ChangeEmailFragment"
+        android:label="fragment_change_email"
+        tools:layout="@layout/fragment_change_email" />
+    <fragment
+        android:id="@+id/changePasswordFragment2"
+        android:name="com.example.belya.ui.technician_main.tabs.account.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" />
 </navigation>

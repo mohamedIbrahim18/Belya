@@ -1,5 +1,6 @@
 package com.example.belya.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,8 @@ class RequestsAdapter(private var listOfRequests : List<User>) : RecyclerView.Ad
             val fullName = "${task.firstName} ${task.lastName}"
             itemBinding.requestName.text = fullName
             itemBinding.requestCity.text = task.city
-            itemBinding.requestPrice.text = task.price
+            itemBinding.requestPrice.text = task.price.trim()
+            Log.d("price in adapter",task.price.toString())
         }
     }
 

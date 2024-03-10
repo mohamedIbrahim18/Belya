@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.belya.Constant
 import com.example.belya.R
@@ -15,15 +14,15 @@ import com.example.belya.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.math.log
 
 class TechnicianDetailsFragment : Fragment() {
     private lateinit var viewBinding: FragmentTechnicianDeatilsBinding
     private lateinit var person: User
     private lateinit var db: FirebaseFirestore
-    private val auth = FirebaseAuth.getInstance()
 
-    private lateinit var otherUID: String
-    private lateinit var currentUserId: String
+    private lateinit var technicianId: String
+    private var currentUserId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,12 +39,12 @@ class TechnicianDetailsFragment : Fragment() {
         arguments?.let {
             it.getParcelable<User>("pokemon")?.let { task ->
                 person = task
-                otherUID = person.userID
-                currentUserId = auth.currentUser!!.uid
+                technicianId = person.userID
+                currentUserId = FirebaseAuth.getInstance().currentUser?.uid
 
                 setupUI()
-                checkMyIdWithOtherId(otherUID, currentUserId)
-                checkMyIdWithOtherIdIfAccepted(otherUID, currentUserId)
+                checkMyIdWithOtherId(technicianId, currentUserId)
+                checkMyIdWithOtherIdIfAccepted(technicianId, currentUserId)
             }
         }
 
@@ -55,7 +54,9 @@ class TechnicianDetailsFragment : Fragment() {
 
             if (viewBinding.edittextPersonDetails.text?.isNotEmpty() == true) {
                 val price = viewBinding.edittextPersonDetails.text.toString()
-                makeTicket(currentUserId, otherUID, price)
+                Log.d("price in Text View", price)
+                Log.d("my current id ", currentUserId!!)
+                makeTicket(currentUserId!!,technicianId,price)
             } else {
                 viewBinding.textinputLayoutPersonDetails.error = "Please Enter a price"
                 viewBinding.progressBarPersonDeatails.visibility = View.GONE
@@ -65,28 +66,32 @@ class TechnicianDetailsFragment : Fragment() {
     }
 
     private fun setupUI() {
-        val name = person.firstName + " " + person.lastName
+        val name = "${person.firstName} ${person.lastName}"
         viewBinding.firstnamePersonDetails.text = name
         viewBinding.cityPersonDetails.text = person.city
         viewBinding.ratingbarPersonDetails.rating = person.person_rate.toFloat()
     }
 
-    private fun checkMyIdWithOtherId(techID: String, customerID: String) {
-        fetchListFromFirestore(techID, "pendingList", customerID) { isContained ->
-            if (isContained) {
-                updateUIForPending()
-            } else {
-                updateUIForNotPending()
+    private fun checkMyIdWithOtherId(techID: String, customerID: String?) {
+        customerID?.let {
+            fetchListFromFirestore(techID, "pendingList", it) { isContained ->
+                if (isContained) {
+                    updateUIForPending()
+                } else {
+                    updateUIForNotPending()
+                }
             }
         }
     }
 
-    private fun checkMyIdWithOtherIdIfAccepted(techID: String, customerID: String) {
-        fetchListFromFirestore(techID, "acceptedList", customerID) { isContained ->
-            if (isContained) {
-                updateUIForAccepted()
-            } else {
-                updateUIForNotAccepted()
+    private fun checkMyIdWithOtherIdIfAccepted(techID: String, customerID: String?) {
+        customerID?.let {
+            fetchListFromFirestore(techID, "acceptedList", it) { isContained ->
+                if (isContained) {
+                    updateUIForAccepted()
+                } else {
+                    updateUIForNotAccepted()
+                }
             }
         }
     }
@@ -118,6 +123,7 @@ class TechnicianDetailsFragment : Fragment() {
                             updateUIForNotPending()
                         }
                     }
+
                     "acceptedList" -> {
                         if (isContained) {
                             updateUIForAccepted()
@@ -128,7 +134,6 @@ class TechnicianDetailsFragment : Fragment() {
                 }
             }
     }
-
 
 
     private fun updateUIForPending() {
@@ -159,45 +164,55 @@ class TechnicianDetailsFragment : Fragment() {
         viewBinding.progressBarPersonDeatails.visibility = View.VISIBLE
         viewBinding.bookNowPersonDetails.visibility = View.GONE
 
-        FirebaseFirestore.getInstance().collection(Constant.USER)
-            .document(currentUserId).get().addOnSuccessListener { documentSnapshot ->
-                val currentUser = documentSnapshot.toObject(User::class.java)
-                if (currentUser != null) {
-                    currentUser.price = price
+        val ticketRef = FirebaseFirestore.getInstance()
+            .collection(Constant.USER)
+            .document(technicianId)
+            .collection("Tickets")
+            .document(currentUserId)
 
-                    val otherUserRef = db.collection(Constant.USER).document(technicianId)
-                        .collection("Tickets")
-                    val batch = db.batch()
-
-                    val customerRequestDoc = otherUserRef.document(currentUser.userID)
-                    batch.set(customerRequestDoc, currentUser)
-                    val techRef = FirebaseFirestore.getInstance().collection(Constant.USER)
-                        .document(technicianId)
-                    batch.update(techRef, "pendingList", FieldValue.arrayUnion(currentUserId))
-
-                    batch.commit().addOnSuccessListener {
-                        Log.d(TAG, "Ticket created successfully")
-                        viewBinding.progressBarPersonDeatails.visibility = View.GONE
-                        viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
-
-                        viewBinding.bookNowPersonDetails.setBackgroundColor(Color.RED)
-                        viewBinding.bookNowPersonDetails.isClickable = false
-                        viewBinding.bookNowPersonDetails.text = "Pending"
-                    }.addOnFailureListener { e ->
-                        Log.e(TAG, "Error creating ticket", e)
-                        viewBinding.progressBarPersonDeatails.visibility = View.GONE
-                        viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+        // Create a new document in the Tickets collection
+        ticketRef.set(hashMapOf("userId" to currentUserId))
+            .addOnSuccessListener {
+                // Document created successfully, now update its fields
+                // Update price in the ticket document
+                ticketRef.update("price", price)
+                    .addOnSuccessListener {
+                        // Handle success
+                        Log.d(TAG, "Price updated successfully")
                     }
-                } else {
-                    Log.e(TAG, "Current user is null")
-                    viewBinding.progressBarPersonDeatails.visibility = View.GONE
-                    viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
-                }
-            }.addOnFailureListener { e ->
-                Log.e(TAG, "Error getting current user", e)
-                viewBinding.progressBarPersonDeatails.visibility = View.GONE
-                viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+                    .addOnFailureListener { e ->
+                        // Handle failure
+                        Log.e(TAG, "Error updating price: $e")
+                    }
+
+                // Update pendingList in the technician document
+                FirebaseFirestore.getInstance().collection(Constant.USER)
+                    .document(technicianId)
+                    .update("pendingList", FieldValue.arrayUnion(currentUserId))
+                    .addOnSuccessListener {
+                        // Handle success
+                        Log.d(TAG, "User added to pending list successfully")
+                        uiTicketCreated() // Notify UI after updating pending list
+                    }
+                    .addOnFailureListener { e ->
+                        // Handle failure
+                        Log.e(TAG, "Error adding user to pending list: $e")
+                    }
             }
+            .addOnFailureListener { e ->
+                // Handle failure in creating the document
+                Log.e(TAG, "Error creating ticket document: $e")
+            }
+    }
+
+
+    private fun uiTicketCreated() {
+        viewBinding.progressBarPersonDeatails.visibility = View.GONE
+        viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+
+        viewBinding.bookNowPersonDetails.setBackgroundColor(Color.RED)
+        viewBinding.bookNowPersonDetails.isClickable = false
+        viewBinding.bookNowPersonDetails.text = "Pending"
     }
 
     companion object {

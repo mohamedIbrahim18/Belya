@@ -1,5 +1,7 @@
 package com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.technician_details
 
+import FeedbackAdapter
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -7,19 +9,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import coil.load
 import com.example.belya.Constant
+import com.example.belya.HorizontalItemDecoration
 import com.example.belya.R
 import com.example.belya.databinding.FragmentTechnicianDeatilsBinding
+import com.example.belya.model.Feedback
 import com.example.belya.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlin.math.log
 
 class TechnicianDetailsFragment : Fragment() {
     private lateinit var viewBinding: FragmentTechnicianDeatilsBinding
     private lateinit var person: User
     private lateinit var db: FirebaseFirestore
+    private lateinit var feedbackList: MutableList<Feedback> // Change the type to MutableList
+    lateinit var feedbackAdapter: FeedbackAdapter
 
     private lateinit var technicianId: String
     private var currentUserId: String? = null
@@ -32,7 +39,9 @@ class TechnicianDetailsFragment : Fragment() {
         return viewBinding.root
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        feedbackList = mutableListOf()
         super.onViewCreated(view, savedInstanceState)
         db = FirebaseFirestore.getInstance()
 
@@ -42,10 +51,20 @@ class TechnicianDetailsFragment : Fragment() {
                 technicianId = person.userID
                 currentUserId = FirebaseAuth.getInstance().currentUser?.uid
 
-                setupUI()
+                setupUI(technicianId)
                 checkMyIdWithOtherId(technicianId, currentUserId)
                 checkMyIdWithOtherIdIfAccepted(technicianId, currentUserId)
+                setupRecyclerFeedbacks()
+                fetchReviewsCollocation(technicianId)
+                viewBinding.addFeedback.setOnClickListener {
+                    val action =
+                        TechnicianDetailsFragmentDirections.actionTechnicianDetailsFragmentToAddFeedbackFragment(
+                            technicianId
+                        )
+                    view.findNavController().navigate(action)
+                }
             }
+
         }
 
         viewBinding.bookNowPersonDetails.setOnClickListener {
@@ -56,7 +75,7 @@ class TechnicianDetailsFragment : Fragment() {
                 val price = viewBinding.edittextPersonDetails.text.toString()
                 Log.d("price in Text View", price)
                 Log.d("my current id ", currentUserId!!)
-                makeTicket(currentUserId!!,technicianId,price)
+                makeTicket(currentUserId!!, technicianId, price)
             } else {
                 viewBinding.textinputLayoutPersonDetails.error = "Please Enter a price"
                 viewBinding.progressBarPersonDeatails.visibility = View.GONE
@@ -65,11 +84,71 @@ class TechnicianDetailsFragment : Fragment() {
         }
     }
 
-    private fun setupUI() {
+    private fun fetchReviewsCollocation(technicianId: String) {
+        FirebaseFirestore.getInstance().collection(Constant.USER)
+            .document(technicianId).collection("Reviews").get()
+            .addOnSuccessListener { documents ->
+                val feedbackList = mutableListOf<Feedback>()
+                for (document in documents) {
+                    val userName = document.getString("userName") ?: ""
+                    val userImageResId =
+                        R.drawable.ic_mechanic // You need to replace this with actual image resource ID
+                    val message = document.getString("message") ?: ""
+                    val rating = document.getDouble("rating")?.toFloat() ?: 0.0f
+                    val timestamp = document.getTimestamp("time")
+                    val feedback = Feedback(userName, userImageResId, message, rating, timestamp)
+
+                    feedbackList.add(feedback)
+                }
+                feedbackAdapter.updateData(feedbackList)
+            }
+            .addOnFailureListener { exception ->
+                Log.e(TAG, "Error fetching reviews: ", exception)
+            }
+    }
+
+    private fun setupRecyclerFeedbacks() {
+        feedbackAdapter = FeedbackAdapter(feedbackList)
+        viewBinding.recyclerFeedback.apply {
+            viewBinding.recyclerFeedback.addItemDecoration(HorizontalItemDecoration())
+            adapter = feedbackAdapter
+        }
+    }
+
+    private fun setupUI(technicianId: String) {
         val name = "${person.firstName} ${person.lastName}"
         viewBinding.firstnamePersonDetails.text = name
         viewBinding.cityPersonDetails.text = person.city
-        viewBinding.ratingbarPersonDetails.rating = person.person_rate.toFloat()
+        viewBinding.imagePersonDetails.load(person.imagePath){
+            placeholder(R.drawable.ic_profileimg)
+        }
+
+        // Query the "Reviews" collection for the specified technician ID
+        FirebaseFirestore.getInstance().collection(Constant.USER)
+            .document(technicianId)
+            .collection("Reviews")
+            .get()
+            .addOnSuccessListener { documents ->
+                var totalRating = 0.0
+                var count = 0
+
+                // Iterate over the documents to calculate the total rating and count
+                for (document in documents) {
+                    val rating = document.getDouble("rating")
+                    rating?.let {
+                        totalRating += it
+                        count++
+                    }
+                }
+                // Calculate the average rating
+                val averageRating = if (count > 0) totalRating / count else 0.0
+                // Set the average rating to the rating bar
+                viewBinding.ratingbarPersonDetails.rating = averageRating.toFloat()
+            }
+            .addOnFailureListener { exception ->
+                // Handle failure
+                Log.e(TAG, "Error getting reviews: $exception")
+            }
     }
 
     private fun checkMyIdWithOtherId(techID: String, customerID: String?) {
@@ -152,7 +231,7 @@ class TechnicianDetailsFragment : Fragment() {
         viewBinding.bookNowPersonDetails.text = "Accepted"
         viewBinding.bookNowPersonDetails.isClickable = false
         // TODO
-        viewBinding.bookNowPersonDetails.setBackgroundResource(R.color.accept_button_color)
+        viewBinding.bookNowPersonDetails.setBackgroundResource(R.color.purple_200)
 
     }
 

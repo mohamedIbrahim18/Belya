@@ -3,18 +3,18 @@
     <item
         android:id="@+id/notificationTechnicianFragment2"
         android:icon="@drawable/ic_notification"
-        android:title="Notification"
+        android:title="@string/notification"
         />
     <item
         android:id="@+id/chatTechnicianFragment2"
         android:icon="@drawable/ic_chat"
-        android:title="Chat"
+        android:title="@string/chat"
         />
 
     <item
         android:id="@+id/accountTechnicianFragment2"
         android:icon="@drawable/ic_account"
-        android:title="My Account"
+        android:title="@string/my_account"
         />
 
 </menu>

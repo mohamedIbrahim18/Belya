@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_accountTechnicianFragment2_to_changePasswordFragment"
             app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_accountTechnicianFragment2_to_acceptedTicketsFragment"
+            app:destination="@id/acceptedTicketsFragment" />
     </fragment>
     <fragment
         android:id="@+id/changeEmailFragment"
@@ -41,4 +44,9 @@
         android:name="com.example.belya.ui.technician_main.tabs.account.ChangePasswordFragment"
         android:label="fragment_change_password"
         tools:layout="@layout/fragment_change_password" />
+    <fragment
+        android:id="@+id/acceptedTicketsFragment"
+        android:name="com.example.belya.ui.technician_main.tabs.account.AcceptedTicketsFragment"
+        android:label="fragment_accepted_tickets"
+        tools:layout="@layout/fragment_accepted_tickets" />
 </navigation>

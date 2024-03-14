@@ -3,6 +3,7 @@ package com.example.belya.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.Coil
 import coil.load
 import com.example.belya.R
 import com.example.belya.databinding.RecyclerPersonInCategoryItemBinding
@@ -15,13 +16,12 @@ class PersonAdapter(private var listOfPerson: MutableList<User>) :
         fun bind(task: User) {
            // itemBinding.personImage.text(task.imagePath)
             itemBinding.personImage.load(task.imagePath){
-                crossfade(500)
+                crossfade(true)
                 placeholder(R.drawable.ic_profileimg)
             }
             itemBinding.personName.text = task.firstName +" "+ task.lastName
             itemBinding.city.text = task.city
             itemBinding.job.text = task.job
-            itemBinding.personRate.rating = task.person_rate.toFloat()
         }
     }
 

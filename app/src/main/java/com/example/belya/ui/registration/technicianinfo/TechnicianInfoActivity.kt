@@ -7,9 +7,10 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.belya.databinding.ActivityTechnicianInfoBinding
 import com.example.belya.Constant
+import com.example.belya.databinding.ActivityTechnicianInfoBinding
 import com.example.belya.ui.technician_main.TechnicianMainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -19,61 +20,132 @@ import java.util.Date
 class TechnicianInfoActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityTechnicianInfoBinding
     private val auth = FirebaseAuth.getInstance()
-    private var job: String? = null
     private var selectedImg: Uri? = null
+    private var selectedJob: String = ""
+
+    companion object {
+        private const val REQUEST_IMAGE_PICK = 1
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityTechnicianInfoBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-        initSpinner()
+        setupSpinner()
         initViews()
     }
 
     private fun initViews() {
+        viewBinding.progressBar.visibility = View.GONE
         viewBinding.profileImg.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_GET_CONTENT
             intent.type = "image/*"
-            startActivityForResult(intent, 1)
+            startActivityForResult(intent, REQUEST_IMAGE_PICK)
         }
-        viewBinding.progressBar.visibility = View.GONE
+
         viewBinding.saveChanges.setOnClickListener {
-            // Check if essential fields are not empty
-            if (isFieldsValid()) {
-                // update the new attributes
-                selectedImg?.let {
-                    uploadImage(it)
-                }
-            } else {
-                // Show error message or handle empty fields
-                // For example:
-                // Toast.makeText(this, "Please fill all required fields", Toast.LENGTH_SHORT).show()
-            }
+            updateTechnicianData()
+            viewBinding.progressBar.visibility = View.VISIBLE
+            viewBinding.saveChanges.visibility = View.GONE
+
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
-            if (data != null) {
-                if (data.data != null) {
-                    selectedImg = data.data
-                    viewBinding.profileImg.setImageURI(data.data)
+            if (requestCode == REQUEST_IMAGE_PICK && data != null && data.data != null) {
+                selectedImg = data.data
+                viewBinding.profileImg.setImageURI(data.data)
+            }
+        }
+    }
+
+    private fun getTheNewData(): Map<String, Any> {
+        val phoneNumber = viewBinding.phoneEd.text.toString().trim()
+        val city = viewBinding.cityEd.text.toString().trim()
+        val workExperience = viewBinding.workExperienceEd.text.toString().trim()
+
+        val newData = mutableMapOf<String, Any>()
+        if (phoneNumber.isNotEmpty()) {
+            newData["phoneNumber"] = phoneNumber
+        }
+        selectedImg?.let { newData["imagePath"] = it.toString() }
+        newData["city"] = city
+        newData["work_experience"] = workExperience
+        newData["job"] = selectedJob
+
+        return newData
+    }
+
+    private fun uploadImage() {
+        selectedImg?.let { imgUri ->
+            val reference = FirebaseStorage.getInstance().reference.child("Profile")
+                .child(Date().time.toString())
+            reference.putFile(imgUri).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    task.result?.storage?.downloadUrl?.addOnSuccessListener { uri ->
+                        uploadInfo(uri.toString())
+                    }?.addOnFailureListener { e ->
+                        Log.e("UPLOAD_IMAGE", "Failed to upload image: ${e.message}")
+                        handleUploadFailure()
+                    }
+                } else {
+                    Log.e("UPLOAD_IMAGE", "Failed to upload image: ${task.exception?.message}")
+                    handleUploadFailure()
                 }
             }
         }
     }
 
+    private fun uploadInfo(imageUrl: String) {
+        val userTechnicianData = getTheNewData().toMutableMap()
+        if (imageUrl.isNotEmpty()) {
+            userTechnicianData["imagePath"] = imageUrl
+        }
+        // Update user data in Firestore
+        val db = FirebaseFirestore.getInstance()
+        val documentId = auth.uid ?: ""
+        val userRef = db.collection(Constant.USER).document(documentId)
+        userRef.update(userTechnicianData).addOnSuccessListener {
+            // Update successful
+            navigateToTechnicianPage()
+        }.addOnFailureListener { e ->
+            // Handle the error
+            Log.e("UPDATE_USER", "Failed to update user data: ${e.message}")
+            handleUploadFailure()
+        }
+    }
 
-    private fun initSpinner() {
-        // Dummy job data
-        val jobOptions = arrayOf("Plumping", "Pharmacy", "Carpentry", "Electricity", "Mechanics")
-        val madapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, jobOptions)
+    private fun updateTechnicianData() {
+        if (selectedImg != null) {
+            uploadImage()
+        } else {
+            uploadInfo("")
+        }
+    }
+
+
+    private fun navigateToTechnicianPage() {
+        val intent = Intent(this, TechnicianMainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun setupSpinner() {
+        val jobOptions = arrayOf("Plumbing", "Pharmacy", "Carpentry", "Electricity", "Mechanics")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, jobOptions)
         viewBinding.jobSpinner.apply {
-            adapter = madapter
+            this.adapter = adapter
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    job = jobOptions[position]
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedJob = jobOptions[position]
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -83,75 +155,8 @@ class TechnicianInfoActivity : AppCompatActivity() {
         }
     }
 
-    private fun isFieldsValid(): Boolean {
-        val phoneNumber = viewBinding.phoneEd.text.toString().trim()
-        val city = viewBinding.cityEd.text.toString().trim()
-        return phoneNumber.isNotEmpty() && city.isNotEmpty()
-    }
-
-    private fun uploadImage(selectedImg: Uri) {
-        val reference = FirebaseStorage.getInstance().reference.child("Profile").child(Date().time.toString())
-        reference.putFile(selectedImg).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                task.result?.storage?.downloadUrl?.addOnSuccessListener { uri ->
-                    uploadUserInfo(uri.toString())
-                }?.addOnFailureListener { e ->
-                    handleUploadFailure(e)
-                }
-            } else {
-                handleUploadFailure(task.exception)
-            }
-        }
-    }
-
-    private fun uploadUserInfo(imageUrl: String) {
-        val userFactorData = getTheNewData(imageUrl)
-        val db = FirebaseFirestore.getInstance()
-        val documentId = auth.uid!!
-        val userFactorsCollection = db.collection(Constant.USER)
-        // Update the document with the new data
-        userFactorsCollection.document(documentId)
-            .update(userFactorData)
-            .addOnSuccessListener {
-                // Update successful
-                navigateToFactorPage()
-            }
-            .addOnFailureListener { e ->
-                // Handle the error
-                handleUpdateFailure(e)
-            }
-    }
-
-    private fun handleUploadFailure(exception: Exception?) {
-        Log.e("UPLOAD_IMAGE", "Failed to upload image: ${exception?.message}")
+    private fun handleUploadFailure() {
         viewBinding.progressBar.visibility = View.GONE
         viewBinding.saveChanges.visibility = View.VISIBLE
-    }
-
-    private fun handleUpdateFailure(exception: Exception?) {
-        Log.e("ERROR_HANDLE", exception?.localizedMessage ?: "Unknown error")
-        viewBinding.progressBar.visibility = View.GONE
-        viewBinding.saveChanges.visibility = View.VISIBLE
-    }
-
-    private fun getTheNewData(imageUrl: String): Map<String, Any> {
-        val phoneNumber = viewBinding.phoneEd.text.toString().trim()
-        val workExperience = viewBinding.workExperienceEd.text.toString().trim()
-        val city = viewBinding.cityEd.text.toString().trim()
-
-        val newData = mutableMapOf<String, Any>()
-        newData["phoneNumber"] = phoneNumber
-        newData["imagePath"] = imageUrl
-        newData["city"] = city
-        newData["job"] = job ?: ""
-        newData["work_experience"] = workExperience
-
-        return newData
-    }
-
-    private fun navigateToFactorPage() {
-        val intent = Intent(this, TechnicianMainActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 }

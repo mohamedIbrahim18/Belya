@@ -26,12 +26,11 @@ class FeedbackAdapter(private var listOfFeedbacks: List<Feedback>) :
                 crossfade(true)
                 placeholder(R.drawable.ic_profileimg)
             }
-            // todo fix it
+
             val date = feedback.time?.toDate()
             val dateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
             val formattedDate = dateFormat.format(date)
             itemBinding.feedbackTime.text = formattedDate
-         //   itemBinding.feedbackTime.text = feedback.time.toString()
         }
     }
 

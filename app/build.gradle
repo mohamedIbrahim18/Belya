@@ -92,7 +92,8 @@ dependencies {
 
     // FirestoreRecyclerOptions
     implementation 'com.firebaseui:firebase-ui-firestore:8.0.0'
-
+    // Firebase Storage
+    implementation("com.google.firebase:firebase-storage")
 
 
 }

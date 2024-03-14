@@ -60,7 +60,11 @@
         android:id="@+id/technicianDetailsFragment"
         android:name="com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.technician_details.TechnicianDetailsFragment"
         android:label="fragment_technician_deatils"
-        tools:layout="@layout/fragment_technician_deatils" />
+        tools:layout="@layout/fragment_technician_deatils" >
+        <action
+            android:id="@+id/action_technicianDetailsFragment_to_addFeedbackFragment"
+            app:destination="@id/addFeedbackFragment" />
+    </fragment>
     <fragment
         android:id="@+id/changeEmailFragment2"
         android:name="com.example.belya.ui.technician_main.tabs.account.ChangeEmailFragment"
@@ -71,4 +75,14 @@
         android:name="com.example.belya.ui.technician_main.tabs.account.ChangePasswordFragment"
         android:label="fragment_change_password"
         tools:layout="@layout/fragment_change_password" />
+    <fragment
+        android:id="@+id/addFeedbackFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.technician_details.AddFeedbackFragment"
+        android:label="fragment_add_feedback"
+        tools:layout="@layout/fragment_add_feedback" >
+        <argument
+            android:name="techID"
+            app:argType="string"
+            android:defaultValue="techID" />
+    </fragment>
 </navigation>

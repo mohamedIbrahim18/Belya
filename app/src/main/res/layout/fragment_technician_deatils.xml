@@ -15,7 +15,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginStart="130dp"
-            android:layout_marginTop="33dp"
+            android:layout_marginTop="20dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,9 +111,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textinput_layout_person_details"
-
             />
-
+        <TextView
+            android:id="@+id/add_feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/book_now_person_details"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:text="Add Feedback"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_feedback"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/recycler_feedback_list_item"
+            app:layout_constraintTop_toBottomOf="@id/add_feedback"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -1,5 +1,8 @@
 package com.example.belya.ui.technician_main.tabs.account
+
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import coil.load
 import com.example.belya.Constant
 import com.example.belya.R
 import com.example.belya.databinding.FragmentAccountTechnicianBinding
@@ -14,6 +18,8 @@ import com.example.belya.model.User
 import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Locale
+
 class AccountTechnicianFragment : Fragment() {
     lateinit var viewBinding: FragmentAccountTechnicianBinding
 
@@ -37,6 +43,9 @@ class AccountTechnicianFragment : Fragment() {
         viewBinding.accountChangePassword.setOnClickListener {
             findNavController().navigate(R.id.action_accountTechnicianFragment2_to_changePasswordFragment)
         }
+        viewBinding.acceptedTickets.setOnClickListener {
+            findNavController().navigate(R.id.action_accountTechnicianFragment2_to_acceptedTicketsFragment)
+        }
         viewBinding.logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
             navigateToLoginPage()
@@ -44,7 +53,6 @@ class AccountTechnicianFragment : Fragment() {
         fetchDataFromFireStore()
 
     }
-
 
     private fun fetchDataFromFireStore() {
         val currentUID = FirebaseAuth.getInstance().uid
@@ -60,6 +68,9 @@ class AccountTechnicianFragment : Fragment() {
                         val fullName: String = it.firstName + " " + it.lastName
                         viewBinding.myName.text = fullName
                         viewBinding.myEmail.text = it.email
+                        viewBinding.accountProfilePic.load(it.imagePath){
+                            placeholder(R.drawable.ic_profileimg)
+                        }
                     }
                 }
             }

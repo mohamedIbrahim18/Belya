@@ -1,7 +1,6 @@
 package com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.technician_details
 
 import FeedbackAdapter
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import coil.load
+import com.bumptech.glide.Glide
 import com.example.belya.Constant
 import com.example.belya.HorizontalItemDecoration
 import com.example.belya.R
@@ -25,25 +24,23 @@ class TechnicianDetailsFragment : Fragment() {
     private lateinit var viewBinding: FragmentTechnicianDeatilsBinding
     private lateinit var person: User
     private lateinit var db: FirebaseFirestore
-    private lateinit var feedbackList: MutableList<Feedback> // Change the type to MutableList
+    private lateinit var feedbackList: MutableList<Feedback>
     lateinit var feedbackAdapter: FeedbackAdapter
 
     private lateinit var technicianId: String
     private var currentUserId: String? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         viewBinding = FragmentTechnicianDeatilsBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
-    @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        feedbackList = mutableListOf()
         super.onViewCreated(view, savedInstanceState)
         db = FirebaseFirestore.getInstance()
+        feedbackList = mutableListOf()
 
         arguments?.let {
             it.getParcelable<User>("pokemon")?.let { task ->
@@ -64,7 +61,6 @@ class TechnicianDetailsFragment : Fragment() {
                     view.findNavController().navigate(action)
                 }
             }
-
         }
 
         viewBinding.bookNowPersonDetails.setOnClickListener {
@@ -85,32 +81,31 @@ class TechnicianDetailsFragment : Fragment() {
     }
 
     private fun fetchReviewsCollocation(technicianId: String) {
-        FirebaseFirestore.getInstance().collection(Constant.USER)
-            .document(technicianId).collection("Reviews").get()
-            .addOnSuccessListener { documents ->
-                val feedbackList = mutableListOf<Feedback>()
-                for (document in documents) {
-                    val userName = document.getString("userName") ?: ""
-                    val userImageResId =
-                        R.drawable.ic_mechanic // You need to replace this with actual image resource ID
-                    val message = document.getString("message") ?: ""
-                    val rating = document.getDouble("rating")?.toFloat() ?: 0.0f
-                    val timestamp = document.getTimestamp("time")
-                    val feedback = Feedback(userName, userImageResId, message, rating, timestamp)
-
-                    feedbackList.add(feedback)
+        db.collection(Constant.USER).document(technicianId).collection("Reviews").get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val feedbackList = mutableListOf<Feedback>()
+                    for (document in task.result!!) {
+                        val userName = document.getString("userName") ?: ""
+                        val userImagePath = document.getString("imagePath")
+                            ?: "" // Replace "imagePath" with your actual field name
+                        val message = document.getString("message") ?: ""
+                        val rating = document.getDouble("rating")?.toFloat() ?: 0.0f
+                        val timestamp = document.getTimestamp("time")
+                        val feedback = Feedback(userName, userImagePath, message, rating, timestamp)
+                        feedbackList.add(feedback)
+                    }
+                    feedbackAdapter.updateData(feedbackList)
+                } else {
+                    Log.e(TAG, "Error fetching reviews: ", task.exception)
                 }
-                feedbackAdapter.updateData(feedbackList)
-            }
-            .addOnFailureListener { exception ->
-                Log.e(TAG, "Error fetching reviews: ", exception)
             }
     }
 
     private fun setupRecyclerFeedbacks() {
         feedbackAdapter = FeedbackAdapter(feedbackList)
         viewBinding.recyclerFeedback.apply {
-            viewBinding.recyclerFeedback.addItemDecoration(HorizontalItemDecoration())
+            addItemDecoration(HorizontalItemDecoration())
             adapter = feedbackAdapter
         }
     }
@@ -119,35 +114,59 @@ class TechnicianDetailsFragment : Fragment() {
         val name = "${person.firstName} ${person.lastName}"
         viewBinding.firstnamePersonDetails.text = name
         viewBinding.cityPersonDetails.text = person.city
-        viewBinding.imagePersonDetails.load(person.imagePath){
-            placeholder(R.drawable.ic_profileimg)
-        }
-
-        // Query the "Reviews" collection for the specified technician ID
-        FirebaseFirestore.getInstance().collection(Constant.USER)
+        Glide.with(viewBinding.imagePersonDetails).load(person.imagePath)
+            .placeholder(R.drawable.ic_profileimg).into(viewBinding.imagePersonDetails)
+        db.collection(Constant.USER)
             .document(technicianId)
-            .collection("Reviews")
+            .collection("Tickets")
             .get()
-            .addOnSuccessListener { documents ->
-                var totalRating = 0.0
+            .addOnSuccessListener { ticketQuerySnapshot ->
+                var totalprice = 0.0
                 var count = 0
 
-                // Iterate over the documents to calculate the total rating and count
-                for (document in documents) {
-                    val rating = document.getDouble("rating")
-                    rating?.let {
-                        totalRating += it
-                        count++
+                for (ticketDocumentSnapshot in ticketQuerySnapshot.documents) {
+                    val ticketUser = ticketDocumentSnapshot.get("user") as? Map<*, *>
+                    ticketUser?.let { ticketUserMap ->
+                        val priceString = ticketUserMap["price"] as? String
+                        priceString?.let {
+                            val price = it.toDoubleOrNull()
+                            price?.let {
+                                totalprice += it
+                                count++
+                            }
+                        }
                     }
                 }
-                // Calculate the average rating
-                val averageRating = if (count > 0) totalRating / count else 0.0
-                // Set the average rating to the rating bar
-                viewBinding.ratingbarPersonDetails.rating = averageRating.toFloat()
+
+                val averagePrice = if (count > 0) totalprice / count else 0.0
+                Log.d("Price Debug", "Average Price: $averagePrice")
+                viewBinding.averagePricePersonDetails.text =
+                    "Average Price Between $averagePrice to ${averagePrice + 30} per hour"
             }
             .addOnFailureListener { exception ->
-                // Handle failure
-                Log.e(TAG, "Error getting reviews: $exception")
+                Log.e("Firestore Error", "Error getting documents: ", exception)
+                // Handle the error here
+            }
+
+
+        db.collection(Constant.USER).document(technicianId).collection("Reviews").get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    var totalRating = 0.0
+                    var count = 0
+
+                    for (document in task.result!!) {
+                        val rating = document.getDouble("rating")
+                        rating?.let {
+                            totalRating += it
+                            count++
+                        }
+                    }
+                    val averageRating = if (count > 0) totalRating / count else 0.0
+                    viewBinding.ratingbarPersonDetails.rating = averageRating.toFloat()
+                } else {
+                    Log.e(TAG, "Error getting reviews: ", task.exception)
+                }
             }
     }
 
@@ -176,13 +195,9 @@ class TechnicianDetailsFragment : Fragment() {
     }
 
     private fun fetchListFromFirestore(
-        techID: String,
-        listName: String,
-        customerID: String,
-        callback: (Boolean) -> Unit
+        techID: String, listName: String, customerID: String, callback: (Boolean) -> Unit
     ) {
-        FirebaseFirestore.getInstance().collection(Constant.USER)
-            .document(techID)
+        db.collection(Constant.USER).document(techID)
             .addSnapshotListener { documentSnapshot, error ->
                 if (error != null) {
                     Log.e(TAG, "Error fetching $listName: ${error.message}", error)
@@ -193,7 +208,6 @@ class TechnicianDetailsFragment : Fragment() {
                 val isContained = list != null && customerID in list
                 callback.invoke(isContained)
 
-                // Call the appropriate UI update method based on the list name
                 when (listName) {
                     "pendingList" -> {
                         if (isContained) {
@@ -214,7 +228,6 @@ class TechnicianDetailsFragment : Fragment() {
             }
     }
 
-
     private fun updateUIForPending() {
         viewBinding.bookNowPersonDetails.text = "Pending"
         viewBinding.bookNowPersonDetails.isClickable = false
@@ -228,62 +241,50 @@ class TechnicianDetailsFragment : Fragment() {
     }
 
     private fun updateUIForAccepted() {
+
+        val customColor = Color.parseColor("#3AB449")
         viewBinding.bookNowPersonDetails.text = "Accepted"
         viewBinding.bookNowPersonDetails.isClickable = false
-        // TODO
-        viewBinding.bookNowPersonDetails.setBackgroundResource(R.color.purple_200)
-
+        viewBinding.bookNowPersonDetails.setBackgroundColor(customColor)
     }
 
     private fun updateUIForNotAccepted() {
-        // Do nothing, as we're handling it in updateUIForPending and updateUIForNotPending
+
     }
 
     private fun makeTicket(currentUserId: String, technicianId: String, price: String) {
         viewBinding.progressBarPersonDeatails.visibility = View.VISIBLE
         viewBinding.bookNowPersonDetails.visibility = View.GONE
 
-        val ticketRef = FirebaseFirestore.getInstance()
-            .collection(Constant.USER)
-            .document(technicianId)
-            .collection("Tickets")
+        val ticketRef = db.collection(Constant.USER).document(technicianId).collection("Tickets")
             .document(currentUserId)
 
-        // Create a new document in the Tickets collection
-        ticketRef.set(hashMapOf("userId" to currentUserId))
-            .addOnSuccessListener {
-                // Document created successfully, now update its fields
-                // Update price in the ticket document
-                ticketRef.update("price", price)
-                    .addOnSuccessListener {
-                        // Handle success
-                        Log.d(TAG, "Price updated successfully")
+        ticketRef.set(hashMapOf("userId" to currentUserId)).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                ticketRef.update("price", price).addOnCompleteListener { priceUpdateTask ->
+                    if (priceUpdateTask.isSuccessful) {
+                        db.collection(Constant.USER).document(technicianId)
+                            .update("pendingList", FieldValue.arrayUnion(currentUserId))
+                            .addOnCompleteListener { updateTask ->
+                                if (updateTask.isSuccessful) {
+                                    uiTicketCreated()
+                                } else {
+                                    Log.e(
+                                        TAG,
+                                        "Error adding user to pending list: ",
+                                        updateTask.exception
+                                    )
+                                }
+                            }
+                    } else {
+                        Log.e(TAG, "Error updating price: ", priceUpdateTask.exception)
                     }
-                    .addOnFailureListener { e ->
-                        // Handle failure
-                        Log.e(TAG, "Error updating price: $e")
-                    }
-
-                // Update pendingList in the technician document
-                FirebaseFirestore.getInstance().collection(Constant.USER)
-                    .document(technicianId)
-                    .update("pendingList", FieldValue.arrayUnion(currentUserId))
-                    .addOnSuccessListener {
-                        // Handle success
-                        Log.d(TAG, "User added to pending list successfully")
-                        uiTicketCreated() // Notify UI after updating pending list
-                    }
-                    .addOnFailureListener { e ->
-                        // Handle failure
-                        Log.e(TAG, "Error adding user to pending list: $e")
-                    }
+                }
+            } else {
+                Log.e(TAG, "Error creating ticket document: ", task.exception)
             }
-            .addOnFailureListener { e ->
-                // Handle failure in creating the document
-                Log.e(TAG, "Error creating ticket document: $e")
-            }
+        }
     }
-
 
     private fun uiTicketCreated() {
         viewBinding.progressBarPersonDeatails.visibility = View.GONE

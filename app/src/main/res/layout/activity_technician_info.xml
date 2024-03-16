@@ -6,33 +6,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.registration.technicianinfo.TechnicianInfoActivity">
+
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
         android:layout_marginTop="25dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/work_experience" />
-    <ImageView
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_img"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@drawable/ic_profileimg"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="54dp"
-        />
+        android:src="@drawable/ic_profileimg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/phonenumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:padding="10dp"
         android:layout_marginTop="20dp"
+        android:padding="10dp"
         android:text="@string/phone_number"
         android:textColor="@color/blue_main"
         android:textSize="14sp"
@@ -63,8 +65,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:padding="10dp"
         android:layout_marginTop="10dp"
+        android:padding="10dp"
         android:text="@string/city"
         android:textColor="@color/blue_main"
         android:textSize="14sp"
@@ -74,8 +76,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputlayout_city"
         android:layout_width="match_parent"
-        android:layout_marginTop="50dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inputlayout_phone">
@@ -95,43 +97,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:padding="10dp"
         android:layout_marginTop="20dp"
+        android:padding="10dp"
         android:text="@string/occupation"
         android:textColor="@color/blue_main"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inputlayout_city" />
-<LinearLayout
-    android:id="@+id/parent_spinner"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:layout_constraintTop_toBottomOf="@id/job"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    android:orientation="horizontal">
-    <Spinner
-        android:id="@+id/jobSpinner"
+
+    <LinearLayout
+        android:id="@+id/parent_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Light"
-        android:spinnerMode="dropdown"
-        app:layout_constraintTop_toBottomOf="@id/job"/>
-    <ImageView
-        android:id="@+id/spinner_item_image"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="10dp" />
-</LinearLayout>
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/job">
+
+        <Spinner
+            android:id="@+id/jobSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:spinnerMode="dropdown"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_constraintTop_toBottomOf="@id/job" />
+
+        <ImageView
+            android:id="@+id/spinner_item_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/work_experience"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:padding="10dp"
         android:layout_marginTop="20dp"
+        android:padding="10dp"
         android:text="@string/work_experience"
         android:textColor="@color/blue_main"
         android:textSize="14sp"
@@ -149,11 +154,11 @@
         <EditText
             android:id="@+id/work_experience_ed"
             android:layout_width="match_parent"
-            android:lines="3"
             android:layout_height="match_parent"
             android:layout_marginStart="18dp"
             android:layout_marginEnd="18dp"
-            android:background="@drawable/custome_border_to_edit_text" />
+            android:background="@drawable/custome_border_to_edit_text"
+            android:lines="3" />
         />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -161,14 +166,13 @@
         android:id="@+id/save_changes"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/inputlayout_work_experience"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="20dp"
-        android:text="@string/save_changes"
-        android:padding="15dp"
         android:layout_marginStart="17dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
+        android:padding="15dp"
+        android:text="@string/save_changes"
         app:cornerRadius="30dp"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputlayout_work_experience" />
 </androidx.constraintlayout.widget.ConstraintLayout>

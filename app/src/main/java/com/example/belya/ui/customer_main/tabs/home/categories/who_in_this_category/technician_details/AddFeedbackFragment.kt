@@ -45,6 +45,7 @@ class AddFeedbackFragment : Fragment() {
                 .addOnSuccessListener { documentSnapshot ->
                     val firstName = documentSnapshot.getString("firstName")
                     val lastName = documentSnapshot.getString("lastName")
+                    val image = documentSnapshot.getString("imagePath")
                     val fullName = "$firstName $lastName"
                     val message = viewBinding.edReviewDescription.text.toString()
                     val rating = viewBinding.ratingBar.rating
@@ -53,7 +54,7 @@ class AddFeedbackFragment : Fragment() {
 
                     val feedback = Feedback(
                         userName = fullName,
-                        userImageResId = R.drawable.ic_profileimg, // You need to replace this with actual image resource ID
+                        imagePath = image?:"", // You need to replace this with actual image resource ID
                         message = message,
                         rating = rating,
                         time = Timestamp.now(), // Store timestamp as a string

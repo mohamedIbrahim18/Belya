@@ -3,7 +3,7 @@ package com.example.belya.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import com.bumptech.glide.Glide
 import com.example.belya.R
 import com.example.belya.databinding.RecyclerChatsListItemBinding
 import com.example.belya.model.User
@@ -15,10 +15,11 @@ class ChatsAdapter(private var listofChats : MutableList<User>) : RecyclerView.A
             val fullName = "${task.firstName} ${task.lastName}"
             itemBinding.personNameChat.text = fullName
             itemBinding.personJobChat.text = task.job
-            itemBinding.personImageChat.load(task.imagePath){
-                crossfade(1)
-                placeholder(R.drawable.ic_profileimg)
-            }
+
+            Glide.with(itemBinding.root.context)
+                .load(task.imagePath)
+                .placeholder(R.drawable.ic_profileimg)
+                .into(itemBinding.personImageChat)
 
         }
     }

@@ -8,7 +8,7 @@
 
     tools:context=".ui.technician_main.tabs.account.AccountTechnicianFragment">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/account_profile_pic"
         android:layout_width="160dp"
         android:layout_height="160dp"

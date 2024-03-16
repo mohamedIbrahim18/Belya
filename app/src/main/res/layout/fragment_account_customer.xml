@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.customer_main.tabs.account.AccountCustomerFragment">
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/account_profile_pic"
         android:layout_width="160dp"
         android:layout_height="160dp"

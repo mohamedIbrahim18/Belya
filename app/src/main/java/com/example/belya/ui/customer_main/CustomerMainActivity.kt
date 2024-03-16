@@ -25,7 +25,7 @@ class CustomerMainActivity : AppCompatActivity() {
         viewBinding = ActivityCustomerMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         initViews()
-        fetchAcceptedUsers()
+      //  fetchAcceptedUsers()
     }
 
     private fun initViews() {
@@ -33,10 +33,10 @@ class CustomerMainActivity : AppCompatActivity() {
         navController = navHost.navController
         viewBinding.navigationMenu.setupWithNavController(navController)
 
-
-        badgeDrawable =
-            viewBinding.navigationMenu.getOrCreateBadge(R.id.notificationCustomerFragment)
-        badgeDrawable.setVisible(true)
+//
+//        badgeDrawable =
+//            viewBinding.navigationMenu.getOrCreateBadge(R.id.notificationCustomerFragment)
+//        badgeDrawable.setVisible(true)
 
         viewBinding.navigationMenu.setOnItemSelectedListener { item ->
             if (item.itemId != navController.currentDestination?.id) {
@@ -47,7 +47,7 @@ class CustomerMainActivity : AppCompatActivity() {
 
 
     }
-    private fun fetchAcceptedUsers() {
+    /*private fun fetchAcceptedUsers() {
         val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
         if (currentUserId != null) {
             FirebaseFirestore.getInstance().collection(Constant.USER)
@@ -74,5 +74,5 @@ class CustomerMainActivity : AppCompatActivity() {
                 }
         }
     }
-
+*/
 }

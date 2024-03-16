@@ -4,7 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import com.bumptech.glide.Glide
 import com.example.belya.R
 import com.example.belya.databinding.RecyclerRequestsListItemBinding
 import com.example.belya.model.User
@@ -17,11 +17,11 @@ class RequestsAdapter(private var listOfRequests : List<User>) : RecyclerView.Ad
             itemBinding.requestName.text = fullName
             itemBinding.requestCity.text = task.city
             itemBinding.requestPrice.text = task.price.trim()
-            itemBinding.requestImage.load(task.imagePath){
-                crossfade(true)
-                placeholder(R.drawable.ic_profileimg)
 
-            }
+            Glide.with(itemBinding.root.context).load(task.imagePath)
+                .placeholder(R.drawable.ic_profileimg)
+                .into(itemBinding.requestImage)
+
             Log.d("price in adapter",task.price.toString())
         }
     }

@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import coil.Coil
-import coil.load
+
+import com.bumptech.glide.Glide
 import com.example.belya.Constant
 import com.example.belya.R
 import com.example.belya.databinding.FragmentAccountCustomerBinding
@@ -71,9 +71,11 @@ class AccountCustomerFragment : Fragment() {
                         val fullName: String = it.firstName + " " + it.lastName
                         viewBinding.myName.text = fullName
                         viewBinding.myEmail.text = it.email
-                    viewBinding.accountProfilePic.load(it.imagePath){
-                        placeholder(R.drawable.ic_profileimg)
-                    }
+                        Glide.with(viewBinding.accountProfilePic)
+                            .load(it.imagePath)
+                            .placeholder(R.drawable.ic_profileimg)
+                            .into(viewBinding.accountProfilePic)
+
                     }
                 }
             }

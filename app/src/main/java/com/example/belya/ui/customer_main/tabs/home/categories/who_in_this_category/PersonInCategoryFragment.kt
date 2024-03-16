@@ -2,10 +2,10 @@ package com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_cate
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import com.example.belya.Constant
 import com.example.belya.HorizontalItemDecoration
@@ -18,24 +18,17 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class PersonInCategoryFragment : Fragment() {
 
-    lateinit var viewBinding: FragmentPersonInCategoryBinding
-    lateinit var personInCategoryAdapter: PersonAdapter
-    private lateinit var personList: MutableList<User>
-    lateinit var newList: MutableList<User>
-    var categoryName: String = ""
+    private lateinit var viewBinding: FragmentPersonInCategoryBinding
+    private lateinit var personInCategoryAdapter: PersonAdapter
+    private val personList = mutableListOf<User>()
+    private var categoryName: String = ""
 
-    lateinit var auth: FirebaseAuth
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        viewBinding = FragmentPersonInCategoryBinding.inflate(layoutInflater)
+        viewBinding = FragmentPersonInCategoryBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
@@ -45,11 +38,6 @@ class PersonInCategoryFragment : Fragment() {
     }
 
     private fun initViews() {
-        // Initialize personList and newList
-        personList = mutableListOf()
-        newList = mutableListOf()
-
-        // Initialize RecyclerView and fetch data
         initRecyclerPerson()
         categoryName = arguments?.getString("jobName") ?: ""
         fetchPersonFromDatabase(categoryName)
@@ -57,29 +45,24 @@ class PersonInCategoryFragment : Fragment() {
 
     private fun fetchPersonFromDatabase(categoryName: String) {
         FirebaseFirestore.getInstance().collection(Constant.USER)
-            .whereEqualTo("job", categoryName).addSnapshotListener { value, error ->
+            .whereEqualTo("job", categoryName)
+            .addSnapshotListener { value, error ->
                 if (error != null) {
-                    // handle the error
-                    Log.e("Error Fetch category", "Error fetching data", error)
                     return@addSnapshotListener
                 }
-                if (value != null) {
-                    // Clear the existing list before adding new data
-                    newList.clear()
-                    for (document in value.documents) {
-                        val result = document.toObject(User::class.java)
-                        result?.let {
-                            newList.add(it)
+                value?.let { snapshot ->
+                    personList.clear()
+                    for (document in snapshot.documents) {
+                        val user = document.toObject(User::class.java)
+                        user?.let {
+                            personList.add(it)
+                            personInCategoryAdapter.notifyDataSetChanged()
                         }
                     }
-                    // Update the adapter with the new list
-                    personInCategoryAdapter.newList(newList)
                 }
             }
     }
-
     private fun initRecyclerPerson() {
-        // Initialize personAdapter with personList
         personInCategoryAdapter = PersonAdapter(personList)
         viewBinding.recyclerCategories.apply {
             viewBinding.recyclerCategories.addItemDecoration(HorizontalItemDecoration())
@@ -87,7 +70,6 @@ class PersonInCategoryFragment : Fragment() {
 
             personInCategoryAdapter.onItemSelectedClickListnner = object : PersonAdapter.OnItemSelectedClick{
                 override fun onItemSelectedClick(position: Int, task: User) {
-                    //showPersonDetails(task)
                     val bundle = Bundle()
                     bundle.putParcelable("pokemon",task)
                     findNavController().navigate(

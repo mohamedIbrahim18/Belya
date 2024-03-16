@@ -6,132 +6,161 @@
     android:layout_height="match_parent"
     tools:context=".ui.customer_main.tabs.home.categories.who_in_this_category.technician_details.TechnicianDetailsFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/image_person_details"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="130dp"
-            android:layout_marginTop="20dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_profileimg" />
-
-        <TextView
-            android:id="@+id/firstname_person_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="2dp"
-            android:textColor="@color/blue_main"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_person_details"
-            tools:text="Mohamed" />
-
-        <TextView
-            android:id="@+id/city_person_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:textColor="@color/blue_main"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/firstname_person_details"
-            tools:text="City" />
-
-        <RatingBar
-            android:id="@+id/ratingbar_person_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:isIndicator="true"
-            android:numStars="5"
-            android:rating="0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/city_person_details" />
-
-        <TextView
-            android:id="@+id/average_price_person_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/blue_main"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ratingbar_person_details"
-            android:text="Average Price Between 20 to 50 per hour" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textinput_layout_person_details"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:boxCornerRadiusBottomEnd="50dp"
-            app:boxCornerRadiusTopEnd="50dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/average_price_person_details">
+            android:layout_height="match_parent"
+            android:background="#F3FBF7F5">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edittext_person_details"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/personal_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#FDFDFD"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:padding="15dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/image_person_details"
+                        android:layout_width="115dp"
+                        android:layout_height="115dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@drawable/ic_profileimg" />
+
+                    <TextView
+                        android:id="@+id/firstname_person_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="2dp"
+                        android:textColor="@color/blue_main"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/image_person_details"
+                        tools:text="Mohamed" />
+
+                    <TextView
+                        android:id="@+id/city_person_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/blue_main"
+                        android:textSize="20sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/firstname_person_details"
+                        tools:text="City" />
+
+                    <RatingBar
+                        android:id="@+id/ratingbar_person_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:isIndicator="true"
+                        android:numStars="5"
+                        android:progressTint="#ffd203"
+                        android:rating="0"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/city_person_details" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/average_price_person_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Average Price Between 20 to 50 per hour"
+                android:textColor="@color/blue_main"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/personal_data" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textinput_layout_person_details"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Enter Your Price Please..." />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="33dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="33dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/average_price_person_details">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/book_now_person_details"
-            android:layout_width="0dp"
-            android:layout_height="75dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="30dp"
-            android:text="Book Now"
-            app:cornerRadius="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textinput_layout_person_details" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edittext_person_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/custome_border_to_edit_text"
+                    android:hint="Enter Your Price Please..." />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <ProgressBar
-            android:id="@+id/progress_bar_person_deatails"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textinput_layout_person_details"
-            />
-        <TextView
-            android:id="@+id/add_feedback"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/book_now_person_details"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="20dp"
-            android:textStyle="bold"
-            android:text="Add Feedback"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_feedback"
-            android:layout_width="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/recycler_feedback_list_item"
-            app:layout_constraintTop_toBottomOf="@id/add_feedback"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/book_now_person_details"
+                android:layout_width="0dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="70dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="70dp"
+                android:text="Book Now"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textinput_layout_person_details" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_person_deatails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/book_now_person_details" />
+
+            <TextView
+                android:id="@+id/add_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Add Feedback"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/progress_bar_person_deatails" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_feedback"
+                tools:listitem="@layout/recycler_feedback_list_item" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </FrameLayout>

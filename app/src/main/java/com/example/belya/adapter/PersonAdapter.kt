@@ -3,8 +3,7 @@ package com.example.belya.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.Coil
-import coil.load
+import com.bumptech.glide.Glide
 import com.example.belya.R
 import com.example.belya.databinding.RecyclerPersonInCategoryItemBinding
 import com.example.belya.model.User
@@ -14,12 +13,12 @@ class PersonAdapter(private var listOfPerson: MutableList<User>) :
     class ViewHolder(var itemBinding: RecyclerPersonInCategoryItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(task: User) {
-           // itemBinding.personImage.text(task.imagePath)
-            itemBinding.personImage.load(task.imagePath){
-                crossfade(true)
-                placeholder(R.drawable.ic_profileimg)
-            }
-            itemBinding.personName.text = task.firstName +" "+ task.lastName
+            // itemBinding.personImage.text(task.imagePath)
+            Glide.with(itemBinding.root.context)
+                .load(task.imagePath)
+                .placeholder(R.drawable.ic_profileimg)
+                .into(itemBinding.personImage)
+            itemBinding.personName.text = task.firstName + " " + task.lastName
             itemBinding.city.text = task.city
             itemBinding.job.text = task.job
         }
@@ -38,15 +37,16 @@ class PersonAdapter(private var listOfPerson: MutableList<User>) :
         return listOfPerson.size
     }
 
-    fun newList(mList: MutableList<User>){
+    fun newList(mList: MutableList<User>) {
         listOfPerson = mList
         notifyDataSetChanged()
     }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(listOfPerson[position])
 
         holder.itemBinding.cardPerson.setOnClickListener {
-            onItemSelectedClickListnner?.onItemSelectedClick(position,listOfPerson[position])
+            onItemSelectedClickListnner?.onItemSelectedClick(position, listOfPerson[position])
         }
 
 

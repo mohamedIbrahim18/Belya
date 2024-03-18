@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.belya.databinding.ActivitySignUpBinding
 import com.example.belya.Constant
+import com.example.belya.base.LoadingDialog
 import com.example.belya.model.User
 import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.ui.registration.technicianinfo.TechnicianInfoActivity
@@ -32,11 +33,12 @@ class SignUpActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         initViews()
     }
-
+val loading = LoadingDialog(this)
     private fun initViews() {
         auth = Firebase.auth
         viewBinding.loadingProgressBar.isVisible = false
         viewBinding.btnCreateAccount.setOnClickListener {
+            loading.startLoading()
             chooseWhoUseThisApp()
         }
         viewBinding.haveAcoountLogin.setOnClickListener {

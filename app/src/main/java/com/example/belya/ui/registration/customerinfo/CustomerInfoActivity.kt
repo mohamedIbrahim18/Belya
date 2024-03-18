@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.belya.Constant
+import com.example.belya.base.LoadingDialog
 import com.example.belya.databinding.ActivityCustomerInfoBinding
 import com.example.belya.ui.customer_main.CustomerMainActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -19,6 +20,7 @@ class CustomerInfoActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityCustomerInfoBinding
     private val auth = FirebaseAuth.getInstance()
     private var selectedImg: Uri? = null
+    val loading = LoadingDialog(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +30,6 @@ class CustomerInfoActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        viewBinding.progressBar.visibility = View.GONE
         viewBinding.profileImg.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_GET_CONTENT
@@ -37,9 +38,9 @@ class CustomerInfoActivity : AppCompatActivity() {
         }
 
         viewBinding.saveChanges.setOnClickListener {
-            updateCustomerData()
-            viewBinding.progressBar.visibility = View.VISIBLE
+            loading.startLoading()
             viewBinding.saveChanges.visibility = View.GONE
+            updateCustomerData()
         }
     }
 
@@ -80,12 +81,10 @@ class CustomerInfoActivity : AppCompatActivity() {
                         uploadInfo(uri.toString())
                     }?.addOnFailureListener { e ->
                         Log.e("UPLOAD_IMAGE", "Failed to upload image: ${e.message}")
-                        viewBinding.progressBar.visibility = View.GONE
                         viewBinding.saveChanges.visibility = View.VISIBLE
                     }
                 } else {
                     Log.e("UPLOAD_IMAGE", "Failed to upload image: ${task.exception?.message}")
-                    viewBinding.progressBar.visibility = View.GONE
                     viewBinding.saveChanges.visibility = View.VISIBLE
                 }
             }
@@ -102,12 +101,10 @@ class CustomerInfoActivity : AppCompatActivity() {
         userRef.update(userCustomerData).addOnSuccessListener {
             // Update successful
             navigateToCustomerPage()
-            viewBinding.progressBar.visibility = View.GONE
             viewBinding.saveChanges.visibility = View.VISIBLE
         }.addOnFailureListener { e ->
             // Handle the error
             Log.e("UPDATE_USER", "Failed to update user data: ${e.message}")
-            viewBinding.progressBar.visibility = View.GONE
             viewBinding.saveChanges.visibility = View.VISIBLE
         }
     }

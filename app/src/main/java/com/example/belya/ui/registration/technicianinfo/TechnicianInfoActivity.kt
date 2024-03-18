@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.belya.Constant
+import com.example.belya.base.LoadingDialog
 import com.example.belya.databinding.ActivityTechnicianInfoBinding
 import com.example.belya.ui.technician_main.TechnicianMainActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +23,7 @@ class TechnicianInfoActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private var selectedImg: Uri? = null
     private var selectedJob: String = ""
+    val loading = LoadingDialog(this)
 
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
@@ -36,7 +38,6 @@ class TechnicianInfoActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        viewBinding.progressBar.visibility = View.GONE
         viewBinding.profileImg.setOnClickListener {
             val intent = Intent()
             intent.action = Intent.ACTION_GET_CONTENT
@@ -45,9 +46,9 @@ class TechnicianInfoActivity : AppCompatActivity() {
         }
 
         viewBinding.saveChanges.setOnClickListener {
-            updateTechnicianData()
-            viewBinding.progressBar.visibility = View.VISIBLE
+            loading.startLoading()
             viewBinding.saveChanges.visibility = View.GONE
+            updateTechnicianData()
 
         }
     }
@@ -156,7 +157,6 @@ class TechnicianInfoActivity : AppCompatActivity() {
     }
 
     private fun handleUploadFailure() {
-        viewBinding.progressBar.visibility = View.GONE
         viewBinding.saveChanges.visibility = View.VISIBLE
     }
 }

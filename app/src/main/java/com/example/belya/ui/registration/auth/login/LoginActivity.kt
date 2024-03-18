@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.belya.databinding.ActivityLoginBinding
 import com.example.belya.Constant
+import com.example.belya.base.LoadingDialog
 import com.example.belya.base.showDialog
 import com.example.belya.ui.customer_main.CustomerMainActivity
 import com.example.belya.ui.technician_main.TechnicianMainActivity
@@ -51,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         initViews()
     }
-
+    val loading = LoadingDialog(this)
     private fun initViews() {
         if (isGpsPermissionAllowed()) {
             getUserLocation()
@@ -60,9 +61,9 @@ class LoginActivity : AppCompatActivity() {
         }
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-        viewBinding.progressBar.visibility = View.GONE
+      //  viewBinding.progressBar.visibility = View.GONE
         viewBinding.btnLogin.setOnClickListener {
-            viewBinding.progressBar.visibility = View.VISIBLE
+            loading.startLoading()
             viewBinding.btnLogin.visibility = View.GONE
             val email = viewBinding.emailEd.text.toString()
             val password = viewBinding.passwordEd.text.toString()
@@ -71,10 +72,7 @@ class LoginActivity : AppCompatActivity() {
                     if (it.isSuccessful) {
                         // Check user type and navigate accordingly
                         checkUserTypeAndNavigate()
-                        viewBinding.progressBar.visibility = View.GONE
                         viewBinding.btnLogin.visibility = View.VISIBLE
-
-
                     } else {
                         showDialog(this, it.exception?.localizedMessage ?: "",
 
@@ -83,8 +81,9 @@ class LoginActivity : AppCompatActivity() {
                                 dialog.dismiss()
                             }
                         )
-                        viewBinding.progressBar.visibility = View.GONE
+
                         viewBinding.btnLogin.visibility = View.VISIBLE
+                        loading.isDismiss()
                     }
                 }
             }

@@ -32,6 +32,7 @@ import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -52,32 +53,47 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        getUserLocation()
 
     }
+
     val locationCallback: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult) {
-            result ?: return;
-            val otherUserId = intent.getStringExtra("otherUserId")
+            super.onLocationResult(result)
             for (location in result.locations) {
-                // update ui
                 Log.e("location update", "" + location.latitude + " " + location.longitude)
-                userLocation = location
-                drawUserMarkerOnMap(otherUserId!!)
+                saveLocationToFirestore(location.latitude, location.longitude)
+
             }
         }
 
         override fun onLocationAvailability(p0: LocationAvailability) {
             super.onLocationAvailability(p0)
         }
-
     }
-    var userLocation: Location? = null
-    var userMarker: Marker? = null
+    private fun saveLocationToFirestore(latitude: Double, longitude: Double) {
+        val currentUser = FirebaseAuth.getInstance().uid
+        currentUser?.let {
+            val userRef = FirebaseFirestore.getInstance().collection(Constant.USER).document(it)
+            val locationData = hashMapOf(
+                "latitude" to latitude,
+                "longitude" to longitude
+            )
+            userRef.collection("Locations").document(it).set(locationData).addOnSuccessListener {
+            }
+                .addOnFailureListener { e ->
+                    Log.w("Fail", "Error adding location", e)
+                }
+        }
+    }
     val locationRequest = LocationRequest.create()?.apply {
         interval = 1000
         fastestInterval = 5000
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
     }
+    var userMarker: Marker? = null
+
+
     private fun getUserLocation() {
         val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest!!)
         val client: SettingsClient = LocationServices.getSettingsClient(this)
@@ -155,6 +171,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onDestroy()
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
+
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
         val otherUserId = intent.getStringExtra("otherUserId")
@@ -177,7 +194,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     val latLng = LatLng(latitude, longitude)
 
                     if (userMarker == null) {
-                        val markerOptions = MarkerOptions().position(latLng).title("Current Location")
+                        val markerOptions =
+                            MarkerOptions().position(latLng).title("Current Location")
                         userMarker = googleMap?.addMarker(markerOptions)
                     } else {
                         userMarker?.position = latLng

@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.belya.R
 import com.example.belya.databinding.ActivitySpecificChatBinding
 import com.example.belya.model.ChatMessageModel
 import com.example.belya.model.ChatroomModel
@@ -43,6 +44,12 @@ class SpecificChatActivity : AppCompatActivity() {
                 sendMessageToUser(message)
             }
         }
+        viewBinding.cardLocationToChat.setOnClickListener {
+            val intent = Intent(this,MapsActivity::class.java)
+            intent.putExtra("otherUserId", otherUser.userID) // Pass the ID of the other user
+            startActivity(intent)
+        }
+
 
         getOrCreateChatRoomModel()
         setupChatRecyclerView()

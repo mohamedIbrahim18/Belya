@@ -58,16 +58,17 @@ class LoginActivity : AppCompatActivity() {
         viewBinding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        initViews()
-    }
-
-    val loading = LoadingDialog(this)
-    private fun initViews() {
         if (isGpsPermissionAllowed()) {
             getUserLocation()
         } else {
             requestPermission()
         }
+        initViews()
+    }
+
+    val loading = LoadingDialog(this)
+    private fun initViews() {
+
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
         //  viewBinding.progressBar.visibility = View.GONE
@@ -86,7 +87,7 @@ class LoginActivity : AppCompatActivity() {
                         showDialog(this, it.exception?.localizedMessage ?: "",
 
                             posActionName = "ok",
-                            posAction = DialogInterface.OnClickListener { dialog, which ->
+                            posAction = { dialog, which ->
                                 dialog.dismiss()
                             }
                         )

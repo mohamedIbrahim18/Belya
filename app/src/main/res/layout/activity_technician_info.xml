@@ -49,37 +49,6 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <TextView
-        android:id="@+id/city"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:text="@string/city"
-        android:textColor="@color/blue_main"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputlayout_phone" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/inputlayout_city"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputlayout_phone">
-
-        <EditText
-            android:id="@+id/city_ed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:background="@drawable/custome_border_to_edit_text" />
-        />
-    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/job"
@@ -92,7 +61,7 @@
         android:textColor="@color/blue_main"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputlayout_city" />
+        app:layout_constraintTop_toBottomOf="@id/inputlayout_phone" />
 
     <LinearLayout
         android:id="@+id/parent_spinner"

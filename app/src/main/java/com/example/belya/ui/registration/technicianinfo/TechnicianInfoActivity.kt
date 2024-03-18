@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.belya.Constant
 import com.example.belya.base.LoadingDialog
 import com.example.belya.databinding.ActivityTechnicianInfoBinding
+import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.ui.technician_main.TechnicianMainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -65,7 +66,6 @@ class TechnicianInfoActivity : AppCompatActivity() {
 
     private fun getTheNewData(): Map<String, Any> {
         val phoneNumber = viewBinding.phoneEd.text.toString().trim()
-        val city = viewBinding.cityEd.text.toString().trim()
         val workExperience = viewBinding.workExperienceEd.text.toString().trim()
 
         val newData = mutableMapOf<String, Any>()
@@ -73,9 +73,9 @@ class TechnicianInfoActivity : AppCompatActivity() {
             newData["phoneNumber"] = phoneNumber
         }
         selectedImg?.let { newData["imagePath"] = it.toString() }
-        newData["city"] = city
         newData["work_experience"] = workExperience
         newData["job"] = selectedJob
+        newData["city"] = ""
 
         return newData
     }
@@ -129,7 +129,7 @@ class TechnicianInfoActivity : AppCompatActivity() {
 
 
     private fun navigateToTechnicianPage() {
-        val intent = Intent(this, TechnicianMainActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
     }

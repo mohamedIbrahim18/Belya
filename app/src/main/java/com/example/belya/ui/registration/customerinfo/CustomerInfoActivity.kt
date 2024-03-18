@@ -11,6 +11,7 @@ import com.example.belya.Constant
 import com.example.belya.base.LoadingDialog
 import com.example.belya.databinding.ActivityCustomerInfoBinding
 import com.example.belya.ui.customer_main.CustomerMainActivity
+import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -58,15 +59,12 @@ class CustomerInfoActivity : AppCompatActivity() {
 
     private fun getTheNewData(): Map<String, Any> {
         val phoneNumber = viewBinding.phoneEd.text.toString().trim()
-        val city: String = viewBinding.locationEd.text.toString().trim()
 
         val newData = mutableMapOf<String, Any>()
         if (phoneNumber.isNotEmpty()) {
             newData["phoneNumber"] = phoneNumber
         }
         selectedImg?.let { newData["imagePath"] = it.toString() }
-
-        newData["city"] = city
 
         return newData
     }
@@ -114,7 +112,7 @@ class CustomerInfoActivity : AppCompatActivity() {
     }
 
     private fun navigateToCustomerPage() {
-        val intent = Intent(this, CustomerMainActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
     }

@@ -1,10 +1,13 @@
 package com.example.belya.ui.registration.auth.login
 
 import android.Manifest
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
@@ -34,8 +37,13 @@ import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
+import java.util.Locale
 
 class LoginActivity : AppCompatActivity() {
     val REQUEST_LOCATION_CODE = 120
@@ -52,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         initViews()
     }
+
     val loading = LoadingDialog(this)
     private fun initViews() {
         if (isGpsPermissionAllowed()) {
@@ -61,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
         }
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-      //  viewBinding.progressBar.visibility = View.GONE
+        //  viewBinding.progressBar.visibility = View.GONE
         viewBinding.btnLogin.setOnClickListener {
             loading.startLoading()
             viewBinding.btnLogin.visibility = View.GONE
@@ -328,17 +337,61 @@ class LoginActivity : AppCompatActivity() {
                 "latitude" to latitude,
                 "longitude" to longitude
             )
-            userRef.collection("Locations").document(id!!).set(locationData).addOnSuccessListener {
+
+            userRef.addSnapshotListener { value, error ->
+                if (error != null) {
+                    return@addSnapshotListener
+                }
+
+                if (value != null && value.exists()) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val cityName = getCityName(latitude, longitude, applicationContext)
+//                        Snackbar.make(viewBinding.root, cityName, Snackbar.LENGTH_LONG).show()
+//                        Toast.makeText(this@LoginActivity, cityName, Toast.LENGTH_LONG).show()
+//                        Log.e("City", cityName)
+                        userRef.update("city",cityName).addOnCompleteListener {
+
+                        }.addOnFailureListener {
+
+                        }
+                    }
+                }
             }
+
+            userRef.collection("Locations").document(id!!).set(locationData)
+                .addOnSuccessListener {
+                }
                 .addOnFailureListener { e ->
                     Log.w("Fail", "Error adding location", e)
                 }
         }
     }
 
+    private suspend fun getCityName(latitude: Double, longitude: Double, context: Context): String {
+        var cityName = ""
+        withContext(Dispatchers.IO) {
+            try {
+                val geocoder = Geocoder(context, Locale.getDefault())
+                val addresses: MutableList<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
+                if (!addresses.isNullOrEmpty()) {
+                    for (address in addresses) {
+                        if (address.locality != null) {
+                            cityName = address.adminArea.toString()
+                            break
+                        }
+                    }
+                } else {
+
+                }
+            } catch (e: IOException) {
+                Log.e("GetCityName", "Error getting city name", e)
+            }
+        }
+        return cityName
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
-
 }

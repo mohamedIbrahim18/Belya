@@ -52,7 +52,7 @@ class HomeCustomerFragment : Fragment() {
 
     private fun initRecyclerCategories() {
         categoryItemList = listOf(
-            CategoriesItem(R.drawable.ic_plumber, "Plumping", "0"),
+            CategoriesItem(R.drawable.ic_plumber, "Plumbing", "0"),
             CategoriesItem(R.drawable.ic_pharmacist, "Pharmacy", "0"),
             CategoriesItem(R.drawable.ic_mechanic, "Mechanics", "0"),
             CategoriesItem(R.drawable.ic_electrician, "Electricity", "0"),

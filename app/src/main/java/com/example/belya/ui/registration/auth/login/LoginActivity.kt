@@ -1,6 +1,7 @@
 package com.example.belya.ui.registration.auth.login
 
 import android.Manifest
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -75,11 +76,13 @@ class LoginActivity : AppCompatActivity() {
 
 
                     } else {
-                        Snackbar.make(
-                            viewBinding.root,
-                            it.exception?.localizedMessage!!,
-                            Snackbar.LENGTH_LONG
-                        ).show()
+                        showDialog(this, it.exception?.localizedMessage ?: "",
+
+                            posActionName = "ok",
+                            posAction = DialogInterface.OnClickListener { dialog, which ->
+                                dialog.dismiss()
+                            }
+                        )
                         viewBinding.progressBar.visibility = View.GONE
                         viewBinding.btnLogin.visibility = View.VISIBLE
                     }
@@ -311,7 +314,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-
     val locationRequest = LocationRequest.create()?.apply {
         interval = 1000
         fastestInterval = 5000
@@ -334,6 +336,7 @@ class LoginActivity : AppCompatActivity() {
                 }
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         fusedLocationClient.removeLocationUpdates(locationCallback)

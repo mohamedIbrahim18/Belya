@@ -8,6 +8,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.belya.Constant
 import com.example.belya.R
 import com.example.belya.databinding.ActivitySpecificChatBinding
 import com.example.belya.model.ChatMessageModel
@@ -53,16 +55,37 @@ class SpecificChatActivity : AppCompatActivity() {
 
         getOrCreateChatRoomModel()
         setupChatRecyclerView()
-        setupPhone(otherUser)
+        setupPhoneAndImage(otherUser)
     }
 
-
-    private fun setupPhone(otherUser: User) {
+    private fun setupPhoneAndImage(otherUser: User) {
         viewBinding.cardPhoneToChat.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)
             intent.data = Uri.parse("tel:${otherUser.phoneNumber}")
             startActivity(intent)
         }
+
+        // Retrieve the user data from Firestore
+        val firestore = FirebaseFirestore.getInstance()
+        val userRef = firestore.collection(Constant.USER).document(otherUser.userID)
+        userRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val user = document.toObject(User::class.java)
+                    user?.let {
+                        // Load and display the user's profile image using Glide
+                        Glide.with(this)
+                            .load(it.imagePath)
+                            .placeholder(R.drawable.ic_profileimg) // Placeholder image while loading
+                            .into(viewBinding.cardImageToChat)
+                    }
+                } else {
+                    // Handle the case where the document doesn't exist
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Handle errors
+            }
     }
 
 

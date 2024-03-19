@@ -18,12 +18,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.belya.databinding.ActivityLoginBinding
 import com.example.belya.Constant
-import com.example.belya.base.LoadingDialog
-import com.example.belya.base.showDialog
+import com.example.belya.utils.base.LoadingDialog
+import com.example.belya.utils.base.showDialog
 import com.example.belya.ui.customer_main.CustomerMainActivity
 import com.example.belya.ui.technician_main.TechnicianMainActivity
 import com.example.belya.ui.registration.auth.forget_password.ForgetPasswordActivity
 import com.example.belya.ui.registration.auth.signup.SignUpActivity
+import com.example.belya.utils.Common
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
@@ -62,6 +63,10 @@ class LoginActivity : AppCompatActivity() {
             getUserLocation()
         } else {
             requestPermission()
+        }
+        val check =Common()
+        if (!check.isConnectedToInternet(this)){
+            check.showInternetDisconnectedDialog(this)
         }
         initViews()
     }

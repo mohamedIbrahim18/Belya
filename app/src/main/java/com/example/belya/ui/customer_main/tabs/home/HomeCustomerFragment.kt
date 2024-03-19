@@ -15,6 +15,7 @@ import com.example.belya.adapter.CategoriesAdapter
 import com.example.belya.model.CategoriesItem
 import com.example.belya.adapter.ImportantAdapter
 import com.example.belya.model.ImportantItem
+import com.example.belya.utils.Common
 import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeCustomerFragment : Fragment() {
@@ -41,6 +42,10 @@ class HomeCustomerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val check = Common()
+        if (!check.isConnectedToInternet(requireContext())){
+            check.showInternetDisconnectedDialog(requireContext())
+        }
         initViews()
 
     }

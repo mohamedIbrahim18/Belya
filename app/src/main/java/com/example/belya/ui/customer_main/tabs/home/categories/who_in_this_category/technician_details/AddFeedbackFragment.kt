@@ -9,6 +9,7 @@ import com.example.belya.Constant
 import com.example.belya.R
 import com.example.belya.databinding.FragmentAddFeedbackBinding
 import com.example.belya.model.Feedback
+import com.example.belya.utils.Common
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -28,6 +29,10 @@ class AddFeedbackFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val check = Common()
+        if (!check.isConnectedToInternet(requireContext())){
+            check.showInternetDisconnectedDialog(requireContext())
+        }
         initViews()
     }
 

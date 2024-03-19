@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.belya.Constant
-import com.example.belya.base.LoadingDialog
+import com.example.belya.utils.base.LoadingDialog
 import com.example.belya.databinding.ActivityCustomerInfoBinding
 import com.example.belya.ui.customer_main.CustomerMainActivity
 import com.example.belya.ui.registration.auth.login.LoginActivity

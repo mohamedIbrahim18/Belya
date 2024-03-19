@@ -1,4 +1,4 @@
-package com.example.belya.base
+package com.example.belya.utils.base
 
 import android.app.Activity
 import android.app.AlertDialog

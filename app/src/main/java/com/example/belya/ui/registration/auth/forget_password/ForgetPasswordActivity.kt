@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.example.belya.Constant
 import com.example.belya.databinding.ActivityForgetPasswordBinding
 import com.example.belya.ui.registration.auth.login.LoginActivity
+import com.example.belya.utils.Common
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -24,7 +25,10 @@ class ForgetPasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityForgetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        val check = Common()
+        if (!check.isConnectedToInternet(this)){
+            check.showInternetDisconnectedDialog(this)
+        }
         initViews()
     }
 

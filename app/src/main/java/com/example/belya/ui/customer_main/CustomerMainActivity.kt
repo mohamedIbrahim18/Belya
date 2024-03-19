@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.belya.Constant
 import com.example.belya.R
 import com.example.belya.databinding.ActivityCustomerMainBinding
+import com.example.belya.utils.Common
 import com.google.android.material.badge.BadgeDrawable
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,6 +25,10 @@ class CustomerMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityCustomerMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        val check = Common()
+        if (!check.isConnectedToInternet(this)){
+            check.showInternetDisconnectedDialog(this)
+        }
         initViews()
       //  fetchAcceptedUsers()
     }

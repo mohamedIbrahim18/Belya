@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.belya.Constant
-import com.example.belya.base.LoadingDialog
+import com.example.belya.utils.base.LoadingDialog
 import com.example.belya.databinding.ActivityTechnicianInfoBinding
 import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.ui.technician_main.TechnicianMainActivity

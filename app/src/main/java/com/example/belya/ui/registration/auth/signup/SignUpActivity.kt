@@ -10,11 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.belya.databinding.ActivitySignUpBinding
 import com.example.belya.Constant
-import com.example.belya.base.LoadingDialog
+import com.example.belya.utils.base.LoadingDialog
 import com.example.belya.model.User
 import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.ui.registration.technicianinfo.TechnicianInfoActivity
 import com.example.belya.ui.registration.customerinfo.CustomerInfoActivity
+import com.example.belya.utils.Common
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -31,6 +32,10 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        val check = Common()
+        if (!check.isConnectedToInternet(this)){
+            check.showInternetDisconnectedDialog(this)
+        }
         initViews()
     }
 val loading = LoadingDialog(this)

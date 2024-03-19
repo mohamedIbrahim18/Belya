@@ -16,6 +16,7 @@ import com.example.belya.model.ChatMessageModel
 import com.example.belya.model.ChatroomModel
 import com.example.belya.model.User
 import com.example.belya.utils.AndroidUtils
+import com.example.belya.utils.Common
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -36,7 +37,10 @@ class SpecificChatActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivitySpecificChatBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-
+        val check = Common()
+        if (!check.isConnectedToInternet(this)){
+            check.showInternetDisconnectedDialog(this)
+        }
         otherUser = AndroidUtils.getUserModelFromIntent(intent)
         chatroomId = getChatroomID(currentUserId, otherUser.userID)
         viewBinding.cardNameToChat.text = otherUser.firstName + " " + otherUser.lastName

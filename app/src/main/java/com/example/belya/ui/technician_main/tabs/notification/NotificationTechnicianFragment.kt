@@ -14,6 +14,7 @@ import com.example.belya.R
 import com.example.belya.databinding.FragmentNotificationTechnicianBinding
 import com.example.belya.model.User
 import com.example.belya.adapter.RequestsAdapter
+import com.example.belya.utils.Common
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,6 +35,10 @@ class NotificationTechnicianFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val check = Common()
+        if (!check.isConnectedToInternet(requireContext())){
+            check.showInternetDisconnectedDialog(requireContext())
+        }
         listRequests = mutableListOf()
         initRequestsRecycler()
         fetchTickets()

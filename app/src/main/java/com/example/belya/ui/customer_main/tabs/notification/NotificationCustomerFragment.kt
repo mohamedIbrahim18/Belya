@@ -11,6 +11,7 @@ import com.example.belya.databinding.FragmentNotificationCustomerBinding
 import com.example.belya.model.StatusOfCustomer
 import com.example.belya.model.User
 import com.example.belya.adapter.StatusCustomerAdapter
+import com.example.belya.utils.Common
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -30,6 +31,10 @@ class NotificationCustomerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val check = Common()
+        if (!check.isConnectedToInternet(requireContext())){
+            check.showInternetDisconnectedDialog(requireContext())
+        }
         initViews()
         fetchAcceptedUsers()
     }

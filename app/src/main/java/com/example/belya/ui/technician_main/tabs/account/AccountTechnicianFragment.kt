@@ -14,6 +14,7 @@ import com.example.belya.R
 import com.example.belya.databinding.FragmentAccountTechnicianBinding
 import com.example.belya.model.User
 import com.example.belya.ui.registration.auth.login.LoginActivity
+import com.example.belya.utils.Common
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -30,6 +31,10 @@ class AccountTechnicianFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val check = Common()
+        if (!check.isConnectedToInternet(requireContext())){
+            check.showInternetDisconnectedDialog(requireContext())
+        }
         initViews()
     }
 

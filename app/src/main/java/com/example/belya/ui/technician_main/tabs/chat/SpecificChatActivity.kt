@@ -16,7 +16,7 @@ import com.example.belya.model.ChatMessageModel
 import com.example.belya.model.ChatroomModel
 import com.example.belya.model.User
 import com.example.belya.utils.AndroidUtils
-import com.example.belya.utils.Common
+import com.example.belya.utils.base.Common
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth

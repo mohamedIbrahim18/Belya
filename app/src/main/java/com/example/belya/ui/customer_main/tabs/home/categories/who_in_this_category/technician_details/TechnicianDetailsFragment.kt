@@ -16,7 +16,7 @@ import com.example.belya.R
 import com.example.belya.databinding.FragmentTechnicianDeatilsBinding
 import com.example.belya.model.Feedback
 import com.example.belya.model.User
-import com.example.belya.utils.Common
+import com.example.belya.utils.base.Common
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore

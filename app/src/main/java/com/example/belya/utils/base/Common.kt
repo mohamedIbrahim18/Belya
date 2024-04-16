@@ -1,13 +1,10 @@
-package com.example.belya.utils
+package com.example.belya.utils.base
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.app.AlertDialog
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Button
-import android.widget.ProgressBar
-import androidx.core.view.isVisible
 import com.example.belya.R
 
 class Common {

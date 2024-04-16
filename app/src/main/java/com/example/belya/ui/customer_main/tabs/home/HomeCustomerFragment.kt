@@ -15,7 +15,7 @@ import com.example.belya.adapter.CategoriesAdapter
 import com.example.belya.model.CategoriesItem
 import com.example.belya.adapter.ImportantAdapter
 import com.example.belya.model.ImportantItem
-import com.example.belya.utils.Common
+import com.example.belya.utils.base.Common
 import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeCustomerFragment : Fragment() {

@@ -3,18 +3,13 @@ package com.example.belya.ui.customer_main
 
 import androidx.navigation.fragment.NavHostFragment
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.belya.Constant
 import com.example.belya.R
 import com.example.belya.databinding.ActivityCustomerMainBinding
-import com.example.belya.utils.Common
+import com.example.belya.utils.base.Common
 import com.google.android.material.badge.BadgeDrawable
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 class CustomerMainActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityCustomerMainBinding

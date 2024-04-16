@@ -6,10 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.belya.Constant
-import com.example.belya.R
 import com.example.belya.databinding.FragmentAddFeedbackBinding
 import com.example.belya.model.Feedback
-import com.example.belya.utils.Common
+import com.example.belya.utils.base.Common
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue

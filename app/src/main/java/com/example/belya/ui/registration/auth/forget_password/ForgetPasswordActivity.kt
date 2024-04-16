@@ -8,10 +8,9 @@ import android.widget.Toast
 import com.example.belya.Constant
 import com.example.belya.databinding.ActivityForgetPasswordBinding
 import com.example.belya.ui.registration.auth.login.LoginActivity
-import com.example.belya.utils.Common
+import com.example.belya.utils.base.Common
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase

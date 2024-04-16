@@ -1,7 +1,6 @@
 package com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,7 @@ import com.example.belya.R
 import com.example.belya.databinding.FragmentPersonInCategoryBinding
 import com.example.belya.model.User
 import com.example.belya.adapter.PersonAdapter
-import com.example.belya.utils.Common
-import com.google.firebase.auth.FirebaseAuth
+import com.example.belya.utils.base.Common
 import com.google.firebase.firestore.FirebaseFirestore
 
 class PersonInCategoryFragment : Fragment() {

@@ -2,7 +2,6 @@ package com.example.belya.ui.registration.auth.login
 
 import android.Manifest
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -24,7 +23,7 @@ import com.example.belya.ui.customer_main.CustomerMainActivity
 import com.example.belya.ui.technician_main.TechnicianMainActivity
 import com.example.belya.ui.registration.auth.forget_password.ForgetPasswordActivity
 import com.example.belya.ui.registration.auth.signup.SignUpActivity
-import com.example.belya.utils.Common
+import com.example.belya.utils.base.Common
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
@@ -64,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
         } else {
             requestPermission()
         }
-        val check =Common()
+        val check = Common()
         if (!check.isConnectedToInternet(this)){
             check.showInternetDisconnectedDialog(this)
         }

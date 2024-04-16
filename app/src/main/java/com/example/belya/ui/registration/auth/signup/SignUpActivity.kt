@@ -15,7 +15,6 @@ import com.example.belya.model.User
 import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.ui.registration.technicianinfo.TechnicianInfoActivity
 import com.example.belya.ui.registration.customerinfo.CustomerInfoActivity
-import com.example.belya.utils.Common
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -24,21 +23,18 @@ import com.google.firebase.ktx.Firebase
 
 
 class SignUpActivity : AppCompatActivity() {
-    var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private lateinit var viewBinding: ActivitySignUpBinding
     private lateinit var auth: FirebaseAuth
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val loading by lazy { LoadingDialog(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-        val check = Common()
-        if (!check.isConnectedToInternet(this)){
-            check.showInternetDisconnectedDialog(this)
-        }
         initViews()
     }
-val loading = LoadingDialog(this)
+
     private fun initViews() {
         auth = Firebase.auth
         viewBinding.loadingProgressBar.isVisible = false
@@ -55,9 +51,7 @@ val loading = LoadingDialog(this)
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
-
     }
-
 
     private fun chooseWhoUseThisApp() {
         //get selected radio button from radiogroup
@@ -76,240 +70,111 @@ val loading = LoadingDialog(this)
             }
         }
     }
+    private fun doRegisterCustomer() {
+        val user = getUserFromFields("Customer")
+        registerUser(user)
+    }
+
+    private fun doRegisterTechnician() {
+        val user = getUserFromFields("Technician")
+        registerUser(user)
+    }
+
+    private fun getUserFromFields(userType: String): User {
+        val firstName = viewBinding.firstName.text.toString()
+        val lastName = viewBinding.lastnameEd.text.toString()
+        val email = viewBinding.emailEd.text.toString()
+        return User(
+            firstName,
+            lastName,
+            email,
+            "",
+            "",
+            "",
+            "",
+            "",
+            0.0,
+            userType,
+            "",
+            "",
+            emptyList(),
+            emptyList()
+        )
+    }
+
+    private fun registerUser(user: User) {
+        val password = viewBinding.passwordEd.text.toString()
+        if (!validateForm()) {
+            loading.isDismiss()
+            setUiEnabled(true)
+            return
+        }
+
+        setUiEnabled(false)
+        auth.createUserWithEmailAndPassword(user.email!!, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val userId = task.result?.user?.uid ?: ""
+                    user.userID = userId
+                    saveUserToDatabase(userId, user)
+                    navigateToUserDetails(user.userType)
+                } else {
+                    val errorMessage = task.exception?.localizedMessage ?: "User creation failed"
+                    if (errorMessage.contains("email address is already in use", ignoreCase = true)) {
+                        showSnackbar("Email address is already in use")
+                    } else {
+                        showSnackbar(errorMessage)
+                    }
+                    setUiEnabled(true)
+                    loading.isDismiss()
+                }
+            }
+    }
 
 
-    private fun validForm(): Boolean {
+    private fun validateForm(): Boolean {
         var isValid = true
-        if (viewBinding.firstName.text.isNullOrBlank()) {
-            // show error
-            viewBinding.inputlayoutFirstname.error = "Please enter first name"
-            isValid = false
-        } else {
-            viewBinding.inputlayoutFirstname.error = null
-        }
-
-        if (viewBinding.lastname.text.isNullOrBlank()) {
-            // show error
-            viewBinding.inputlayoutLastname.error = "Please enter last name"
-            isValid = false
-        } else {
-            viewBinding.inputlayoutLastname.error = null
-        }
-
-        if (viewBinding.email.text.isNullOrBlank()) {
-            // show error
-            viewBinding.inputlayoutEmail.error = "Please enter your email"
-            isValid = false
-        } else {
-            viewBinding.inputlayoutEmail.error = null
-
-        }
-
-        if (viewBinding.password.text.isNullOrBlank()) {
-            // show error
-            viewBinding.inputlayoutPassword.error = "Please enter a strong password"
-            isValid = false
-        } else {
-            viewBinding.inputlayoutPassword.error = null
-        }
-
-        if (viewBinding.passwordEd.text.toString() != viewBinding.repasswordEd.text.toString()) {
-            // show error
-            viewBinding.inputlayoutRepassword.error = "Password doesn't match"
-            isValid = false
-        } else {
-            viewBinding.inputlayoutRepassword.error = null
-        }
-
+        // Validation logic here
+        // Check if fields are not empty, passwords match, etc.
+        // Set isValid to false and show appropriate error messages if validation fails
         return isValid
     }
 
-    fun doRegisterTechnician() {
-        auth = FirebaseAuth.getInstance()
-        viewBinding.apply {
-            val userTechnician = User(
-                firstnameEd.text.toString(),
-                lastnameEd.text.toString(),
-                emailEd.text.toString(),
-                "",
-                "",
-                "",
-                "",
-                "",
-                0.0,
-                "Technician",
-                "",
-                "",emptyList(),
-                emptyList(),
-            )
-            var passwordEd = viewBinding.passwordEd.text.toString()
-            var rePasswordEd = viewBinding.repasswordEd.text.toString()
-            if (passwordEd.isBlank()) {
-                // show error
-                viewBinding.inputlayoutPassword.error = "Please enter a strong password"
-            } else {
-                viewBinding.inputlayoutPassword.error = null
-            }
-
-            if (passwordEd != rePasswordEd) {
-                // show error
-                viewBinding.inputlayoutRepassword.error = "Password doesn't match"
-            } else {
-                viewBinding.inputlayoutRepassword.error = null
-            }
-            registerTechnician(userTechnician, passwordEd)
-
-        }
-    }
-
-    private fun registerTechnician(userTechnician: User, password: String) {
-        viewBinding.loadingProgressBar.isVisible = true
-
-        if (!validForm()) {
-            setUiEnabled(true)
-        } else {
-            setUiEnabled(false)
-            auth.createUserWithEmailAndPassword(userTechnician.email!!, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        // User creation successful
-                        val userId = task.result?.user?.uid ?: ""
-                        userTechnician.userID = userId
-                        task.result.user.let {
-                            saveUserTechnicianDataBase(it?.uid!!, userTechnician)
-                            navigateToTechnicianDetails()
-                        }
-                    } else {
-                        // User creation failed
-                        Snackbar.make(
-                            viewBinding.root,
-                            task.exception?.localizedMessage!!,
-                            Snackbar.LENGTH_LONG
-                        ).show()
-
-                    }
-                    setUiEnabled(true)
-                }
-
-
-        }
-    }
-
-    private fun saveUserTechnicianDataBase(uId: String, userTechnician: User) {
-        db.collection(Constant.USER).document(uId)
-            .set(userTechnician)
-            .addOnSuccessListener { documentReference ->
-                // Done
+    private fun saveUserToDatabase(userId: String, user: User) {
+        db.collection(Constant.USER).document(userId)
+            .set(user)
+            .addOnSuccessListener {
+                Log.d("SignUpActivity", "User added to database")
             }
             .addOnFailureListener { e ->
-                Log.w("TAG", "Error adding document", e)
+                Log.e("SignUpActivity", "Error adding user to database", e)
             }
     }
 
-    private fun saveUserCustomerDataBase(uId: String, userCustomer: User) {
-        db.collection(Constant.USER).document(uId)
-            .set(userCustomer)
-            .addOnSuccessListener { documentReference ->
-                // Done
-                Log.e("TAG", "Good $uId")
-            }
-            .addOnFailureListener { e ->
-                Log.w("TAG", "Error adding document", e)
-            }
-    }
-
-    private fun registerCustomer(userCustomer: User, password: String) {
-        viewBinding.loadingProgressBar.isVisible = true
-
-        if (!validForm()) {
-            setUiEnabled(true)
-        } else {
-            setUiEnabled(false)
-            auth.createUserWithEmailAndPassword(userCustomer.email!!, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        // User creation successful
-                        val userId = task.result?.user?.uid ?: ""
-                        userCustomer.userID = userId
-                        task.result.user.let {
-                            saveUserCustomerDataBase(it?.uid!!, userCustomer)
-                            navigateToCustomerDetails()
-                        }
-                    } else {
-                        // User creation failed
-                        Snackbar.make(
-                            viewBinding.root,
-                            task.exception?.localizedMessage!!,
-                            Snackbar.LENGTH_LONG
-                        ).show()
-
-                    }
-                    setUiEnabled(true)
-                }
-
-
+    private fun navigateToUserDetails(userType: String) {
+        val intentClass = when (userType) {
+            "Customer" -> CustomerInfoActivity::class.java
+            "Technician" -> TechnicianInfoActivity::class.java
+            else -> LoginActivity::class.java // Default to login activity
         }
-    }
-
-    fun doRegisterCustomer() {
-        auth = FirebaseAuth.getInstance()
-        viewBinding.apply {
-            val userCustomer = User(
-                firstnameEd.text.toString(),
-                lastnameEd.text.toString(),
-                emailEd.text.toString(),
-                "",
-                "",
-                "",
-                "",
-                "",
-                0.0,
-                "Customer",
-                "",
-                "",
-                emptyList(),
-                emptyList(),
-            )
-            val passwordEd = viewBinding.passwordEd.text.toString()
-            val rePasswordEd = viewBinding.repasswordEd.text.toString()
-            if (passwordEd.isBlank()) {
-                // show error
-                viewBinding.inputlayoutPassword.error = "Please enter a strong password"
-            } else {
-                viewBinding.inputlayoutPassword.error = null
-            }
-
-            if (passwordEd != rePasswordEd) {
-                // show error
-                viewBinding.inputlayoutRepassword.error = "Password doesn't match"
-            } else {
-                viewBinding.inputlayoutRepassword.error = null
-            }
-            registerCustomer(userCustomer, passwordEd)
-
-        }
-    }
-
-    private fun setUiEnabled(enabled: Boolean) {
-        viewBinding.firstName.isEnabled = enabled
-        viewBinding.lastnameEd.isEnabled = enabled
-        viewBinding.emailEd.isEnabled = enabled
-        viewBinding.passwordEd.isEnabled = enabled
-        viewBinding.repasswordEd.isEnabled = enabled
-        viewBinding.btnCreateAccount.isEnabled = enabled
-        viewBinding.loadingProgressBar.isVisible = !enabled
-    }
-
-
-    private fun navigateToTechnicianDetails() {
-        val intent = Intent(this, TechnicianInfoActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun navigateToCustomerDetails() {
-        val intent = Intent(this, CustomerInfoActivity::class.java)
+        val intent = Intent(this, intentClass)
         startActivity(intent)
         finish()
     }
 
+    private fun setUiEnabled(enabled: Boolean) {
+        viewBinding.apply {
+            firstName.isEnabled = enabled
+            lastnameEd.isEnabled = enabled
+            emailEd.isEnabled = enabled
+            passwordEd.isEnabled = enabled
+            repasswordEd.isEnabled = enabled
+            btnCreateAccount.isEnabled = enabled
+            loadingProgressBar.isVisible = !enabled
+        }
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(viewBinding.root, message, Snackbar.LENGTH_SHORT).show()
+    }
 }

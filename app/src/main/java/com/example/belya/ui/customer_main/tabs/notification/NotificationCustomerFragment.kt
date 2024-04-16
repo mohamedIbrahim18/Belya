@@ -11,7 +11,7 @@ import com.example.belya.databinding.FragmentNotificationCustomerBinding
 import com.example.belya.model.StatusOfCustomer
 import com.example.belya.model.User
 import com.example.belya.adapter.StatusCustomerAdapter
-import com.example.belya.utils.Common
+import com.example.belya.utils.base.Common
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat

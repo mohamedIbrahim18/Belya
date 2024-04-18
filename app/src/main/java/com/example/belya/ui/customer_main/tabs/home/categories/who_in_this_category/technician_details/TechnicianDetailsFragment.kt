@@ -148,9 +148,10 @@ class TechnicianDetailsFragment : Fragment() {
     private fun setupUI(technicianId: String) {
         val name = "${person.firstName} ${person.lastName}"
         viewBinding.firstnamePersonDetails.text = name
+        viewBinding.workExperiencePersonDetails.text = person.work_experience
         viewBinding.cityPersonDetails.text = person.city
         Glide.with(viewBinding.imagePersonDetails).load(person.imagePath)
-            .placeholder(R.drawable.ic_profileimg).into(viewBinding.imagePersonDetails)
+            .placeholder(R.drawable.profile_pic).into(viewBinding.imagePersonDetails)
         db.collection(Constant.USER)
             .document(technicianId)
             .collection("Tickets")
@@ -199,6 +200,7 @@ class TechnicianDetailsFragment : Fragment() {
                     }
                     val averageRating = if (count > 0) totalRating / count else 0.0
                     viewBinding.ratingbarPersonDetails.rating = averageRating.toFloat()
+                    saveAverageRatingInDataBase(averageRating)
                 } else {
                     Log.e(TAG, "Error getting reviews: ", task.exception)
                 }
@@ -208,9 +210,10 @@ class TechnicianDetailsFragment : Fragment() {
     private fun setSecondUI(technicianId: String) {
         val name = "${importantPerson.firstName} ${importantPerson.lastName}"
         viewBinding.firstnamePersonDetails.text = name
+        viewBinding.workExperiencePersonDetails.text = importantPerson.workExperience
         viewBinding.cityPersonDetails.text = importantPerson.city
         Glide.with(viewBinding.imagePersonDetails).load(importantPerson.imagePath)
-            .placeholder(R.drawable.ic_profileimg).into(viewBinding.imagePersonDetails)
+            .placeholder(R.drawable.profile_pic).into(viewBinding.imagePersonDetails)
         db.collection(Constant.USER)
             .document(technicianId)
             .collection("Tickets")
@@ -259,9 +262,21 @@ class TechnicianDetailsFragment : Fragment() {
                     }
                     val averageRating = if (count > 0) totalRating / count else 0.0
                     viewBinding.ratingbarPersonDetails.rating = averageRating.toFloat()
+                    saveAverageRatingInDataBase(averageRating)
+
                 } else {
                     Log.e(TAG, "Error getting reviews: ", task.exception)
                 }
+            }
+    }
+
+    private fun saveAverageRatingInDataBase(averageRating: Double) {
+        db.collection(Constant.USER).document(technicianId).update("person_rate",averageRating)
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully updated!")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error updating document", e)
             }
     }
 

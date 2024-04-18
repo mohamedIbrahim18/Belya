@@ -16,7 +16,7 @@
     <string name="customer">Customer</string>
     <string name="technician">Technician</string>
     <string name="continuee">continue</string>
-    <string name="occupation">Occupation</string>
+    <string name="job">Job</string>
     <string name="work_experience">Work Experience</string>
     <string name="save_changes">Save Changes</string>
     <string name="phone_number">Phone Number</string>
@@ -36,4 +36,7 @@
     <string name="chat">Chat</string>
     <string name="my_account">My Account</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="email_job"><![CDATA[Email & Job & City]]></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

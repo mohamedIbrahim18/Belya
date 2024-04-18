@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_accountCustomerFragment_to_changePasswordFragment2"
             app:destination="@id/changePasswordFragment2" />
+        <action
+            android:id="@+id/action_accountCustomerFragment_to_editInformationCustomerFragment"
+            app:destination="@id/editInformationCustomerFragment" />
     </fragment>
     <fragment
         android:id="@+id/technicianDetailsFragment"
@@ -93,4 +96,9 @@
             app:argType="string"
             android:defaultValue="techID" />
     </fragment>
+    <fragment
+        android:id="@+id/editInformationCustomerFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.account.EditInformationCustomerFragment"
+        android:label="fragment_edit_information_customer"
+        tools:layout="@layout/fragment_edit_information_customer" />
 </navigation>

@@ -16,7 +16,7 @@ class ImportantAdapter(private var userList: List<UserApiModelItem>) : RecyclerV
         fun bind(user: UserApiModelItem) {
             // Load image using Glide if imagePath is not null
             Glide.with(itemBinding.root.context).load(user.imagePath)
-                .placeholder(R.drawable.ic_profileimg)
+                .placeholder(R.drawable.profile_pic)
                 .into(itemBinding.imageMostImportant)
 
             // Set other user details

@@ -16,7 +16,7 @@ class PersonAdapter(private var listOfPerson: MutableList<User>) :
             // itemBinding.personImage.text(task.imagePath)
             Glide.with(itemBinding.root.context)
                 .load(task.imagePath)
-                .placeholder(R.drawable.ic_profileimg)
+                .placeholder(R.drawable.profile_pic)
                 .into(itemBinding.personImage)
             itemBinding.personName.text = task.firstName + " " + task.lastName
             itemBinding.city.text = task.city

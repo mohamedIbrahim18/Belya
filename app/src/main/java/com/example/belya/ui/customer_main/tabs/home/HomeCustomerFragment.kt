@@ -17,7 +17,7 @@ import com.example.belya.model.CategoriesItem
 import com.example.belya.adapter.ImportantAdapter
 import com.example.belya.api.modeApi.UserApiModelItem
 import com.example.belya.utils.base.Common
-import com.example.foodapplication.retrofit.api.ApiManger
+import com.example.belya.api.ApiManger
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 

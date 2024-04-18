@@ -20,7 +20,7 @@ class FeedbackAdapter(private var listOfFeedbacks: List<Feedback>) :
             itemBinding.feedbackMessage.text = feedback.message
             itemBinding.feedbackRating.rating = feedback.rating
             Glide.with(itemBinding.root.context).load(feedback.imagePath)
-                .placeholder(R.drawable.ic_profileimg)
+                .placeholder(R.drawable.profile_pic)
                 .into(itemBinding.feedbackUserImage)
 
             feedback.time?.let { time ->

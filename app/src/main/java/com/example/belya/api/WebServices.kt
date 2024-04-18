@@ -1,6 +1,5 @@
-package com.example.foodapplication.retrofit.api
+package com.example.belya.api
 
-import com.example.belya.api.modeApi.UserApiModel
 import com.example.belya.api.modeApi.UserApiModelItem
 import retrofit2.Response
 import retrofit2.http.GET

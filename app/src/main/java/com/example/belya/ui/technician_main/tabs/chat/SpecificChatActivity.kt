@@ -80,7 +80,7 @@ class SpecificChatActivity : AppCompatActivity() {
                         // Load and display the user's profile image using Glide
                         Glide.with(this)
                             .load(it.imagePath)
-                            .placeholder(R.drawable.ic_profileimg) // Placeholder image while loading
+                            .placeholder(R.drawable.profile_pic) // Placeholder image while loading
                             .into(viewBinding.cardImageToChat)
                     }
                 } else {

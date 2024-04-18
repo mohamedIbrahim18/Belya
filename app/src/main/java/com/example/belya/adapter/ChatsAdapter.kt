@@ -18,7 +18,7 @@ class ChatsAdapter(private var listofChats : MutableList<User>) : RecyclerView.A
 
             Glide.with(itemBinding.root.context)
                 .load(task.imagePath)
-                .placeholder(R.drawable.ic_profileimg)
+                .placeholder(R.drawable.profile_pic)
                 .into(itemBinding.personImageChat)
 
         }

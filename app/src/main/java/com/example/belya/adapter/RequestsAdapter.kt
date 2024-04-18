@@ -19,7 +19,7 @@ class RequestsAdapter(private var listOfRequests : List<User>) : RecyclerView.Ad
             itemBinding.requestPrice.text = task.price.trim()
 
             Glide.with(itemBinding.root.context).load(task.imagePath)
-                .placeholder(R.drawable.ic_profileimg)
+                .placeholder(R.drawable.profile_pic)
                 .into(itemBinding.requestImage)
 
             Log.d("price in adapter",task.price.toString())

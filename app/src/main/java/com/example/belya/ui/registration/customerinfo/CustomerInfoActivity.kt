@@ -34,6 +34,9 @@ class CustomerInfoActivity : AppCompatActivity() {
         viewBinding.profileImg.setOnClickListener {
             openImageChooser()
         }
+        viewBinding.penToChangeImage.setOnClickListener {
+            openImageChooser()
+        }
 
         viewBinding.saveChanges.setOnClickListener {
             saveChanges()

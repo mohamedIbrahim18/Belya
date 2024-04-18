@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.belya.Constant
 import com.example.belya.HorizontalItemDecoration
 import com.example.belya.databinding.FragmentChatCustomerBinding
@@ -18,10 +19,9 @@ import com.example.belya.utils.AndroidUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-
 class ChatCustomerFragment : Fragment() {
-    lateinit var chatsAdapter: ChatsAdapter
-    private lateinit var listofChats: MutableList<User>
+    private lateinit var chatsAdapter: ChatsAdapter
+    private val listOfChats: MutableList<User> = mutableListOf()
     private lateinit var viewBinding: FragmentChatCustomerBinding
 
     override fun onCreateView(
@@ -34,9 +34,8 @@ class ChatCustomerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listofChats = mutableListOf()
-        initViews()
         initRecyclerViewForChats()
+        initViews()
     }
 
     private fun initViews() {
@@ -68,7 +67,7 @@ class ChatCustomerFragment : Fragment() {
             .addOnSuccessListener { documentSnapshot ->
                 val user = documentSnapshot.toObject(User::class.java)
                 user?.let {
-                    listofChats.add(it)
+                    listOfChats.add(it)
                     chatsAdapter.notifyDataSetChanged()
                 }
             }
@@ -78,8 +77,9 @@ class ChatCustomerFragment : Fragment() {
     }
 
     private fun initRecyclerViewForChats() {
-        chatsAdapter = ChatsAdapter(listofChats)
+        chatsAdapter = ChatsAdapter(listOfChats)
         viewBinding.recyclerViewChats.apply {
+            layoutManager = LinearLayoutManager(context)
             addItemDecoration(HorizontalItemDecoration())
             adapter = chatsAdapter
             chatsAdapter.onItemSelectedClickedListnner = object : ChatsAdapter.OnItemSelectedClick {
@@ -88,7 +88,6 @@ class ChatCustomerFragment : Fragment() {
                     AndroidUtils.passUserModelAsIntent(intent,task)
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     context.startActivity(intent)
-
                 }
             }
         }

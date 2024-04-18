@@ -45,6 +45,12 @@ class TechnicianInfoActivity : AppCompatActivity() {
             intent.type = "image/*"
             startActivityForResult(intent, REQUEST_IMAGE_PICK)
         }
+        viewBinding.penToChangeImage.setOnClickListener {
+            val intent = Intent()
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.type = "image/*"
+            startActivityForResult(intent, REQUEST_IMAGE_PICK)
+        }
 
         viewBinding.saveChanges.setOnClickListener {
             loading.startLoading()

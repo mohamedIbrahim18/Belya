@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
             requestPermission()
         }
         val check = Common()
-        if (!check.isConnectedToInternet(this)){
+        if (!check.isConnectedToInternet(this)) {
             check.showInternetDisconnectedDialog(this)
         }
         initViews()
@@ -351,10 +351,8 @@ class LoginActivity : AppCompatActivity() {
                 if (value != null && value.exists()) {
                     CoroutineScope(Dispatchers.Main).launch {
                         val cityName = getCityName(latitude, longitude, applicationContext)
-//                        Snackbar.make(viewBinding.root, cityName, Snackbar.LENGTH_LONG).show()
-//                        Toast.makeText(this@LoginActivity, cityName, Toast.LENGTH_LONG).show()
-//                        Log.e("City", cityName)
-                        userRef.update("city",cityName).addOnCompleteListener {
+                        Log.e("City", cityName)
+                        userRef.update("city", cityName).addOnCompleteListener {
 
                         }.addOnFailureListener {
 
@@ -377,7 +375,8 @@ class LoginActivity : AppCompatActivity() {
         withContext(Dispatchers.IO) {
             try {
                 val geocoder = Geocoder(context, Locale.getDefault())
-                val addresses: MutableList<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
+                val addresses: MutableList<Address>? =
+                    geocoder.getFromLocation(latitude, longitude, 1)
                 if (!addresses.isNullOrEmpty()) {
                     for (address in addresses) {
                         if (address.locality != null) {

@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import com.example.belya.databinding.ActivitySignUpBinding
 import com.example.belya.Constant
@@ -31,6 +32,7 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivitySignUpBinding.inflate(layoutInflater)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(viewBinding.root)
         initViews()
     }
@@ -81,7 +83,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun getUserFromFields(userType: String): User {
-        val firstName = viewBinding.firstName.text.toString()
+        val firstName = viewBinding.firstnameEd.text.toString()
         val lastName = viewBinding.lastnameEd.text.toString()
         val email = viewBinding.emailEd.text.toString()
         return User(

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.example.belya.Constant
 import com.example.belya.HorizontalItemDecoration
@@ -14,16 +15,20 @@ import com.example.belya.databinding.FragmentHomeCustomerBinding
 import com.example.belya.adapter.CategoriesAdapter
 import com.example.belya.model.CategoriesItem
 import com.example.belya.adapter.ImportantAdapter
-import com.example.belya.model.ImportantItem
+import com.example.belya.api.modeApi.UserApiModelItem
 import com.example.belya.utils.base.Common
+import com.example.foodapplication.retrofit.api.ApiManger
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeCustomerFragment : Fragment() {
     lateinit var viewBinding: FragmentHomeCustomerBinding
     private lateinit var categoryItemList: List<CategoriesItem>
     lateinit var categoriesItemAdpater: CategoriesAdapter
 
-    private lateinit var importantItemList: List<ImportantItem>
+    private lateinit var importantItemList: List<UserApiModelItem>
     lateinit var importantAdapter: ImportantAdapter
 
 
@@ -83,17 +88,47 @@ class HomeCustomerFragment : Fragment() {
 
 
     private fun initRecyclerImportant() {
-        importantItemList = listOf(
-            ImportantItem(R.drawable.ic_plumber, "TSADASDAS", "30"),
-            ImportantItem(R.drawable.ic_plumber, "TSADASDAS", "30"),
-            ImportantItem(R.drawable.ic_plumber, "TSADASDAS", "30"),
-        )
+        // Initialize an empty list for the important items
+        importantItemList = mutableListOf()
+
+        // Initialize the adapter with the empty list
         importantAdapter = ImportantAdapter(importantItemList)
+
+        // Set up the recycler view with the adapter
         viewBinding.recyclerMostImportant.apply {
-            viewBinding.recyclerMostImportant.addItemDecoration(HorizontalItemDecoration())
+            // Add item decoration if needed
+            addItemDecoration(HorizontalItemDecoration())
             adapter = importantAdapter
         }
+        fetchDataAndUpdateList()
     }
+
+
+
+    private fun fetchDataAndUpdateList() {
+        lifecycleScope.launch {
+            try {
+                val apiService = ApiManger.getApis()
+                val response = withContext(Dispatchers.IO) {
+                    apiService.getPersonFromRate()
+                }
+                if (response.isSuccessful) {
+                    val userApiModel = response.body()
+                    userApiModel?.let {
+                        val users = it.userApiModel ?: emptyList() // Handling null userApiModel
+                        importantAdapter.submitList(users)
+                    }
+                } else {
+                    // Handle error response
+                    Log.e("API_ERROR", "Failed to fetch data: ${response.message()}")
+                }
+            } catch (e: Exception) {
+                // Handle failure
+                Log.e("API_FAILURE", "Failed to fetch data: ${e.message}")
+            }
+        }
+    }
+
 
 
     private fun showWhoInThisCategory(nameOfJob: String) {

@@ -1,6 +1,7 @@
 package com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.technician_details
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import com.example.belya.Constant
 import com.example.belya.databinding.FragmentAddFeedbackBinding
 import com.example.belya.model.Feedback
 import com.example.belya.utils.base.Common
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -47,34 +49,41 @@ class AddFeedbackFragment : Fragment() {
         myCurrentId?.let { userId ->
             FirebaseFirestore.getInstance().collection(Constant.USER).document(userId).get()
                 .addOnSuccessListener { documentSnapshot ->
-                    val firstName = documentSnapshot.getString("firstName")
-                    val lastName = documentSnapshot.getString("lastName")
-                    val image = documentSnapshot.getString("imagePath")
+                    val firstName = documentSnapshot.getString("firstName") ?: ""
+                    val lastName = documentSnapshot.getString("lastName") ?: ""
+                    val image = documentSnapshot.getString("imagePath") ?: ""
                     val fullName = "$firstName $lastName"
                     val message = viewBinding.edReviewDescription.text.toString()
                     val rating = viewBinding.ratingBar.rating
 
-                    val currentTimeStamp = FieldValue.serverTimestamp()
+                    val currentTimeStamp = Timestamp.now()
 
                     val feedback = Feedback(
                         userName = fullName,
-                        imagePath = image?:"", // You need to replace this with actual image resource ID
+                        imagePath = image,
                         message = message,
                         rating = rating,
-                        time = Timestamp.now(), // Store timestamp as a string
+                        time = currentTimeStamp
                     )
                     FirebaseFirestore.getInstance().collection(Constant.USER)
                         .document(techId).collection("Reviews").document(myCurrentId).set(feedback)
                         .addOnSuccessListener {
-                            // Handle success, if needed
+                            val successMessage = "Feedback added successfully"
+                            Snackbar.make(viewBinding.root, successMessage, Snackbar.LENGTH_SHORT).show()
+                            requireActivity().supportFragmentManager.popBackStack() // Finish the activity
                         }
                         .addOnFailureListener { exception ->
+                            Log.e("AddFeedbackFragment", "Failed to add feedback: ${exception.message}")
                             // Handle failure
                         }
                 }
                 .addOnFailureListener { exception ->
+                    Log.e("AddFeedbackFragment", "Failed to fetch user data: ${exception.message}")
                     // Handle failure
                 }
+        } ?: run {
+            Log.e("AddFeedbackFragment", "Current user ID is null")
         }
     }
+
 }

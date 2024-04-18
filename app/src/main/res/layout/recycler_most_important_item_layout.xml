@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_most_important"
         android:layout_width="190dp"
         android:layout_height="190dp"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/occTV_most_important"
+        android:id="@+id/job_most_important"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -36,7 +36,18 @@
         android:textColor="@color/blue_main"
         android:textSize="19sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@id/occTV_most_important"
-        app:layout_constraintTop_toBottomOf="@id/occTV_most_important"
+        app:layout_constraintStart_toStartOf="@id/job_most_important"
+        app:layout_constraintTop_toBottomOf="@id/job_most_important"
         tools:text="Name" />
+    <RatingBar
+        android:id="@+id/user_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:clickable="false"
+        android:isIndicator="true"
+        app:layout_constraintTop_toBottomOf="@id/name_most_important"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:progressTint="#ffd203" />
 </androidx.constraintlayout.widget.ConstraintLayout>

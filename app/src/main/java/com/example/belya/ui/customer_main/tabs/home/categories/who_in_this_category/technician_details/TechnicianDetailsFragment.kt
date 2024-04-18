@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.belya.Constant
 import com.example.belya.HorizontalItemDecoration
 import com.example.belya.R
+import com.example.belya.api.modeApi.UserApiModelItem
 import com.example.belya.databinding.FragmentTechnicianDeatilsBinding
 import com.example.belya.model.Feedback
 import com.example.belya.model.User
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class TechnicianDetailsFragment : Fragment() {
     private lateinit var viewBinding: FragmentTechnicianDeatilsBinding
     private lateinit var person: User
+    private lateinit var importantPerson :UserApiModelItem
     private lateinit var db: FirebaseFirestore
     private lateinit var feedbackList: MutableList<Feedback>
     lateinit var feedbackAdapter: FeedbackAdapter
@@ -47,6 +49,50 @@ class TechnicianDetailsFragment : Fragment() {
         db = FirebaseFirestore.getInstance()
         feedbackList = mutableListOf()
 
+        handelFirstCase()
+        handelSecondCase()
+
+        viewBinding.bookNowPersonDetails.setOnClickListener {
+            viewBinding.progressBarPersonDeatails.visibility = View.VISIBLE
+            viewBinding.bookNowPersonDetails.visibility = View.GONE
+
+            if (viewBinding.edittextPersonDetails.text?.isNotEmpty() == true) {
+                val price = viewBinding.edittextPersonDetails.text.toString()
+                Log.d("price in Text View", price)
+                Log.d("my current id ", currentUserId!!)
+                makeTicket(currentUserId!!, technicianId, price)
+            } else {
+                viewBinding.textinputLayoutPersonDetails.error = "Please Enter a price"
+                viewBinding.progressBarPersonDeatails.visibility = View.GONE
+                viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun handelSecondCase() {
+        arguments?.let {
+            it.getParcelable<UserApiModelItem>("importantMan")?.let { task ->
+                importantPerson = task
+                technicianId = importantPerson.userID!!
+                currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+
+                setSecondUI(technicianId)
+                checkMyIdWithOtherId(technicianId, currentUserId)
+                checkMyIdWithOtherIdIfAccepted(technicianId, currentUserId)
+                setupRecyclerFeedbacks()
+                fetchReviewsCollocation(technicianId)
+                viewBinding.addFeedback.setOnClickListener {
+                    val action =
+                        TechnicianDetailsFragmentDirections.actionTechnicianDetailsFragmentToAddFeedbackFragment(
+                            technicianId
+                        )
+                    view?.findNavController()?.navigate(action)
+                }
+            }
+        }
+    }
+
+    private fun handelFirstCase() {
         arguments?.let {
             it.getParcelable<User>("pokemon")?.let { task ->
                 person = task
@@ -63,24 +109,8 @@ class TechnicianDetailsFragment : Fragment() {
                         TechnicianDetailsFragmentDirections.actionTechnicianDetailsFragmentToAddFeedbackFragment(
                             technicianId
                         )
-                    view.findNavController().navigate(action)
+                    view?.findNavController()?.navigate(action)
                 }
-            }
-        }
-
-        viewBinding.bookNowPersonDetails.setOnClickListener {
-            viewBinding.progressBarPersonDeatails.visibility = View.VISIBLE
-            viewBinding.bookNowPersonDetails.visibility = View.GONE
-
-            if (viewBinding.edittextPersonDetails.text?.isNotEmpty() == true) {
-                val price = viewBinding.edittextPersonDetails.text.toString()
-                Log.d("price in Text View", price)
-                Log.d("my current id ", currentUserId!!)
-                makeTicket(currentUserId!!, technicianId, price)
-            } else {
-                viewBinding.textinputLayoutPersonDetails.error = "Please Enter a price"
-                viewBinding.progressBarPersonDeatails.visibility = View.GONE
-                viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
             }
         }
     }
@@ -120,6 +150,66 @@ class TechnicianDetailsFragment : Fragment() {
         viewBinding.firstnamePersonDetails.text = name
         viewBinding.cityPersonDetails.text = person.city
         Glide.with(viewBinding.imagePersonDetails).load(person.imagePath)
+            .placeholder(R.drawable.ic_profileimg).into(viewBinding.imagePersonDetails)
+        db.collection(Constant.USER)
+            .document(technicianId)
+            .collection("Tickets")
+            .get()
+            .addOnSuccessListener { ticketQuerySnapshot ->
+                var totalprice = 0.0
+                var count = 0
+
+                for (ticketDocumentSnapshot in ticketQuerySnapshot.documents) {
+                    val ticketUser = ticketDocumentSnapshot.get("user") as? Map<*, *>
+                    ticketUser?.let { ticketUserMap ->
+                        val priceString = ticketUserMap["price"] as? String
+                        priceString?.let {
+                            val price = it.toDoubleOrNull()
+                            price?.let {
+                                totalprice += it
+                                count++
+                            }
+                        }
+                    }
+                }
+
+                val averagePrice = if (count > 0) totalprice / count else 0.0
+                Log.d("Price Debug", "Average Price: $averagePrice")
+                viewBinding.averagePricePersonDetails.text =
+                    "Average Price Between $averagePrice to ${averagePrice + 30} per hour"
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore Error", "Error getting documents: ", exception)
+                // Handle the error here
+            }
+
+
+        db.collection(Constant.USER).document(technicianId).collection("Reviews").get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    var totalRating = 0.0
+                    var count = 0
+
+                    for (document in task.result!!) {
+                        val rating = document.getDouble("rating")
+                        rating?.let {
+                            totalRating += it
+                            count++
+                        }
+                    }
+                    val averageRating = if (count > 0) totalRating / count else 0.0
+                    viewBinding.ratingbarPersonDetails.rating = averageRating.toFloat()
+                } else {
+                    Log.e(TAG, "Error getting reviews: ", task.exception)
+                }
+            }
+    }
+
+    private fun setSecondUI(technicianId: String) {
+        val name = "${importantPerson.firstName} ${importantPerson.lastName}"
+        viewBinding.firstnamePersonDetails.text = name
+        viewBinding.cityPersonDetails.text = importantPerson.city
+        Glide.with(viewBinding.imagePersonDetails).load(importantPerson.imagePath)
             .placeholder(R.drawable.ic_profileimg).into(viewBinding.imagePersonDetails)
         db.collection(Constant.USER)
             .document(technicianId)

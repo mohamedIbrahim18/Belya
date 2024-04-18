@@ -19,9 +19,7 @@ import com.example.belya.api.modeApi.UserApiModelItem
 import com.example.belya.utils.base.Common
 import com.example.foodapplication.retrofit.api.ApiManger
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class HomeCustomerFragment : Fragment() {
     lateinit var viewBinding: FragmentHomeCustomerBinding
@@ -48,7 +46,7 @@ class HomeCustomerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val check = Common()
-        if (!check.isConnectedToInternet(requireContext())){
+        if (!check.isConnectedToInternet(requireContext())) {
             check.showInternetDisconnectedDialog(requireContext())
         }
         initViews()
@@ -88,51 +86,48 @@ class HomeCustomerFragment : Fragment() {
 
 
     private fun initRecyclerImportant() {
-        // Initialize an empty list for the important items
         importantItemList = mutableListOf()
-
-        // Initialize the adapter with the empty list
         importantAdapter = ImportantAdapter(importantItemList)
-
-        // Set up the recycler view with the adapter
         viewBinding.recyclerMostImportant.apply {
-            // Add item decoration if needed
             addItemDecoration(HorizontalItemDecoration())
             adapter = importantAdapter
+            importantAdapter.onItemSelectedClickListnner = object : ImportantAdapter.OnItemSelectedClick{
+                override fun onItemSelectedClick(position: Int, task: UserApiModelItem) {
+                    val bundle = Bundle()
+                    bundle.putParcelable("importantMan",task)
+                    findNavController().navigate(
+                        R.id.action_homeCustomerFragment_to_technicianDetailsFragment,bundle)
+                }
+
+            }
         }
         fetchDataAndUpdateList()
     }
 
 
-
     private fun fetchDataAndUpdateList() {
         lifecycleScope.launch {
             try {
-                val apiService = ApiManger.getApis()
-                val response = withContext(Dispatchers.IO) {
-                    apiService.getPersonFromRate()
-                }
+                val response = ApiManger.getApis().getPersonFromRate()
                 if (response.isSuccessful) {
-                    val userApiModel = response.body()
-                    userApiModel?.let {
-                        val users = it.userApiModel ?: emptyList() // Handling null userApiModel
-                        importantAdapter.submitList(users)
+                    val userApiModelList = response.body()
+                    userApiModelList?.let { userList ->
+                        importantAdapter.submitList(userList)
                     }
                 } else {
-                    // Handle error response
                     Log.e("API_ERROR", "Failed to fetch data: ${response.message()}")
                 }
             } catch (e: Exception) {
-                // Handle failure
                 Log.e("API_FAILURE", "Failed to fetch data: ${e.message}")
             }
         }
     }
 
-
-
     private fun showWhoInThisCategory(nameOfJob: String) {
-        val action = HomeCustomerFragmentDirections.actionHomeCustomerFragmentToPersonInCategoryFragment(nameOfJob)
+        val action =
+            HomeCustomerFragmentDirections.actionHomeCustomerFragmentToPersonInCategoryFragment(
+                nameOfJob
+            )
         view?.findNavController()?.navigate(action)
     }
 
@@ -145,9 +140,9 @@ class HomeCustomerFragment : Fragment() {
                 Log.e("TESTFUN", "Error fetching data", error)
                 return@addSnapshotListener
             }
-            if (value !=null){
+            if (value != null) {
                 val count = value.size()
-                updateCategoryCount(countOfJob,count)
+                updateCategoryCount(countOfJob, count)
             }
 
         }
@@ -160,8 +155,6 @@ class HomeCustomerFragment : Fragment() {
             categoriesItemAdpater.notifyItemChanged(index)
         }
     }
-
-
 
 
 }

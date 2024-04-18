@@ -16,9 +16,7 @@ class FeedbackAdapter(private var listOfFeedbacks: List<Feedback>) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(feedback: Feedback) {
             //
-            Log.d("Test", "Binding")
             itemBinding.feedbackUserName.text = feedback.userName
-            Log.e("Name",feedback.userName)
             itemBinding.feedbackMessage.text = feedback.message
             itemBinding.feedbackRating.rating = feedback.rating
             Glide.with(itemBinding.root.context).load(feedback.imagePath)

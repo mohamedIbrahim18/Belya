@@ -1,7 +1,11 @@
 package com.example.belya.api.modeApi
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
+@Parcelize
 data class UserApiModelItem(
 
 	@field:SerializedName("lastName")
@@ -14,10 +18,10 @@ data class UserApiModelItem(
 	val imagePath: String? = null,
 
 	@field:SerializedName("person_rate")
-	val personRate: Int? = null,
+	val personRate: Double? = null,
 
 	@field:SerializedName("pendingList")
-	val pendingList: List<Any?>? = null,
+	val pendingList: @RawValue List<Any?>? = null, // Use @RawValue here
 
 	@field:SerializedName("userID")
 	val userID: String? = null,
@@ -32,7 +36,7 @@ data class UserApiModelItem(
 	val price: String? = null,
 
 	@field:SerializedName("acceptedList")
-	val acceptedList: List<Any?>? = null,
+	val acceptedList: @RawValue List<Any?>? = null,
 
 	@field:SerializedName("userType")
 	val userType: String? = null,
@@ -45,4 +49,4 @@ data class UserApiModelItem(
 
 	@field:SerializedName("work_experience")
 	val workExperience: String? = null
-)
+): Parcelable

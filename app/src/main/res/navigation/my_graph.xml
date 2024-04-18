@@ -19,6 +19,14 @@
                 android:defaultValue="jobName"
                 />
         </action>
+        <action
+            android:id="@+id/action_homeCustomerFragment_to_technicianDetailsFragment"
+            app:destination="@id/technicianDetailsFragment">
+            <argument
+                android:name="importantPerson"
+                app:argType="string"
+                android:defaultValue="importantPerson"/>
+        </action>
     </fragment>
     <fragment
         android:id="@+id/personInCategoryFragment"

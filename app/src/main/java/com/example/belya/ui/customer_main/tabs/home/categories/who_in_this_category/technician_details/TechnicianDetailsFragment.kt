@@ -199,6 +199,7 @@ class TechnicianDetailsFragment : Fragment() {
                     }
                     val averageRating = if (count > 0) totalRating / count else 0.0
                     viewBinding.ratingbarPersonDetails.rating = averageRating.toFloat()
+                    saveAverageRatingInDataBase(averageRating)
                 } else {
                     Log.e(TAG, "Error getting reviews: ", task.exception)
                 }
@@ -259,9 +260,21 @@ class TechnicianDetailsFragment : Fragment() {
                     }
                     val averageRating = if (count > 0) totalRating / count else 0.0
                     viewBinding.ratingbarPersonDetails.rating = averageRating.toFloat()
+                    saveAverageRatingInDataBase(averageRating)
+
                 } else {
                     Log.e(TAG, "Error getting reviews: ", task.exception)
                 }
+            }
+    }
+
+    private fun saveAverageRatingInDataBase(averageRating: Double) {
+        db.collection(Constant.USER).document(technicianId).update("person_rate",averageRating)
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully updated!")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error updating document", e)
             }
     }
 

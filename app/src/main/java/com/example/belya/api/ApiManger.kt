@@ -1,4 +1,4 @@
-package com.example.foodapplication.retrofit.api
+package com.example.belya.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

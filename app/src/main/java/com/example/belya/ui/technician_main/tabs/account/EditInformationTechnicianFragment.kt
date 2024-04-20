@@ -44,6 +44,9 @@ class EditInformationTechnicianFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        progressDialog = ProgressDialog(requireContext())
+        progressDialog.setMessage("Selecting Image...")
+        progressDialog.setCancelable(false)
         setupSpinner()
         initViews()
     }

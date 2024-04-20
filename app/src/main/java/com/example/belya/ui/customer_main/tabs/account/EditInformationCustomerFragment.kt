@@ -13,8 +13,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.belya.Constant
-import com.example.belya.R
-import com.example.belya.databinding.FragmentAccountCustomerBinding
 import com.example.belya.databinding.FragmentEditInformationCustomerBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,6 +40,9 @@ class EditInformationCustomerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        progressDialog = ProgressDialog(requireContext())
+        progressDialog.setMessage("Selecting Image...")
+        progressDialog.setCancelable(false)
         initViews()
     }
 

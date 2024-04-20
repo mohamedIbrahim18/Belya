@@ -41,11 +41,6 @@ class AccountCustomerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
-        progressDialog = ProgressDialog(requireContext())
-        progressDialog.setMessage("Uploading Image...")
-        progressDialog.setCancelable(false)
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER)
-        progressDialog.setCanceledOnTouchOutside(false)
         initViews()
         fetchDataFromFireStore()
     }
@@ -56,6 +51,9 @@ class AccountCustomerFragment : Fragment() {
         }
         viewBinding.accountChangePassword.setOnClickListener {
             findNavController().navigate(R.id.action_accountCustomerFragment_to_changePasswordFragment2)
+        }
+        viewBinding.editProfileDetails.setOnClickListener {
+            findNavController().navigate(R.id.action_accountCustomerFragment_to_editInformationCustomerFragment)
         }
         viewBinding.logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
@@ -74,7 +72,7 @@ class AccountCustomerFragment : Fragment() {
                 val user = documentSnapshot.toObject(User::class.java)
                 user?.let {
                     // Update UI with fetched user details
-                    // Update UI with fetched user detailsval fullName: String = it.firstName + " " + it.lastName
+                    val fullName: String = it.firstName + " " + it.lastName
                     viewBinding.myName.text = fullName
                     viewBinding.myEmail.text = it.email
                     viewBinding.myNumber.text = it.phoneNumber

@@ -23,9 +23,12 @@ import com.google.firebase.storage.FirebaseStorage
 import java.util.Date
 
 class AccountCustomerFragment : Fragment() {
-    private lateinit var viewBinding: FragmentAccountCustomerBinding
-    private lateinit var auth: FirebaseAuth
-    private lateinit var progressDialog: ProgressDialog
+    lateinit var viewBinding : FragmentAccountCustomerBinding
+    lateinit var auth : FirebaseAuth
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,24 +51,19 @@ class AccountCustomerFragment : Fragment() {
     }
 
     private fun initViews() {
-        viewBinding.apply {
-            accountChangeEmail.setOnClickListener {
-                findNavController().navigate(R.id.action_accountCustomerFragment_to_changeEmailFragment2)
-            }
-            accountChangePassword.setOnClickListener {
-               findNavController().navigate(R.id.action_accountCustomerFragment_to_changePasswordFragment2)
-            }
-            editProfileDetails.setOnClickListener {
-                findNavController().navigate(R.id.action_accountCustomerFragment_to_editInformationCustomerFragment)
-            }
-            logout.setOnClickListener {
-                FirebaseAuth.getInstance().signOut()
-                navigateToLoginPage()
-            }
-
+        viewBinding.accountChangeEmail.setOnClickListener {
+            findNavController().navigate(R.id.action_accountCustomerFragment_to_changeEmailFragment2)
         }
-    }
+        viewBinding.accountChangePassword.setOnClickListener {
+            findNavController().navigate(R.id.action_accountCustomerFragment_to_changePasswordFragment2)
+        }
+        viewBinding.logout.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+            navigateToLoginPage()
+        }
+        fetchDataFromFireStore()
 
+    }
 
     private fun fetchDataFromFireStore() {
         val currentUID = FirebaseAuth.getInstance().uid
@@ -76,7 +74,7 @@ class AccountCustomerFragment : Fragment() {
                 val user = documentSnapshot.toObject(User::class.java)
                 user?.let {
                     // Update UI with fetched user details
-                    val fullName: String = it.firstName + " " + it.lastName
+                    // Update UI with fetched user detailsval fullName: String = it.firstName + " " + it.lastName
                     viewBinding.myName.text = fullName
                     viewBinding.myEmail.text = it.email
                     viewBinding.myNumber.text = it.phoneNumber
@@ -97,6 +95,5 @@ class AccountCustomerFragment : Fragment() {
         startActivity(intent)
         requireActivity().finish()
     }
-
 
 }

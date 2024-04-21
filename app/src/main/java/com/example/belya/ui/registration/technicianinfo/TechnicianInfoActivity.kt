@@ -10,8 +10,11 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.belya.Constant
+import com.example.belya.R
+import com.example.belya.adapter.JobOptionAdapter
 import com.example.belya.utils.base.LoadingDialog
 import com.example.belya.databinding.ActivityTechnicianInfoBinding
+import com.example.belya.model.JobOption
 import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.ui.technician_main.TechnicianMainActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -117,6 +120,7 @@ class TechnicianInfoActivity : AppCompatActivity() {
         val userRef = db.collection(Constant.USER).document(documentId)
         userRef.update(userTechnicianData).addOnSuccessListener {
             // Update successful
+            Toast.makeText(this,"successfully you created account go to login",Toast.LENGTH_LONG).show()
             navigateToTechnicianPage()
         }.addOnFailureListener { e ->
             // Handle the error
@@ -141,8 +145,15 @@ class TechnicianInfoActivity : AppCompatActivity() {
     }
 
     private fun setupSpinner() {
-        val jobOptions = arrayOf("Plumbing", "Pharmacy", "Carpentry", "Electricity", "Mechanics")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, jobOptions)
+        val jobOptions = listOf(
+            JobOption("Plumbing", R.drawable.ic_plumber),
+            JobOption("Pharmacy", R.drawable.ic_pharmacist),
+            JobOption("Carpentry", R.drawable.ic_ngar),
+            JobOption("Electricity", R.drawable.ic_electrician),
+            JobOption("Mechanics", R.drawable.ic_mechanic)
+        )
+
+        val adapter = JobOptionAdapter(this, jobOptions)
         viewBinding.jobSpinner.apply {
             this.adapter = adapter
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -152,7 +163,7 @@ class TechnicianInfoActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    selectedJob = jobOptions[position]
+                    selectedJob = jobOptions[position].name
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {

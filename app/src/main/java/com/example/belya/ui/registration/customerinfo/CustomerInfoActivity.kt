@@ -93,6 +93,7 @@ class CustomerInfoActivity : AppCompatActivity() {
         val userRef = db.collection(Constant.USER).document(documentId)
         userRef.update(userCustomerData)
             .addOnSuccessListener {
+                Toast.makeText(this,"successfully you created account go to login",Toast.LENGTH_LONG).show()
                 navigateToCustomerPage()
             }
             .addOnFailureListener { e ->

@@ -169,7 +169,7 @@ class TechnicianDetailsFragment : Fragment() {
                             val price = it.toDoubleOrNull()
                             price?.let {
                                 totalprice += it
-                                updateAveragePriceInuserDocument(totalprice)
+                             //   updateAveragePriceInuserDocument(totalprice)
                                 count++
                             }
                         }
@@ -415,6 +415,8 @@ class TechnicianDetailsFragment : Fragment() {
             }
         }
     }
+
+
 
     private fun uiTicketCreated() {
         viewBinding.progressBarPersonDeatails.visibility = View.GONE

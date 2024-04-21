@@ -24,4 +24,5 @@ data class User(
 {
 constructor() : this("","","","","","","","",
     0.0,"","","", emptyList(),emptyList(),"")
+
 }

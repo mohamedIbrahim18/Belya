@@ -39,28 +39,46 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".ui.registration.customerinfo.CustomerInfoActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
         <activity
             android:name=".ui.registration.auth.forget_password.ForgetPasswordActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
         <activity
             android:name=".ui.customer_main.CustomerMainActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
         <activity
             android:name=".ui.technician_main.TechnicianMainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
         <activity
             android:name=".ui.registration.technicianinfo.TechnicianInfoActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
         <activity
             android:name=".ui.registration.auth.login.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
         <activity
             android:name=".ui.technician_main.tabs.chat.SpecificChatActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
         <activity
             android:name=".ui.registration.auth.signup.SignUpActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"
+
+            />
         <activity
             android:name=".ui.splashscreen.SplashScreenActivity"
             android:exported="true">
@@ -70,6 +88,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

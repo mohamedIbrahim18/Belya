@@ -1,4 +1,5 @@
 package com.example.belya.ui.customer_main.tabs.account
+
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -17,18 +18,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 class AccountCustomerFragment : Fragment() {
-    lateinit var viewBinding : FragmentAccountCustomerBinding
-    lateinit var auth : FirebaseAuth
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var viewBinding: FragmentAccountCustomerBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewBinding = FragmentAccountCustomerBinding.inflate(layoutInflater)
+        viewBinding = FragmentAccountCustomerBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
@@ -53,8 +50,6 @@ class AccountCustomerFragment : Fragment() {
             FirebaseAuth.getInstance().signOut()
             navigateToLoginPage()
         }
-        fetchDataFromFireStore()
-
     }
 
     private fun fetchDataFromFireStore() {
@@ -70,7 +65,7 @@ class AccountCustomerFragment : Fragment() {
                     viewBinding.myName.text = fullName
                     viewBinding.myEmail.text = it.email
                     viewBinding.myNumber.text = it.phoneNumber
-                    viewBinding.myCity.text =it.city
+                    viewBinding.myCity.text = it.city
                     Glide.with(viewBinding.accountProfilePic)
                         .load(it.imagePath)
                         .placeholder(R.drawable.profile_pic)
@@ -87,5 +82,4 @@ class AccountCustomerFragment : Fragment() {
         startActivity(intent)
         requireActivity().finish()
     }
-
 }

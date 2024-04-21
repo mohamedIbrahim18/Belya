@@ -17,21 +17,22 @@ import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.utils.base.Common
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+
 class AccountTechnicianFragment : Fragment() {
-    lateinit var viewBinding: FragmentAccountTechnicianBinding
-    lateinit var auth : FirebaseAuth
+    private lateinit var viewBinding: FragmentAccountTechnicianBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewBinding = FragmentAccountTechnicianBinding.inflate(layoutInflater)
+        viewBinding = FragmentAccountTechnicianBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val check = Common()
-        if (!check.isConnectedToInternet(requireContext())){
+        if (!check.isConnectedToInternet(requireContext())) {
             check.showInternetDisconnectedDialog(requireContext())
         }
         auth = FirebaseAuth.getInstance()
@@ -56,8 +57,6 @@ class AccountTechnicianFragment : Fragment() {
             FirebaseAuth.getInstance().signOut()
             navigateToLoginPage()
         }
-        fetchDataFromFireStore()
-
     }
 
     private fun fetchDataFromFireStore() {
@@ -82,7 +81,6 @@ class AccountTechnicianFragment : Fragment() {
                             .load(it.imagePath)
                             .placeholder(R.drawable.profile_pic)
                             .into(viewBinding.accountProfilePic)
-
                     }
                 }
             }

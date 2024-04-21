@@ -90,6 +90,8 @@ class AcceptedTicketsFragment : Fragment() {
                 val ticketUser = ticketDocumentSnapshot.get("user") as? Map<*, *>
                 ticketUser?.let { ticketUserMap ->
                     val price = ticketUserMap["price"] as? String
+                    val description = ticketUserMap["description"] as String
+                    user.description = description
                     user.price = price ?: "0"
                     listOfAcceptedTickets.add(user)
                     acceptedAdapter.notifyDataSetChanged()

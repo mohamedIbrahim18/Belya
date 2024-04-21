@@ -14,6 +14,7 @@ class AcceptedTicketsAdapter(private var listOfAcceptedList: List<User>) : Recyc
             val fullName = "${task.firstName} ${task.lastName}"
             itemBinding.acceptedName.text = fullName
             itemBinding.acceptedCity.text = task.city
+            itemBinding.acceptedDescriptionJob.text = task.description
             itemBinding.acceptedPrice.text = task.price.trim()
             Log.d("price in adapter", task.price)
             Log.d("city in adapter", task.city!!)

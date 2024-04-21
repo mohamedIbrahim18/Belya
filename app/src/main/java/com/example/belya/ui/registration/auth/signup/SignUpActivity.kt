@@ -100,7 +100,8 @@ class SignUpActivity : AppCompatActivity() {
             "",
             "",
             emptyList(),
-            emptyList()
+            emptyList(),
+            ""
         )
     }
 

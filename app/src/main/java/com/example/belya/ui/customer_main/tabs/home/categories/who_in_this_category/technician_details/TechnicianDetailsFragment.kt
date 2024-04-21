@@ -58,9 +58,10 @@ class TechnicianDetailsFragment : Fragment() {
 
             if (viewBinding.edittextPersonDetails.text?.isNotEmpty() == true) {
                 val price = viewBinding.edittextPersonDetails.text.toString()
+                val description = viewBinding.edittextDescriptionTask.text.toString()
                 Log.d("price in Text View", price)
                 Log.d("my current id ", currentUserId!!)
-                makeTicket(currentUserId!!, technicianId, price)
+                makeTicket(currentUserId!!, technicianId, price,description)
             } else {
                 viewBinding.textinputLayoutPersonDetails.error = "Please Enter a price"
                 viewBinding.progressBarPersonDeatails.visibility = View.GONE
@@ -168,6 +169,7 @@ class TechnicianDetailsFragment : Fragment() {
                             val price = it.toDoubleOrNull()
                             price?.let {
                                 totalprice += it
+                                updateAveragePriceInuserDocument(totalprice)
                                 count++
                             }
                         }
@@ -204,6 +206,27 @@ class TechnicianDetailsFragment : Fragment() {
                 } else {
                     Log.e(TAG, "Error getting reviews: ", task.exception)
                 }
+            }
+    }
+
+    private fun updateAveragePriceInuserDocument(totalprice: Double) {
+        val userRef = db.collection(Constant.USER).document(technicianId)
+        userRef.update("price", totalprice)
+            .addOnSuccessListener {
+                Log.d("Firestore", "Average price updated successfully.")
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore Error", "Error updating average price: ", exception)
+                // Handle the error here
+            }
+    }
+    private fun saveAverageRatingInDataBase(averageRating: Double) {
+        db.collection(Constant.USER).document(technicianId).update("person_rate",averageRating)
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully updated!")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error updating document", e)
             }
     }
 
@@ -270,15 +293,7 @@ class TechnicianDetailsFragment : Fragment() {
             }
     }
 
-    private fun saveAverageRatingInDataBase(averageRating: Double) {
-        db.collection(Constant.USER).document(technicianId).update("person_rate",averageRating)
-            .addOnSuccessListener {
-                Log.d(TAG, "DocumentSnapshot successfully updated!")
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error updating document", e)
-            }
-    }
+
 
     private fun checkMyIdWithOtherId(techID: String, customerID: String?) {
         customerID?.let {
@@ -362,7 +377,12 @@ class TechnicianDetailsFragment : Fragment() {
 
     }
 
-    private fun makeTicket(currentUserId: String, technicianId: String, price: String) {
+    private fun makeTicket(
+        currentUserId: String,
+        technicianId: String,
+        price: String,
+        description: String
+    ) {
         viewBinding.progressBarPersonDeatails.visibility = View.VISIBLE
         viewBinding.bookNowPersonDetails.visibility = View.GONE
 
@@ -371,7 +391,7 @@ class TechnicianDetailsFragment : Fragment() {
 
         ticketRef.set(hashMapOf("userId" to currentUserId)).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                ticketRef.update("price", price).addOnCompleteListener { priceUpdateTask ->
+                ticketRef.update("price", price, "description", description).addOnCompleteListener { priceUpdateTask ->
                     if (priceUpdateTask.isSuccessful) {
                         db.collection(Constant.USER).document(technicianId)
                             .update("pendingList", FieldValue.arrayUnion(currentUserId))

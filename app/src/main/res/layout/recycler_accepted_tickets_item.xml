@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:padding="16dp"
-    app:cardCornerRadius="16dp"
+    app:cardCornerRadius="15dp"
     app:cardElevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,6 +62,21 @@
             app:layout_constraintStart_toStartOf="@id/accepted_city"
             app:layout_constraintTop_toBottomOf="@id/accepted_city"
             tools:text="60 EGP" />
+        <TextView
+            android:id="@+id/accepted_description_job"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textColor="#808080"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:padding="3dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/accepted_price"
+            tools:text="Fix botgaz out mdasdsldsadlsdlskadlkasd;laskd;ask " />
 
         <TextView
             android:id="@+id/did_you_finish"

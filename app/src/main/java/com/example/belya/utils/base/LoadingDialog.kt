@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import com.example.belya.R
 
 class LoadingDialog(val mActivity: Activity){
-    private lateinit var isDialog:AlertDialog
+    private var isDialog: AlertDialog? = null
     fun startLoading(){
         val inflater = mActivity.layoutInflater
         val dialogView = inflater.inflate(R.layout.progress_dialog_layout,null)
@@ -14,25 +14,11 @@ class LoadingDialog(val mActivity: Activity){
         builder.setView(dialogView)
         builder.setCancelable(false)
         isDialog = builder.create()
-        isDialog.show()
+        isDialog?.show()
     }
     fun isDismiss(){
-        isDialog.dismiss()
+        isDialog?.dismiss()
+        isDialog = null
     }
 }
 
-class LoadingDialogFragment(val fragment: Fragment){
-    private lateinit var isDialog:AlertDialog
-    fun startLoading(){
-        val inflater = fragment.layoutInflater
-        val dialogView = inflater.inflate(R.layout.progress_dialog_layout,null)
-        val builder = AlertDialog.Builder(fragment.context)
-        builder.setView(dialogView)
-        builder.setCancelable(false)
-        isDialog = builder.create()
-        isDialog.show()
-    }
-    fun isDismiss(){
-        isDialog.dismiss()
-    }
-}

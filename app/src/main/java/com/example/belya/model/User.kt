@@ -19,8 +19,9 @@ data class User(
     var price : String,
     var acceptedList : List<String>,
     var pendingList : List<String>,
+    var description :String
 ) : Parcelable
 {
 constructor() : this("","","","","","","","",
-    0.0,"","","", emptyList(),emptyList())
+    0.0,"","","", emptyList(),emptyList(),"")
 }

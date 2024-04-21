@@ -16,6 +16,7 @@ class RequestsAdapter(private var listOfRequests : List<User>) : RecyclerView.Ad
             val fullName = "${task.firstName} ${task.lastName}"
             itemBinding.requestName.text = fullName
             itemBinding.requestCity.text = task.city
+            itemBinding.description.text = task.description
             itemBinding.requestPrice.text = task.price.trim()
 
             Glide.with(itemBinding.root.context).load(task.imagePath)

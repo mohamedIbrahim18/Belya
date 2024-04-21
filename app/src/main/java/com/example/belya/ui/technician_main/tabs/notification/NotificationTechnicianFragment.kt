@@ -90,6 +90,8 @@ class NotificationTechnicianFragment : Fragment() {
             .addOnSuccessListener { ticketDocument ->
                 // Retrieve the price from the ticketDocument
                 val price = ticketDocument.getString("price")
+                val description = ticketDocument.getString("description")
+                user.description = description ?: ""
                 // Update the user object with the price
                 user.price = price ?: "0" // Default value if price is null
                 // Add the user object to the listRequests

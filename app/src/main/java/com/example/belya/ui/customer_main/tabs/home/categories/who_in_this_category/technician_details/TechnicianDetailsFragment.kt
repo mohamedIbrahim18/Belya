@@ -25,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class TechnicianDetailsFragment : Fragment() {
     private lateinit var viewBinding: FragmentTechnicianDeatilsBinding
     private lateinit var person: User
-    private lateinit var importantPerson :UserApiModelItem
+    private lateinit var importantPerson: UserApiModelItem
     private lateinit var db: FirebaseFirestore
     private lateinit var feedbackList: MutableList<Feedback>
     lateinit var feedbackAdapter: FeedbackAdapter
@@ -43,7 +43,7 @@ class TechnicianDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val check = Common()
-        if (!check.isConnectedToInternet(requireContext())){
+        if (!check.isConnectedToInternet(requireContext())) {
             check.showInternetDisconnectedDialog(requireContext())
         }
         db = FirebaseFirestore.getInstance()
@@ -61,7 +61,7 @@ class TechnicianDetailsFragment : Fragment() {
                 val description = viewBinding.edittextDescriptionTask.text.toString()
                 Log.d("price in Text View", price)
                 Log.d("my current id ", currentUserId!!)
-                makeTicket(currentUserId!!, technicianId, price,description)
+                makeTicket(currentUserId!!, technicianId, price, description)
             } else {
                 viewBinding.textinputLayoutPersonDetails.error = "Please Enter a price"
                 viewBinding.progressBarPersonDeatails.visibility = View.GONE
@@ -153,38 +153,43 @@ class TechnicianDetailsFragment : Fragment() {
         viewBinding.cityPersonDetails.text = person.city
         Glide.with(viewBinding.imagePersonDetails).load(person.imagePath)
             .placeholder(R.drawable.profile_pic).into(viewBinding.imagePersonDetails)
-        db.collection(Constant.USER)
+        val ticketsCollectionRef = db.collection(Constant.USER)
             .document(technicianId)
             .collection("Tickets")
-            .get()
-            .addOnSuccessListener { ticketQuerySnapshot ->
-                var totalprice = 0.0
-                var count = 0
 
+// Retrieve all documents from the "Tickets" collection
+        ticketsCollectionRef.get()
+            .addOnSuccessListener { ticketQuerySnapshot ->
+                var totalPrice = 0.0
+                var count = 0
                 for (ticketDocumentSnapshot in ticketQuerySnapshot.documents) {
-                    val ticketUser = ticketDocumentSnapshot.get("user") as? Map<*, *>
-                    ticketUser?.let { ticketUserMap ->
-                        val priceString = ticketUserMap["price"] as? String
-                        priceString?.let {
-                            val price = it.toDoubleOrNull()
-                            price?.let {
-                                totalprice += it
-                             //   updateAveragePriceInuserDocument(totalprice)
-                                count++
-                            }
+                    val userData = ticketDocumentSnapshot.get("user") as? Map<String, Any>
+                    val price = userData?.get("price") as? String
+                    Log.d("Price ONLY", "price Price: $price")
+                        val priceDouble = price?.toDouble()
+                    if (price != null) {
+                        if (priceDouble != null) {
+                            totalPrice += priceDouble
+                            count++
+                            Log.e("Price total", totalPrice.toString())
                         }
+                    } else {
+                        Log.e("Price total", "Price is null or cannot be parsed")
                     }
                 }
-
-                val averagePrice = if (count > 0) totalprice / count else 0.0
+                // Calculate average price
+                val averagePrice = if (count > 0) totalPrice / count else 0.0
                 Log.d("Price Debug", "Average Price: $averagePrice")
                 viewBinding.averagePricePersonDetails.text =
-                    "Average Price Between $averagePrice to ${averagePrice + 30} per hour"
+                    "The technician's average price: $averagePrice"
+                updateAveragePriceInuserDocument(averagePrice.toString())
             }
             .addOnFailureListener { exception ->
                 Log.e("Firestore Error", "Error getting documents: ", exception)
                 // Handle the error here
             }
+
+
 
 
         db.collection(Constant.USER).document(technicianId).collection("Reviews").get()
@@ -209,7 +214,7 @@ class TechnicianDetailsFragment : Fragment() {
             }
     }
 
-    private fun updateAveragePriceInuserDocument(totalprice: Double) {
+    private fun updateAveragePriceInuserDocument(totalprice: String) {
         val userRef = db.collection(Constant.USER).document(technicianId)
         userRef.update("price", totalprice)
             .addOnSuccessListener {
@@ -220,8 +225,9 @@ class TechnicianDetailsFragment : Fragment() {
                 // Handle the error here
             }
     }
+
     private fun saveAverageRatingInDataBase(averageRating: Double) {
-        db.collection(Constant.USER).document(technicianId).update("person_rate",averageRating)
+        db.collection(Constant.USER).document(technicianId).update("person_rate", averageRating)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully updated!")
             }
@@ -292,7 +298,6 @@ class TechnicianDetailsFragment : Fragment() {
                 }
             }
     }
-
 
 
     private fun checkMyIdWithOtherId(techID: String, customerID: String?) {
@@ -391,31 +396,31 @@ class TechnicianDetailsFragment : Fragment() {
 
         ticketRef.set(hashMapOf("userId" to currentUserId)).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                ticketRef.update("price", price, "description", description).addOnCompleteListener { priceUpdateTask ->
-                    if (priceUpdateTask.isSuccessful) {
-                        db.collection(Constant.USER).document(technicianId)
-                            .update("pendingList", FieldValue.arrayUnion(currentUserId))
-                            .addOnCompleteListener { updateTask ->
-                                if (updateTask.isSuccessful) {
-                                    uiTicketCreated()
-                                } else {
-                                    Log.e(
-                                        TAG,
-                                        "Error adding user to pending list: ",
-                                        updateTask.exception
-                                    )
+                ticketRef.update("price", price, "description", description)
+                    .addOnCompleteListener { priceUpdateTask ->
+                        if (priceUpdateTask.isSuccessful) {
+                            db.collection(Constant.USER).document(technicianId)
+                                .update("pendingList", FieldValue.arrayUnion(currentUserId))
+                                .addOnCompleteListener { updateTask ->
+                                    if (updateTask.isSuccessful) {
+                                        uiTicketCreated()
+                                    } else {
+                                        Log.e(
+                                            TAG,
+                                            "Error adding user to pending list: ",
+                                            updateTask.exception
+                                        )
+                                    }
                                 }
-                            }
-                    } else {
-                        Log.e(TAG, "Error updating price: ", priceUpdateTask.exception)
+                        } else {
+                            Log.e(TAG, "Error updating price: ", priceUpdateTask.exception)
+                        }
                     }
-                }
             } else {
                 Log.e(TAG, "Error creating ticket document: ", task.exception)
             }
         }
     }
-
 
 
     private fun uiTicketCreated() {

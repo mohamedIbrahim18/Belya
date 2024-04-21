@@ -56,14 +56,21 @@ class TechnicianDetailsFragment : Fragment() {
             viewBinding.progressBarPersonDeatails.visibility = View.VISIBLE
             viewBinding.bookNowPersonDetails.visibility = View.GONE
 
-            if (viewBinding.edittextPersonDetails.text?.isNotEmpty() == true) {
-                val price = viewBinding.edittextPersonDetails.text.toString()
-                val description = viewBinding.edittextDescriptionTask.text.toString()
-                Log.d("price in Text View", price)
-                Log.d("my current id ", currentUserId!!)
-                makeTicket(currentUserId!!, technicianId, price, description)
+            val price = viewBinding.edittextPersonDetails.text.toString()
+            val description = viewBinding.edittextDescriptionTask.text.toString()
+
+            if (price.isNotEmpty() && price.all { it.isDigit() }) {
+                if (description.isNotEmpty()) {
+                    Log.d("price in Text View", price)
+                    Log.d("my current id ", currentUserId!!)
+                    makeTicket(currentUserId!!, technicianId, price, description)
+                } else {
+                    viewBinding.textinputLayoutDescriptionTask.error = "Please enter a description"
+                    viewBinding.progressBarPersonDeatails.visibility = View.GONE
+                    viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
+                }
             } else {
-                viewBinding.textinputLayoutPersonDetails.error = "Please Enter a price"
+                viewBinding.textinputLayoutPersonDetails.error = "Please enter a valid price"
                 viewBinding.progressBarPersonDeatails.visibility = View.GONE
                 viewBinding.bookNowPersonDetails.visibility = View.VISIBLE
             }
@@ -99,7 +106,6 @@ class TechnicianDetailsFragment : Fragment() {
                 person = task
                 technicianId = person.userID
                 currentUserId = FirebaseAuth.getInstance().currentUser?.uid
-
                 setupUI(technicianId)
                 checkMyIdWithOtherId(technicianId, currentUserId)
                 checkMyIdWithOtherIdIfAccepted(technicianId, currentUserId)
@@ -243,32 +249,36 @@ class TechnicianDetailsFragment : Fragment() {
         viewBinding.cityPersonDetails.text = importantPerson.city
         Glide.with(viewBinding.imagePersonDetails).load(importantPerson.imagePath)
             .placeholder(R.drawable.profile_pic).into(viewBinding.imagePersonDetails)
-        db.collection(Constant.USER)
+        val ticketsCollectionRef = db.collection(Constant.USER)
             .document(technicianId)
             .collection("Tickets")
-            .get()
-            .addOnSuccessListener { ticketQuerySnapshot ->
-                var totalprice = 0.0
-                var count = 0
 
+// Retrieve all documents from the "Tickets" collection
+        ticketsCollectionRef.get()
+            .addOnSuccessListener { ticketQuerySnapshot ->
+                var totalPrice = 0.0
+                var count = 0
                 for (ticketDocumentSnapshot in ticketQuerySnapshot.documents) {
-                    val ticketUser = ticketDocumentSnapshot.get("user") as? Map<*, *>
-                    ticketUser?.let { ticketUserMap ->
-                        val priceString = ticketUserMap["price"] as? String
-                        priceString?.let {
-                            val price = it.toDoubleOrNull()
-                            price?.let {
-                                totalprice += it
-                                count++
-                            }
+                    val userData = ticketDocumentSnapshot.get("user") as? Map<String, Any>
+                    val price = userData?.get("price") as? String
+                    Log.d("Price ONLY", "price Price: $price")
+                    val priceDouble = price?.toDouble()
+                    if (price != null) {
+                        if (priceDouble != null) {
+                            totalPrice += priceDouble
+                            count++
+                            Log.e("Price total", totalPrice.toString())
                         }
+                    } else {
+                        Log.e("Price total", "Price is null or cannot be parsed")
                     }
                 }
-
-                val averagePrice = if (count > 0) totalprice / count else 0.0
+                // Calculate average price
+                val averagePrice = if (count > 0) totalPrice / count else 0.0
                 Log.d("Price Debug", "Average Price: $averagePrice")
                 viewBinding.averagePricePersonDetails.text =
-                    "Average Price Between $averagePrice to ${averagePrice + 30} per hour"
+                    "The technician's average price: $averagePrice"
+                updateAveragePriceInuserDocument(averagePrice.toString())
             }
             .addOnFailureListener { exception ->
                 Log.e("Firestore Error", "Error getting documents: ", exception)

@@ -17,6 +17,7 @@ import com.example.belya.databinding.ActivityTechnicianInfoBinding
 import com.example.belya.model.JobOption
 import com.example.belya.ui.registration.auth.login.LoginActivity
 import com.example.belya.ui.technician_main.TechnicianMainActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -56,6 +57,7 @@ class TechnicianInfoActivity : AppCompatActivity() {
         }
 
         viewBinding.saveChanges.setOnClickListener {
+            // check the fieldls not emptht and phone number ong 11 digiht
             loading.startLoading()
             viewBinding.saveChanges.visibility = View.GONE
             updateTechnicianData()
@@ -120,7 +122,8 @@ class TechnicianInfoActivity : AppCompatActivity() {
         val userRef = db.collection(Constant.USER).document(documentId)
         userRef.update(userTechnicianData).addOnSuccessListener {
             // Update successful
-            Toast.makeText(this,"successfully you created account go to login",Toast.LENGTH_LONG).show()
+            Snackbar.make(viewBinding.root, "successfully you created account go to login", Snackbar.LENGTH_LONG)
+                .show()
             navigateToTechnicianPage()
         }.addOnFailureListener { e ->
             // Handle the error
@@ -130,11 +133,42 @@ class TechnicianInfoActivity : AppCompatActivity() {
     }
 
     private fun updateTechnicianData() {
-        if (selectedImg != null) {
-            uploadImage()
-        } else {
-            uploadInfo("")
+        val phoneNumber = viewBinding.phoneEd.text.toString().trim()
+        val workExperience = viewBinding.workExperienceEd.text.toString().trim()
+
+        viewBinding.inputlayoutPhone.error = null
+        viewBinding.inputlayoutWorkExperience.error = null
+
+        var isValid = true
+        if (phoneNumber.isEmpty()) {
+            viewBinding.inputlayoutPhone.error = "Phone number is required"
+            isValid = false
+        } else if (phoneNumber.length != 11) {
+            viewBinding.inputlayoutPhone.error = "Phone number must be 11 digits"
+            isValid = false
         }
+
+        if (workExperience.isEmpty()) {
+            viewBinding.inputlayoutWorkExperience.error = "Work experience is required"
+            isValid = false
+        }
+
+        if (isValid) {
+            if (selectedImg != null) {
+                uploadImage()
+            } else {
+                uploadInfo("")
+            }
+        } else {
+            // Display error message and enable save button
+            showSnackBar("Please fix the errors before saving")
+            loading.isDismiss()
+            viewBinding.saveChanges.visibility = View.VISIBLE
+        }
+    }
+
+    private fun showSnackBar(s: String) {
+        Snackbar.make(viewBinding.root, s, Snackbar.LENGTH_LONG).show()
     }
 
 

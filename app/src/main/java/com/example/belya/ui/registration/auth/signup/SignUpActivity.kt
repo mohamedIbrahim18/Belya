@@ -55,23 +55,27 @@ class SignUpActivity : AppCompatActivity() {
         finish()
     }
 
+    // Define a flag to track whether the user has selected an option
+    private var optionSelected = false
+
+    // Function to handle user's selection
     private fun chooseWhoUseThisApp() {
-        //get selected radio button from radiogroup
+        // Get selected radio button from radio group
         val buttonId: Int = viewBinding.typeContainer.checkedRadioButtonId
         if (buttonId == View.NO_ID) {
-            Toast.makeText(this, "Please select an option", Toast.LENGTH_SHORT).show()
+            loading.isDismiss()
+            Snackbar.make(viewBinding.root, "You must choose an option", Snackbar.LENGTH_SHORT).show()
         } else {
-            //TODO make validate
+            optionSelected = true
             val selectedRadioButton = findViewById<RadioButton>(buttonId)
             if (selectedRadioButton.text.equals("Customer")) {
-                // navigateToCustomerPage()
                 doRegisterCustomer()
             } else if (selectedRadioButton.text.equals("Technician")) {
-                // navigateToFactorDetails()
                 doRegisterTechnician()
             }
         }
     }
+
     private fun doRegisterCustomer() {
         val user = getUserFromFields("Customer")
         registerUser(user)
@@ -137,11 +141,51 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun validateForm(): Boolean {
         var isValid = true
-        // Validation logic here
-        // Check if fields are not empty, passwords match, etc.
-        // Set isValid to false and show appropriate error messages if validation fails
+
+        // Validate first name
+        val firstName = viewBinding.firstnameEd.text.toString().trim()
+        if (firstName.isEmpty()) {
+            viewBinding.firstnameEd.error = "First name is required"
+            isValid = false
+        }
+
+        // Validate last name
+        val lastName = viewBinding.lastnameEd.text.toString().trim()
+        if (lastName.isEmpty()) {
+            viewBinding.lastnameEd.error = "Last name is required"
+            isValid = false
+        }
+
+        // Validate email
+        val email = viewBinding.emailEd.text.toString().trim()
+        if (email.isEmpty()) {
+            viewBinding.emailEd.error = "Email is required"
+            isValid = false
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            viewBinding.emailEd.error = "Invalid email address"
+            isValid = false
+        }
+
+        // Validate password
+        val password = viewBinding.passwordEd.text.toString()
+        if (password.isEmpty()) {
+            viewBinding.passwordEd.error = "Password is required"
+            isValid = false
+        } else if (password.length < 6) {
+            viewBinding.passwordEd.error = "Password must be at least 6 characters"
+            isValid = false
+        }
+
+        // Validate confirm password
+        val confirmPassword = viewBinding.repasswordEd.text.toString()
+        if (confirmPassword != password) {
+            viewBinding.repasswordEd.error = "Passwords do not match"
+            isValid = false
+        }
+
         return isValid
     }
+
 
     private fun saveUserToDatabase(userId: String, user: User) {
         db.collection(Constant.USER).document(userId)

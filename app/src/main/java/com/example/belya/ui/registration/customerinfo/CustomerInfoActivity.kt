@@ -12,6 +12,7 @@ import com.example.belya.utils.base.LoadingDialog
 import com.example.belya.databinding.ActivityCustomerInfoBinding
 import com.example.belya.ui.customer_main.CustomerMainActivity
 import com.example.belya.ui.registration.auth.login.LoginActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -39,8 +40,9 @@ class CustomerInfoActivity : AppCompatActivity() {
         }
 
         viewBinding.saveChanges.setOnClickListener {
-            saveChanges()
-        }
+                // valid the phoneNumber must be only digit and 11 digiht
+                saveChanges()
+            }
     }
 
     private fun openImageChooser() {
@@ -52,7 +54,21 @@ class CustomerInfoActivity : AppCompatActivity() {
     private fun saveChanges() {
         loading.startLoading()
         viewBinding.saveChanges.visibility = View.GONE
+
+        val phoneNumber = viewBinding.phoneEd.text.toString().trim()
+        if (!isValidPhoneNumber(phoneNumber)) {
+            viewBinding.inputlayoutPhone.error = "Please enter a valid phone number"
+            loading.isDismiss()
+            viewBinding.saveChanges.visibility = View.VISIBLE
+            return
+        }
+
         uploadImage()
+    }
+
+    private fun isValidPhoneNumber(phoneNumber: String): Boolean {
+        // Check if the phone number contains only digits and has a length of 11 digits
+        return phoneNumber.matches(Regex("\\d{11}"))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -93,7 +109,7 @@ class CustomerInfoActivity : AppCompatActivity() {
         val userRef = db.collection(Constant.USER).document(documentId)
         userRef.update(userCustomerData)
             .addOnSuccessListener {
-                Toast.makeText(this,"successfully you created account go to login",Toast.LENGTH_LONG).show()
+                Snackbar.make(viewBinding.root,"successfully you created account go to login",Snackbar.LENGTH_LONG).show()
                 navigateToCustomerPage()
             }
             .addOnFailureListener { e ->
@@ -112,14 +128,12 @@ class CustomerInfoActivity : AppCompatActivity() {
 
     private fun handleUploadFailure(e: Exception) {
         Log.e("UPLOAD_IMAGE", "Failed to upload image: ${e.message}")
-        showToast("Failed to upload image")
         viewBinding.saveChanges.visibility = View.VISIBLE
         loading.isDismiss()
     }
 
     private fun handleUpdateFailure(e: Exception) {
         Log.e("UPDATE_USER", "Failed to update user data: ${e.message}")
-        showToast("Failed to update user data")
         viewBinding.saveChanges.visibility = View.VISIBLE
         loading.isDismiss()
     }
@@ -128,10 +142,6 @@ class CustomerInfoActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     companion object {

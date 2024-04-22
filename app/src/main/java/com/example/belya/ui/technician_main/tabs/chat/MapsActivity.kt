@@ -200,7 +200,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     } else {
                         userMarker?.position = latLng
                     }
-                    googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13.0f))
+                    googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16.0f))
                 } else {
                     Log.e("User location", "Document does not exist for user: $userId")
                 }

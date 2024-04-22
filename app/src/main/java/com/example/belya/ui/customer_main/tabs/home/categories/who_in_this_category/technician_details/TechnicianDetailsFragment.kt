@@ -186,6 +186,10 @@ class TechnicianDetailsFragment : Fragment() {
                 // Calculate average price
                 val averagePrice = if (count > 0) totalPrice / count else 0.0
                 Log.d("Price Debug", "Average Price: $averagePrice")
+                if (averagePrice ==0.0){
+                    "The technician's average price: 50"
+                    updateAveragePriceInuserDocument("50")
+                }
                 viewBinding.averagePricePersonDetails.text =
                     "The technician's average price: $averagePrice"
                 updateAveragePriceInuserDocument(averagePrice.toString())
@@ -276,6 +280,11 @@ class TechnicianDetailsFragment : Fragment() {
                 // Calculate average price
                 val averagePrice = if (count > 0) totalPrice / count else 0.0
                 Log.d("Price Debug", "Average Price: $averagePrice")
+
+                if (averagePrice ==0.0){
+                    "The technician's average price: 50"
+                    updateAveragePriceInuserDocument("50")
+                }
                 viewBinding.averagePricePersonDetails.text =
                     "The technician's average price: $averagePrice"
                 updateAveragePriceInuserDocument(averagePrice.toString())

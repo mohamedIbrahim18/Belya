@@ -41,6 +41,14 @@
                 app:argType="string"
                 android:defaultValue="personDetails"/>
         </action>
+        <action
+            android:id="@+id/action_personInCategoryFragment_to_searchFragment"
+            app:destination="@id/searchFragment">
+            <argument
+                android:name="jobToSearchInCity"
+                app:argType="string"
+                android:defaultValue="jobToSearchInCity"/>
+        </action>
     </fragment>
     <fragment
         android:id="@+id/notificationCustomerFragment"
@@ -101,4 +109,18 @@
         android:name="com.example.belya.ui.customer_main.tabs.account.EditInformationCustomerFragment"
         android:label="fragment_edit_information_customer"
         tools:layout="@layout/fragment_edit_information_customer" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_technicianDetailsFragment"
+            app:destination="@id/technicianDetailsFragment" >
+            <argument
+                android:name="importantPerson"
+                app:argType="string"
+                android:defaultValue="importantPerson"/>
+        </action>
+    </fragment>
 </navigation>

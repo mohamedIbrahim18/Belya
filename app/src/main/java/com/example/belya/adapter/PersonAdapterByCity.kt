@@ -9,12 +9,11 @@ import com.example.belya.api.modeApi.UserApiModelItem
 import com.example.belya.databinding.RecyclerPersonInCategoryItemBinding
 import com.example.belya.model.User
 
-class PersonAdapter(private var listOfPerson: List<User>) :
-    RecyclerView.Adapter<PersonAdapter.ViewHolder>() {
+class PersonAdapterByCity(private var listOfPerson: List<UserApiModelItem>) :
+    RecyclerView.Adapter<PersonAdapterByCity.ViewHolder>() {
     class ViewHolder(var itemBinding: RecyclerPersonInCategoryItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(task: User) {
-            // itemBinding.personImage.text(task.imagePath)
+        fun bind(task: UserApiModelItem) {
             Glide.with(itemBinding.root.context)
                 .load(task.imagePath)
                 .placeholder(R.drawable.profile_pic)
@@ -31,16 +30,11 @@ class PersonAdapter(private var listOfPerson: List<User>) :
             parent,
             false
         )
-        return ViewHolder(viewBinding)
+        return PersonAdapterByCity.ViewHolder(viewBinding)
     }
 
     override fun getItemCount(): Int {
         return listOfPerson.size
-    }
-
-    fun newList(mList: MutableList<User>) {
-        listOfPerson = mList
-        notifyDataSetChanged()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -49,14 +43,15 @@ class PersonAdapter(private var listOfPerson: List<User>) :
         holder.itemBinding.cardPerson.setOnClickListener {
             onItemSelectedClickListnner?.onItemSelectedClick(position, listOfPerson[position])
         }
-
-
     }
 
-
+    fun sumbitList(userList: List<UserApiModelItem>) {
+        listOfPerson = userList
+        notifyDataSetChanged()
+    }
 
     interface OnItemSelectedClick {
-        fun onItemSelectedClick(position: Int, task: User)
+        fun onItemSelectedClick(position: Int, task: UserApiModelItem)
     }
 
     var onItemSelectedClickListnner: OnItemSelectedClick? = null

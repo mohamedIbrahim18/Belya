@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.example.belya.Constant
@@ -18,6 +19,7 @@ import com.example.belya.adapter.ImportantAdapter
 import com.example.belya.api.modeApi.UserApiModelItem
 import com.example.belya.utils.base.Common
 import com.example.belya.api.ApiManger
+import com.example.belya.api.modeApi.SearchRequestByJob
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
@@ -56,7 +58,51 @@ class HomeCustomerFragment : Fragment() {
     private fun initViews() {
         initRecyclerCategories()
         initRecyclerImportant()
+        initSearch()
     }
+
+    private fun initSearch() {
+        viewBinding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                searchOnText(newText)
+                return true
+            }
+        })
+    }
+
+    private fun searchOnText(newText: String?) {
+        if (newText.isNullOrBlank() || newText.isNullOrEmpty()){
+            fetchDataAndUpdateList()
+        }
+        else {
+            newText.let { query ->
+                if (query.isNotBlank()) {
+                    lifecycleScope.launch {
+                        try {
+                            val response = ApiManger.getApis().searchUsersByJob(SearchRequestByJob(query))
+                            if (response.isSuccessful) {
+                                val usersInTheSameJobList = response.body()
+                                usersInTheSameJobList?.let { userList ->
+                                    importantAdapter.submitList(userList)
+                                }
+                            } else {
+                                Log.e("API_ERROR", "Failed to fetch data: ${response.message()}")
+                            }
+                        } catch (e: Exception) {
+                            Log.e("API_FAILURE", "Failed to fetch data: ${e.message}")
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+
 
     private fun initRecyclerCategories() {
         categoryItemList = listOf(

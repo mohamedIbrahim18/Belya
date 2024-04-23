@@ -106,11 +106,11 @@ class HomeCustomerFragment : Fragment() {
 
     private fun initRecyclerCategories() {
         categoryItemList = listOf(
-            CategoriesItem(R.drawable.ic_plumber, "Plumbing", "0"),
-            CategoriesItem(R.drawable.ic_pharmacist, "Pharmacy", "0"),
-            CategoriesItem(R.drawable.ic_mechanic, "Mechanics", "0"),
-            CategoriesItem(R.drawable.ic_electrician, "Electricity", "0"),
-            CategoriesItem(R.drawable.ic_ngar, "Carpentry", "0"),
+            CategoriesItem(R.drawable.ic_plumber, "Plumber", "0"),
+            CategoriesItem(R.drawable.ic_pharmacist, "Pharmacist", "0"),
+            CategoriesItem(R.drawable.ic_mechanic, "Mechanic", "0"),
+            CategoriesItem(R.drawable.ic_electrician, "Electrician", "0"),
+            CategoriesItem(R.drawable.ic_ngar, "Carpenter", "0"),
         )
         categoriesItemAdpater = CategoriesAdapter(categoryItemList)
         viewBinding.recyclerCategories.apply {

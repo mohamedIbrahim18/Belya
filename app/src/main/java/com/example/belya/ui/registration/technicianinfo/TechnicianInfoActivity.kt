@@ -180,11 +180,11 @@ class TechnicianInfoActivity : AppCompatActivity() {
 
     private fun setupSpinner() {
         val jobOptions = listOf(
-            JobOption("Plumbing", R.drawable.ic_plumber),
-            JobOption("Pharmacy", R.drawable.ic_pharmacist),
-            JobOption("Carpentry", R.drawable.ic_ngar),
-            JobOption("Electricity", R.drawable.ic_electrician),
-            JobOption("Mechanics", R.drawable.ic_mechanic)
+            JobOption("Plumber", R.drawable.ic_plumber),
+            JobOption("Pharmacist", R.drawable.ic_pharmacist),
+            JobOption("Carpenter", R.drawable.ic_ngar),
+            JobOption("Electrician", R.drawable.ic_electrician),
+            JobOption("Mechanic", R.drawable.ic_mechanic)
         )
 
         val adapter = JobOptionAdapter(this, jobOptions)

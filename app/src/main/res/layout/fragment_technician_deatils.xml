@@ -133,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Average Price Between 20 to 50 per hour"
+                tools:text="Average Price Between 20 to 50 per hour"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -163,15 +163,24 @@
                 android:id="@+id/book_now_person_details"
                 android:layout_width="0dp"
                 android:layout_height="62dp"
-                android:layout_marginStart="70dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="70dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="5dp"
                 android:text="Book Now"
                 app:cornerRadius="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/cansel_request_person_details"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/textinput_layout_person_details" />
-
+            <ImageView
+                android:id="@+id/cansel_request_person_details"
+                android:layout_width="0dp"
+                android:layout_height="62dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="15dp"
+                android:src="@drawable/ic_cancel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/book_now_person_details"
+                app:layout_constraintTop_toBottomOf="@id/textinput_layout_person_details" />
             <ProgressBar
                 android:id="@+id/progress_bar_person_deatails"
                 android:layout_width="wrap_content"

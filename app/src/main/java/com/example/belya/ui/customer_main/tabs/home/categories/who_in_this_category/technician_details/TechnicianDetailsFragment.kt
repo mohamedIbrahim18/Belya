@@ -51,6 +51,14 @@ class TechnicianDetailsFragment : Fragment() {
 
         handelFirstCase()
         handelSecondCase()
+        getTheAveragePrice()
+
+        viewBinding.canselRequestPersonDetails.setOnClickListener {
+            cancelRequest(currentUserId!!, technicianId)
+        }
+
+        // fun to cancel when i make ticket and i'm pending i can cancel request
+
 
         viewBinding.bookNowPersonDetails.setOnClickListener {
             viewBinding.progressBarPersonDeatails.visibility = View.VISIBLE
@@ -76,6 +84,37 @@ class TechnicianDetailsFragment : Fragment() {
             }
         }
     }
+
+    private fun cancelRequest(currentUserId: String, technicianId: String) {
+        val userRef = db.collection(Constant.USER).document(technicianId)
+
+        // Check if the request is pending before canceling
+        userRef.get()
+            .addOnSuccessListener { documentSnapshot ->
+                val pendingList = documentSnapshot.get("pendingList") as? List<String>
+                if (pendingList != null && currentUserId in pendingList) {
+                    // Remove the current user from the pending list
+                    userRef.update("pendingList", FieldValue.arrayRemove(currentUserId))
+                        .addOnSuccessListener {
+                            Log.d(TAG, "Request canceled successfully.")
+                            // Update the UI to reflect the change
+                            updateUIForNotPending()
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e(TAG, "Error canceling request: ", exception)
+                            // Handle the error here
+                        }
+                } else {
+                    Log.d(TAG, "Cannot cancel request. The request is not pending.")
+                    // You can optionally show a message to the user indicating that the request cannot be canceled.
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e(TAG, "Error checking request state: ", exception)
+                // Handle the error here
+            }
+    }
+
 
     private fun handelSecondCase() {
         arguments?.let {
@@ -159,49 +198,18 @@ class TechnicianDetailsFragment : Fragment() {
         viewBinding.cityPersonDetails.text = person.city
         Glide.with(viewBinding.imagePersonDetails).load(person.imagePath)
             .placeholder(R.drawable.profile_pic).into(viewBinding.imagePersonDetails)
-        val ticketsCollectionRef = db.collection(Constant.USER)
-            .document(technicianId)
-            .collection("Tickets")
+
 
 // Retrieve all documents from the "Tickets" collection
-        ticketsCollectionRef.get()
-            .addOnSuccessListener { ticketQuerySnapshot ->
-                var totalPrice = 0.0
-                var count = 0
-                for (ticketDocumentSnapshot in ticketQuerySnapshot.documents) {
-                    val userData = ticketDocumentSnapshot.get("user") as? Map<String, Any>
-                    val price = userData?.get("price") as? String
-                    Log.d("Price ONLY", "price Price: $price")
-                        val priceDouble = price?.toDouble()
-                    if (price != null) {
-                        if (priceDouble != null) {
-                            totalPrice += priceDouble
-                            count++
-                            Log.e("Price total", totalPrice.toString())
-                        }
-                    } else {
-                        Log.e("Price total", "Price is null or cannot be parsed")
-                    }
-                }
-                // Calculate average price
-                val averagePrice = if (count > 0) totalPrice / count else 0.0
-                Log.d("Price Debug", "Average Price: $averagePrice")
-                if (averagePrice ==0.0){
-                    "The technician's average price: 50"
-                    updateAveragePriceInuserDocument("50")
-                }
-                viewBinding.averagePricePersonDetails.text =
-                    "The technician's average price: $averagePrice"
-                updateAveragePriceInuserDocument(averagePrice.toString())
-            }
-            .addOnFailureListener { exception ->
-                Log.e("Firestore Error", "Error getting documents: ", exception)
-                // Handle the error here
-            }
+        getTheAveragePrice()
 
 
 
 
+        getTheAverageRate()
+    }
+
+    private fun getTheAverageRate() {
         db.collection(Constant.USER).document(technicianId).collection("Reviews").get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -221,6 +229,47 @@ class TechnicianDetailsFragment : Fragment() {
                 } else {
                     Log.e(TAG, "Error getting reviews: ", task.exception)
                 }
+            }
+    }
+
+    private fun getTheAveragePrice() {
+        val ticketsCollectionRef = db.collection(Constant.USER)
+            .document(technicianId)
+            .collection("Tickets")
+
+        ticketsCollectionRef.get()
+            .addOnSuccessListener { ticketQuerySnapshot ->
+                var totalPrice = 0.0
+                var count = 0
+                for (ticketDocumentSnapshot in ticketQuerySnapshot.documents) {
+                    val userData = ticketDocumentSnapshot.get("user") as? Map<String, Any>
+                    val price = userData?.get("price") as? String
+                    Log.d("Price ONLY", "price Price: $price")
+                    val priceDouble = price?.toDouble()
+                    if (price != null) {
+                        if (priceDouble != null) {
+                            totalPrice += priceDouble
+                            count++
+                            Log.e("Price total", totalPrice.toString())
+                        }
+                    } else {
+                        Log.e("Price total", "Price is null or cannot be parsed")
+                    }
+                }
+                // Calculate average price
+                val averagePrice = if (count > 0) totalPrice / count else 0.0
+                Log.d("Price Debug", "Average Price: $averagePrice")
+                if (averagePrice == 0.0) {
+                    "The technician's average price: 50"
+                    updateAveragePriceInuserDocument("50")
+                }
+                viewBinding.averagePricePersonDetails.text =
+                    "The technician's average price: $averagePrice"
+                updateAveragePriceInuserDocument(averagePrice.toString())
+            }
+            .addOnFailureListener { exception ->
+                Log.e("Firestore Error", "Error getting documents: ", exception)
+                // Handle the error here
             }
     }
 
@@ -281,7 +330,7 @@ class TechnicianDetailsFragment : Fragment() {
                 val averagePrice = if (count > 0) totalPrice / count else 0.0
                 Log.d("Price Debug", "Average Price: $averagePrice")
 
-                if (averagePrice ==0.0){
+                if (averagePrice == 0.0) {
                     "The technician's average price: 50"
                     updateAveragePriceInuserDocument("50")
                 }
@@ -380,12 +429,14 @@ class TechnicianDetailsFragment : Fragment() {
     private fun updateUIForPending() {
         viewBinding.bookNowPersonDetails.text = "Pending"
         viewBinding.bookNowPersonDetails.isClickable = false
+        viewBinding.canselRequestPersonDetails.isClickable = true
         viewBinding.bookNowPersonDetails.setBackgroundColor(Color.RED)
     }
 
     private fun updateUIForNotPending() {
         viewBinding.bookNowPersonDetails.text = "Book Now"
         viewBinding.bookNowPersonDetails.isClickable = true
+        viewBinding.canselRequestPersonDetails.isClickable = false
         viewBinding.bookNowPersonDetails.setBackgroundColor(Color.BLUE)
     }
 
@@ -394,6 +445,7 @@ class TechnicianDetailsFragment : Fragment() {
         val customColor = Color.parseColor("#3AB449")
         viewBinding.bookNowPersonDetails.text = "Accepted"
         viewBinding.bookNowPersonDetails.isClickable = false
+        viewBinding.canselRequestPersonDetails.isClickable = false
         viewBinding.bookNowPersonDetails.setBackgroundColor(customColor)
     }
 

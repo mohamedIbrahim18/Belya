@@ -93,7 +93,7 @@ class PersonInCategoryFragment : Fragment() {
 
     private fun navigateToTechnicianDetails(user: User) {
         val bundle = Bundle().apply {
-            putParcelable("importantPerson", user)
+            putParcelable("pokemon", user)
         }
         findNavController().navigate(R.id.action_personInCategoryFragment_to_technicianDetailsFragment, bundle)
     }

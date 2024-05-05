@@ -24,7 +24,7 @@ class AcceptedTicketsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         viewBinding = FragmentAcceptedTicketsBinding.inflate(inflater, container, false)
         return viewBinding.root
@@ -130,9 +130,6 @@ class AcceptedTicketsFragment : Fragment() {
 
             techRef.update("acceptedList", FieldValue.arrayRemove(task.userID))
                 .addOnSuccessListener {
-                    val ticketRef = techRef.collection("Tickets").document(task.userID)
-                    ticketRef.delete()
-                        .addOnSuccessListener {
                             listOfAcceptedTickets.remove(task)
                             acceptedAdapter.notifyDataSetChanged()
                         }
@@ -144,13 +141,5 @@ class AcceptedTicketsFragment : Fragment() {
                             )
                         }
                 }
-                .addOnFailureListener { e ->
-                    Log.e(
-                        "AcceptedTicketsFragment",
-                        "Failed to update accepted list: ${e.message}",
-                        e
-                    )
-                }
         }
     }
-}

@@ -37,6 +37,7 @@
     <string name="my_account">My Account</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="email_job"><![CDATA[Email & Job & City]]></string>
+    <string name="email_city_number"><![CDATA[Email & City & Number]]></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="new_password">New Password</string>

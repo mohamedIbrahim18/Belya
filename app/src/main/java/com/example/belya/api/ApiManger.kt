@@ -8,7 +8,7 @@ class ApiManger {
        private var retrofit: Retrofit? = null
        fun getInstance(): Retrofit {
            if (retrofit == null) {
-               retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+               retrofit = Retrofit.Builder().baseUrl("http://172.187.225.210:8080/")
                    .addConverterFactory(GsonConverterFactory.create())
                    .build()
            }

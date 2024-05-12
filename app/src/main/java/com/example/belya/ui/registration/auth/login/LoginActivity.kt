@@ -350,7 +350,7 @@ class LoginActivity : AppCompatActivity() {
 
                 if (value != null && value.exists()) {
                     CoroutineScope(Dispatchers.Main).launch {
-                        val cityName = getCityName(latitude, longitude, applicationContext)
+                        val cityName = getCityName(latitude, longitude, this@LoginActivity)
                         Log.e("City", cityName)
                         userRef.update("city", cityName).addOnCompleteListener {
 

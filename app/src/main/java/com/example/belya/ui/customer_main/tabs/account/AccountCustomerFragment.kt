@@ -51,14 +51,19 @@ class AccountCustomerFragment : Fragment() {
             navigateToLoginPage()
         }
     }
-
     private fun fetchDataFromFireStore() {
         val currentUID = FirebaseAuth.getInstance().uid
-        FirebaseFirestore.getInstance().collection(Constant.USER).document(currentUID!!)
-            .get()
-            .addOnSuccessListener { documentSnapshot ->
-                // Fetch all data for the document
-                val user = documentSnapshot.toObject(User::class.java)
+        val docRef = FirebaseFirestore.getInstance().collection(Constant.USER).document(currentUID!!)
+
+        docRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w("Error", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                // DocumentSnapshot data may be null if the document exists but has no data.
+                val user = snapshot.toObject(User::class.java)
                 user?.let {
                     // Update UI with fetched user details
                     val fullName: String = it.firstName + " " + it.lastName
@@ -71,11 +76,12 @@ class AccountCustomerFragment : Fragment() {
                         .placeholder(R.drawable.profile_pic)
                         .into(viewBinding.accountProfilePic)
                 }
+            } else {
+                Log.d("Error", "Current data: null")
             }
-            .addOnFailureListener { e ->
-                Log.d("Error", "${e.localizedMessage}")
-            }
+        }
     }
+
 
     private fun navigateToLoginPage() {
         val intent = Intent(requireContext(), LoginActivity::class.java)

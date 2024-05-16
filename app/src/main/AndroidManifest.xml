@@ -2,34 +2,83 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon_"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/icon_"
         android:supportsRtl="true"
         android:theme="@style/Theme.Belya"
         tools:targetApi="31">
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
         <activity
-            android:name=".ui.Customer_Main.CustomerMainActivity"
-            android:exported="false" />
+            android:name=".ui.technician_main.tabs.chat.MapsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps" />
         <activity
-            android:name=".ui.Factor_Main.FactorMainActivity"
-            android:exported="false" />
+            android:name=".ui.registration.customerinfo.CustomerInfoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
         <activity
-            android:name=".ui.registration.factorinfo.FactorInfoActivity"
-            android:exported="false" />
+            android:name=".ui.registration.auth.forget_password.ForgetPasswordActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
         <activity
-            android:name=".ui.registration.whouse.WhoUseThisActivity"
-            android:exported="false" />
+            android:name=".ui.customer_main.CustomerMainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
+        <activity
+            android:name=".ui.technician_main.TechnicianMainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
+        <activity
+            android:name=".ui.registration.technicianinfo.TechnicianInfoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
         <activity
             android:name=".ui.registration.auth.login.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
+        <activity
+            android:name=".ui.technician_main.tabs.chat.SpecificChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"            />
         <activity
             android:name=".ui.registration.auth.signup.SignUpActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"
+
+            />
         <activity
             android:name=".ui.splashscreen.SplashScreenActivity"
             android:exported="true">
@@ -39,6 +88,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_graph_technician"
+    app:startDestination="@id/notificationTechnicianFragment2">
+
+    <fragment
+        android:id="@+id/chatTechnicianFragment2"
+        android:name="com.example.belya.ui.technician_main.tabs.chat.ChatTechnicianFragment"
+        android:label="fragment_chat_technician"
+        tools:layout="@layout/fragment_chat_technician" />
+    <fragment
+        android:id="@+id/notificationTechnicianFragment2"
+        android:name="com.example.belya.ui.technician_main.tabs.notification.NotificationTechnicianFragment"
+        android:label="fragment_notification_technician"
+        tools:layout="@layout/fragment_notification_technician" >
+        <action
+            android:id="@+id/action_notificationTechnicianFragment2_to_chatTechnicianFragment2"
+            app:destination="@id/chatTechnicianFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountTechnicianFragment2"
+        android:name="com.example.belya.ui.technician_main.tabs.account.AccountTechnicianFragment"
+        android:label="fragment_account_technician"
+        tools:layout="@layout/fragment_account_technician" >
+        <action
+            android:id="@+id/action_accountTechnicianFragment2_to_changeEmailFragment"
+            app:destination="@id/changeEmailFragment" />
+        <action
+            android:id="@+id/action_accountTechnicianFragment2_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_accountTechnicianFragment2_to_acceptedTicketsFragment"
+            app:destination="@id/acceptedTicketsFragment" />
+        <action
+            android:id="@+id/action_accountTechnicianFragment2_to_editInformationFragment"
+            app:destination="@id/editInformationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeEmailFragment"
+        android:name="com.example.belya.ui.technician_main.tabs.account.ChangeEmailFragment"
+        android:label="fragment_change_email"
+        tools:layout="@layout/fragment_change_email" />
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.belya.ui.technician_main.tabs.account.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" />
+    <fragment
+        android:id="@+id/acceptedTicketsFragment"
+        android:name="com.example.belya.ui.technician_main.tabs.account.AcceptedTicketsFragment"
+        android:label="fragment_accepted_tickets"
+        tools:layout="@layout/fragment_accepted_tickets" />
+    <fragment
+        android:id="@+id/editInformationFragment"
+        android:name="com.example.belya.ui.technician_main.tabs.account.EditInformationTechnicianFragment"
+        android:label="fragment_edit_information"
+        tools:layout="@layout/fragment_edit_information_technician" />
+</navigation>

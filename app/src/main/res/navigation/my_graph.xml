@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_graph"
+    app:startDestination="@id/homeCustomerFragment">
+
+    <fragment
+        android:id="@+id/homeCustomerFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.home.HomeCustomerFragment"
+        android:label="fragment_home_customer"
+        tools:layout="@layout/fragment_home_customer" >
+        <action
+            android:id="@+id/action_homeCustomerFragment_to_personInCategoryFragment"
+            app:destination="@id/personInCategoryFragment" >
+            <argument
+                android:name="jobName"
+                app:argType="string"
+                android:defaultValue="jobName"
+                />
+        </action>
+        <action
+            android:id="@+id/action_homeCustomerFragment_to_technicianDetailsFragment"
+            app:destination="@id/technicianDetailsFragment">
+            <argument
+                android:name="importantPerson"
+                app:argType="string"
+                android:defaultValue="importantPerson"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/personInCategoryFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.PersonInCategoryFragment"
+        android:label="fragment_person_in_category"
+        tools:layout="@layout/fragment_person_in_category" >
+        <action
+            android:id="@+id/action_personInCategoryFragment_to_technicianDetailsFragment"
+            app:destination="@id/technicianDetailsFragment">
+            <argument
+                android:name="personDetails"
+                app:argType="string"
+                android:defaultValue="personDetails"/>
+        </action>
+        <action
+            android:id="@+id/action_personInCategoryFragment_to_searchFragment"
+            app:destination="@id/searchFragment">
+            <argument
+                android:name="jobToSearchInCity"
+                app:argType="string"
+                android:defaultValue="jobToSearchInCity"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/notificationCustomerFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.notification.NotificationCustomerFragment"
+        android:label="fragment_notification_customer"
+        tools:layout="@layout/fragment_notification_customer" />
+    <fragment
+        android:id="@+id/chatCustomerFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.chat.ChatCustomerFragment"
+        android:label="fragment_chat_customer"
+        tools:layout="@layout/fragment_chat_customer" />
+    <fragment
+        android:id="@+id/accountCustomerFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.account.AccountCustomerFragment"
+        android:label="fragment_account_customer"
+        tools:layout="@layout/fragment_account_customer" >
+        <action
+            android:id="@+id/action_accountCustomerFragment_to_changeEmailFragment2"
+            app:destination="@id/changeEmailFragment2" />
+        <action
+            android:id="@+id/action_accountCustomerFragment_to_changePasswordFragment2"
+            app:destination="@id/changePasswordFragment2" />
+        <action
+            android:id="@+id/action_accountCustomerFragment_to_editInformationCustomerFragment"
+            app:destination="@id/editInformationCustomerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/technicianDetailsFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.technician_details.TechnicianDetailsFragment"
+        android:label="fragment_technician_deatils"
+        tools:layout="@layout/fragment_technician_deatils" >
+        <action
+            android:id="@+id/action_technicianDetailsFragment_to_addFeedbackFragment"
+            app:destination="@id/addFeedbackFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeEmailFragment2"
+        android:name="com.example.belya.ui.technician_main.tabs.account.ChangeEmailFragment"
+        android:label="fragment_change_email"
+        tools:layout="@layout/fragment_change_email" />
+    <fragment
+        android:id="@+id/changePasswordFragment2"
+        android:name="com.example.belya.ui.technician_main.tabs.account.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" />
+    <fragment
+        android:id="@+id/addFeedbackFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.technician_details.AddFeedbackFragment"
+        android:label="fragment_add_feedback"
+        tools:layout="@layout/fragment_add_feedback" >
+        <argument
+            android:name="techID"
+            app:argType="string"
+            android:defaultValue="techID" />
+    </fragment>
+    <fragment
+        android:id="@+id/editInformationCustomerFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.account.EditInformationCustomerFragment"
+        android:label="fragment_edit_information_customer"
+        tools:layout="@layout/fragment_edit_information_customer" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.belya.ui.customer_main.tabs.home.categories.who_in_this_category.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_technicianDetailsFragment"
+            app:destination="@id/technicianDetailsFragment" >
+            <argument
+                android:name="importantPerson"
+                app:argType="string"
+                android:defaultValue="importantPerson"/>
+        </action>
+    </fragment>
+</navigation>
